@@ -36,7 +36,7 @@ public class MainApplication extends Application {
             BorderPane root = mainFrameLoader.load();
 
             FXMLLoader workFrameLoader = new FXMLLoader();
-            workFrameLoader.setLocation(getClass().getResource("view/workframe/workFrame.fxml"));
+            workFrameLoader.setLocation(getClass().getResource("workFrame.fxml"));
             AnchorPane anchorPane = workFrameLoader.load();
 
             root.setCenter(anchorPane);
