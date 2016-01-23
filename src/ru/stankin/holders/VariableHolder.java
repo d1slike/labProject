@@ -4,6 +4,7 @@ import ru.stankin.model.Alterable;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -33,6 +34,10 @@ public class VariableHolder {
     public void reset() {
         activeVariables.values().forEach(variable -> variable.setValue(0));
         altVariable = activeVariables.get(VariableType.RO);
+    }
+
+    public Collection<Variable> getAllVars() {
+        return activeVariables.values();
     }
 
     public void updateAlterVariable() {

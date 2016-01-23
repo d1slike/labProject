@@ -1,19 +1,25 @@
 package ru.stankin.model;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
+
 /**
  * Created by Dislike on 22.01.2016.
  */
 public class Variable implements Alterable {
     private final VariableType type;
-    protected double value;
+    protected ObservableValue<Double> value;
     private int step;
 
     public Variable(VariableType type, double value) {
         this.type = type;
-        this.value = value;
+        this.value = new SimpleObjectProperty<>(0.);
         step = 0;
     }
 
+    public void setValue(double newValue) {
+        value = new SimpleObjectProperty<>(newValue);
+    }
 
     public String getName() {
         return type.getName();
@@ -24,12 +30,13 @@ public class Variable implements Alterable {
     }
 
     public double getValue() {
+        return value.getValue();
+    }
+
+    public ObservableValue<Double> getValuePropertie() {
         return value;
     }
 
-    public void setValue(double value) {
-        this.value = value;
-    }
 
     @Override
     public void setStep(int step) {
@@ -38,6 +45,7 @@ public class Variable implements Alterable {
 
     @Override
     public void addStep() {
-        value+=step;
+        double old = getValue();
+        value = new SimpleObjectProperty<>(old + step);
     }
 }

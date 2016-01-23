@@ -10,7 +10,7 @@
    <children>
       <BorderPane layoutX="12.0" layoutY="14.0" prefHeight="81.0" prefWidth="1000.0" style="-fx-border-color: gray; -fx-border-width: 1;">
          <center>
-            <Label prefHeight="65.0" prefWidth="980.0" text="1" textAlignment="CENTER" BorderPane.alignment="CENTER">
+            <Label fx:id="informationTextLable" prefHeight="65.0" prefWidth="980.0" text="1" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Italic" size="18.0" />
                </font>
@@ -20,7 +20,7 @@
             </Label>
          </center>
          <right>
-            <Button mnemonicParsing="false" text="Далее" BorderPane.alignment="CENTER">
+            <Button fx:id="nextStageButton" mnemonicParsing="false" onAction="#onNextStageButtonClick" text="Далее" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets right="10.0" />
                </BorderPane.margin>
@@ -29,7 +29,7 @@
       </BorderPane>
       <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="98.0" spacing="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
          <children>
-            <VBox fillWidth="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
+            <VBox alignment="CENTER" fillWidth="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
                <children>
                   <HBox fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="20.0">
                      <children>
@@ -40,18 +40,18 @@
                   <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="162.0" prefHeight="91.0" prefWidth="311.0" spacing="30.0">
                      <children>
                         <Label layoutX="14.0" layoutY="162.0" prefHeight="91.0" prefWidth="130.0" text="Шаг изменяемого параметра" wrapText="true" />
-                        <TextField layoutX="122.0" layoutY="170.0" prefHeight="39.0" prefWidth="123.0" />
+                        <TextField fx:id="altVarStepField" layoutX="122.0" layoutY="170.0" prefHeight="39.0" prefWidth="123.0" />
                      </children>
                   </HBox>
-                  <Label text="Таблица неизменяемых параметров" />
-                  <TableView layoutX="14.0" layoutY="253.0" prefHeight="311.0" prefWidth="311.0">
+                  <Label text="Таблица параметров" />
+                  <TableView fx:id="varTable" layoutX="14.0" layoutY="253.0" prefHeight="311.0" prefWidth="311.0">
                     <columns>
-                      <TableColumn editable="false" prefWidth="109.0" resizable="false" sortable="false" text="Параметр" />
-                      <TableColumn prefWidth="201.0" resizable="false" sortable="false" text="Значение" />
+                      <TableColumn fx:id="varTableColumnParam" editable="false" prefWidth="109.0" resizable="false" sortable="false" text="Параметр" />
+                      <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" sortable="false" text="Значение" />
                     </columns>
                   </TableView>
-                  <Button layoutX="129.0" layoutY="588.0" mnemonicParsing="false" text="Вид в 3D" />
-                  <Button layoutX="98.0" layoutY="640.0" mnemonicParsing="false" text="Сброс значений" />
+                  <Button fx:id="showIn3DButton" layoutX="129.0" layoutY="588.0" mnemonicParsing="false" text="Вид в 3D" />
+                  <Button fx:id="resetButton" layoutX="98.0" layoutY="640.0" mnemonicParsing="false" text="Сброс значений" />
                </children>
             </VBox>
             <VBox alignment="CENTER" fillWidth="false" layoutX="323.0" layoutY="253.0" spacing="10.0">
@@ -59,32 +59,32 @@
                   <VBox alignment="CENTER">
                      <children>
                         <Label layoutX="325.0" layoutY="253.0" prefHeight="62.0" prefWidth="123.0" text="Исследуемое значение" wrapText="true" />
-                        <ComboBox layoutX="323.0" layoutY="315.0" prefHeight="39.0" prefWidth="123.0" />
+                        <ComboBox fx:id="researchVarSwitcher" layoutX="323.0" layoutY="315.0" prefHeight="39.0" prefWidth="123.0" />
                      </children>
                   </VBox>
                   <VBox alignment="CENTER" fillWidth="false">
                      <children>
                         <Label layoutX="364.0" layoutY="362.0" text="Время" />
-                        <TextField layoutX="323.0" layoutY="389.0" prefHeight="39.0" prefWidth="123.0" />
+                        <TextField fx:id="timeField" layoutX="323.0" layoutY="389.0" prefHeight="39.0" prefWidth="123.0" />
                      </children>
                   </VBox>
-                  <Button layoutX="323.0" layoutY="441.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="123.0" text="Рассчитать" />
+                  <Button fx:id="calcButton" layoutX="323.0" layoutY="441.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="123.0" text="Рассчитать" />
                </children>
             </VBox>
             <VBox alignment="CENTER" layoutX="542.0" layoutY="98.0" spacing="20.0">
                <children>
-                  <TableView layoutX="542.0" layoutY="98.0" prefHeight="555.0" prefWidth="468.0">
+                  <TableView fx:id="resultTable" layoutX="542.0" layoutY="98.0" prefHeight="555.0" prefWidth="468.0">
                     <columns>
-                      <TableColumn editable="false" prefWidth="105.0" resizable="false" sortable="false" text="t" />
-                      <TableColumn editable="false" prefWidth="45.0" resizable="false" sortable="false" text="-" />
-                        <TableColumn editable="false" prefWidth="124.0" resizable="false" text="d" />
-                        <TableColumn editable="false" prefWidth="122.0" resizable="false" text="n" />
+                      <TableColumn fx:id="resultTableTimeColumn" editable="false" prefWidth="105.0" resizable="false" sortable="false" text="t" />
+                      <TableColumn fx:id="resultTableAltVarColumn" editable="false" prefWidth="45.0" resizable="false" sortable="false" text="-" />
+                        <TableColumn fx:id="resultTableDynamicReaction" editable="false" prefWidth="124.0" resizable="false" text="d" />
+                        <TableColumn fx:id="resultTableFullReaction" editable="false" prefWidth="122.0" resizable="false" text="n" />
                     </columns>
                   </TableView>
                   <HBox alignment="CENTER" fillHeight="false" layoutX="542.0" layoutY="679.0" spacing="50.0">
                      <children>
-                        <Button layoutX="542.0" layoutY="679.0" mnemonicParsing="false" prefWidth="180.0" text="Построить график" />
-                        <Button layoutX="857.0" layoutY="679.0" mnemonicParsing="false" prefWidth="180.0" text="Начать сначала" />
+                        <Button fx:id="showChartButton" layoutX="542.0" layoutY="679.0" mnemonicParsing="false" prefWidth="180.0" text="Построить график" />
+                        <Button fx:id="cancelButton" layoutX="857.0" layoutY="679.0" mnemonicParsing="false" prefWidth="180.0" text="Начать сначала" />
                      </children>
                   </HBox>
                </children>
