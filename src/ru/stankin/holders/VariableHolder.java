@@ -13,14 +13,15 @@ import java.util.stream.Stream;
  * Created by Dislike on 22.01.2016.
  */
 public class VariableHolder {
+    public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
+            VariableType.GAMMA, VariableType.M, VariableType.H};
 
     private final Map<VariableType, Variable> activeVariables;
     private Alterable altVariable;
 
     public VariableHolder() {
         activeVariables = new EnumMap<>(VariableType.class);
-        Stream.of(VariableType.values()).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
-        altVariable = activeVariables.get(VariableType.RO); //default
+        Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
     }
 
     public double getVarValue(VariableType type) {
