@@ -20,7 +20,8 @@ public class MainApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Lab++");
-        primaryStage.setResizable(false);
+        //primaryStage.setResizable(false);
+        //primaryStage.setFullScreen(true);
         initMainForm();
 
     }

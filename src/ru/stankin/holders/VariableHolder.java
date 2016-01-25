@@ -1,6 +1,8 @@
 package ru.stankin.holders;
 
-import ru.stankin.model.Alterable;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ObservableListValue;
+import ru.stankin.model.ResultRecord;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
 
@@ -17,10 +19,14 @@ public class VariableHolder {
             VariableType.GAMMA, VariableType.M, VariableType.H};
 
     private final Map<VariableType, Variable> activeVariables;
-    private Alterable altVariable;
+    private final ObservableListValue<ResultRecord> resultRecords;
+    private Variable altVariable;
+    private VariableType researchVariable;
+
 
     public VariableHolder() {
         activeVariables = new EnumMap<>(VariableType.class);
+        resultRecords = new SimpleListProperty<>();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
     }
 
@@ -35,6 +41,8 @@ public class VariableHolder {
     public void reset() {
         activeVariables.values().forEach(variable -> variable.setValue(0));
         altVariable = activeVariables.get(VariableType.RO);
+        researchVariable = VariableType.Xa;
+        resultRecords.clear();
     }
 
     public Collection<Variable> getAllVars() {
@@ -52,4 +60,17 @@ public class VariableHolder {
     public void setAltVariable(VariableType type) {
         altVariable = activeVariables.get(type);
     }
+
+    public void setResearchVariableType(VariableType type) {
+        researchVariable = type;
+    }
+
+    public VariableType getResearchVariable() {
+        return researchVariable;
+    }
+
+    public ObservableListValue<ResultRecord> getResultRecords() {
+        return resultRecords;
+    }
+
 }

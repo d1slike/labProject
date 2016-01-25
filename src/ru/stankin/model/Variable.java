@@ -6,7 +6,7 @@ import javafx.beans.value.ObservableValue;
 /**
  * Created by Dislike on 22.01.2016.
  */
-public class Variable implements Alterable {
+public final class Variable {
     private final VariableType type;
     protected ObservableValue<Double> value;
     private int step;
@@ -37,13 +37,10 @@ public class Variable implements Alterable {
         return value;
     }
 
-
-    @Override
     public void setStep(int step) {
         this.step = step;
     }
 
-    @Override
     public void addStep() {
         double old = getValue();
         value = new SimpleObjectProperty<>(old + step);

@@ -8,6 +8,7 @@ import javafx.util.StringConverter;
 import ru.stankin.holders.InterfaceItemHolder;
 import ru.stankin.holders.VariableHolder;
 import ru.stankin.math.Calculator;
+import ru.stankin.model.ResultRecord;
 import ru.stankin.model.Stage;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
@@ -48,15 +49,17 @@ public class MainController {
     private Button calcButton;
 
     @FXML
-    private TableView<Variable> resultTable;
+    private TableView<ResultRecord> resultTable;
     @FXML
-    private TableColumn<Variable, Double> resultTableTimeColumn;
+    private TableColumn<ResultRecord, Double> resultTableTimeColumn;
     @FXML
-    private TableColumn<Variable, Double> resultTableAltVarColumn;
+    private TableColumn<ResultRecord, Double> resultTableAltVarColumn;
     @FXML
-    private TableColumn<Variable, Double> resultTableDynamicReaction;
+    private TableColumn<ResultRecord, Double> resultTableStaticReaction;
     @FXML
-    private TableColumn<Variable, Double> resultTableFullReaction;
+    private TableColumn<ResultRecord, Double> resultTableDynamicReaction;
+    @FXML
+    private TableColumn<ResultRecord, Double> resultTableFullReaction;
 
     @FXML
     private Button showChartButton;
@@ -93,7 +96,8 @@ public class MainController {
         interfaceItemHolder.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
         interfaceItemHolder.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
 
-        currentStage = Stage.STAGE_1_SELECT_ALT_VAR;
+        //currentStage = Stage.STAGE_1_SELECT_ALT_VAR;
+        currentStage = Stage.STAGE_4_SELECT_RESEARCH_VAR;
         onChangedStage();
 
 
@@ -103,12 +107,12 @@ public class MainController {
 
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
+        variableHolder.setResearchVariableType(VariableType.Xa);
 
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameProperty());
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValuePropertie());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Double> col) -> new EditableCell());
         varTable.getItems().addAll(variableHolder.getAllVars());
-        varTable.setEditable(true);
 
     }
 
@@ -143,7 +147,7 @@ public class MainController {
     private boolean executeAllActionsOnCurrentStage() {
         switch (currentStage) {
             case STAGE_1_SELECT_ALT_VAR:
-                //nothing
+                resultTableAltVarColumn.setText(variableHolder.getAltVariable().getName());
                 break;
             case STAGE_2_WRITE_STEP_TO_ALT_VAR: {
                 String stringValue = altVarStepField.getText();
@@ -164,6 +168,34 @@ public class MainController {
                 }
             }
             break;
+            case STAGE_3_FILL_VAR_TABLE: {
+                boolean ok = true;
+                for(Variable variable : varTable.getItems()) {
+                    double val = variable.getValue();
+                    VariableType type = variable.getType();
+                    if (!(ok = type.checkRange(val)))
+                        break;
+                }
+                if(!ok) {
+                    interfaceItemHolder.setRedBorder(ElementNames.TABLE_VARIABLES);
+                    return false;
+                }
+            }
+            break;
+            case STAGE_4_SELECT_RESEARCH_VAR: {
+                String name = variableHolder.getResearchVariable().getName();
+                resultTableStaticReaction.setText(name + "(стат.)");
+                resultTableDynamicReaction.setText(name + "(динам.)");
+                resultTableFullReaction.setText(name + "(полн.)");
+
+                resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
+                resultTableAltVarColumn.setCellValueFactory(param -> param.getValue().altVarProperty());
+                resultTableStaticReaction.setCellValueFactory(param -> param.getValue().staticReactionProperty());
+                resultTableDynamicReaction.setCellValueFactory(param -> param.getValue().dynamicReactionProperty());
+                resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
+                resultTable.setItems(variableHolder.getResultRecords());
+            }
+            break;
         }
 
         return true;
@@ -176,6 +208,8 @@ public class MainController {
 
         private class StringDoubleConverter extends StringConverter<Double> {
 
+            private static final double NULL_CONST = 0.0;
+
             @Override
             public String toString(Double object) {
                 return String.valueOf(object);
@@ -183,7 +217,7 @@ public class MainController {
 
             @Override
             public Double fromString(String string) {
-                double val = 0.;
+                double val;
                 try {
                     val = Double.parseDouble(string);
                     VariableType type = varTable.getItems().get(getIndex()).getType();
@@ -192,6 +226,7 @@ public class MainController {
                     setStyle(InterfaceItemHolder.DEFAULT_BORDER_STYLE);
                 } catch (Exception ex) {
                     setStyle(InterfaceItemHolder.RED_BORDER_STYLE);
+                    return NULL_CONST;
                 }
                 return val;
             }
