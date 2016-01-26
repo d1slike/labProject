@@ -12,6 +12,7 @@ import ru.stankin.model.ResultRecord;
 import ru.stankin.model.Stage;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
+import ru.stankin.view.ChartHolder;
 import ru.stankin.view.ElementNames;
 
 
@@ -98,6 +99,7 @@ public class MainController {
 
         //currentStage = Stage.STAGE_1_SELECT_ALT_VAR;
         currentStage = Stage.STAGE_4_SELECT_RESEARCH_VAR;
+        //currentStage = Stage.STAGE_6_CHECK_CHART;
         onChangedStage();
 
 
@@ -139,6 +141,13 @@ public class MainController {
         onChangedStage();
     }
 
+    @FXML
+    private void onShowChartButtonClick() {
+        if (ChartHolder.getInstance() == null)
+            return;
+        ChartHolder.getInstance().show();
+    }
+
     private void onChangedStage() {
         interfaceItemHolder.prepareInterfaceForCurrentStage(currentStage);
         informationTextLabel.setText(currentStage.getDescription());
@@ -170,13 +179,13 @@ public class MainController {
             break;
             case STAGE_3_FILL_VAR_TABLE: {
                 boolean ok = true;
-                for(Variable variable : varTable.getItems()) {
+                for (Variable variable : varTable.getItems()) {
                     double val = variable.getValue();
                     VariableType type = variable.getType();
                     if (!(ok = type.checkRange(val)))
                         break;
                 }
-                if(!ok) {
+                if (!ok) {
                     interfaceItemHolder.setRedBorder(ElementNames.TABLE_VARIABLES);
                     return false;
                 }
@@ -194,8 +203,19 @@ public class MainController {
                 resultTableDynamicReaction.setCellValueFactory(param -> param.getValue().dynamicReactionProperty());
                 resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
                 resultTable.setItems(variableHolder.getResultRecords());
+
+                /*variableHolder.getResultRecords().addAll(new ResultRecord(1,2,3,4,5), new ResultRecord(10,1,1,3,4),  new ResultRecord(2,2,3,4,5), new ResultRecord(4,2,3,4,5),
+                        new ResultRecord(1,2,3,4,5), new ResultRecord(10,1,1,3,4),  new ResultRecord(2,2,3,4,5), new ResultRecord(4,2,3,4,5),
+                        new ResultRecord(1,2,3,4,5), new ResultRecord(10,1,1,3,4),  new ResultRecord(2,2,3,4,5), new ResultRecord(4,2,3,4,5),
+                        new ResultRecord(1,2,3,4,88), new ResultRecord(10,1,1,3, 11),  new ResultRecord(2,2,3,4,3), new ResultRecord(4,2,3,4,1));
+                currentStage = Stage.STAGE_5_FILL_RESULT_TABLE;
+                ChartHolder.initChart(variableHolder.getResultRecords(), variableHolder.getResearchVariable().getName(), 4);*/
             }
             break;
+            case STAGE_5_FILL_RESULT_TABLE: {
+                ChartHolder.initChart(variableHolder.getResultRecords()
+                        , variableHolder.getResearchVariable().getName(), 4); //todo useless magic const
+            }
         }
 
         return true;
@@ -221,7 +241,7 @@ public class MainController {
                 try {
                     val = Double.parseDouble(string);
                     VariableType type = varTable.getItems().get(getIndex()).getType();
-                    if(!type.checkRange(val))
+                    if (!type.checkRange(val))
                         throw new NumberFormatException();
                     setStyle(InterfaceItemHolder.DEFAULT_BORDER_STYLE);
                 } catch (Exception ex) {

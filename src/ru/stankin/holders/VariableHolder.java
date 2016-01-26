@@ -1,7 +1,7 @@
 package ru.stankin.holders;
 
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ObservableListValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import ru.stankin.model.ResultRecord;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
@@ -19,14 +19,14 @@ public class VariableHolder {
             VariableType.GAMMA, VariableType.M, VariableType.H};
 
     private final Map<VariableType, Variable> activeVariables;
-    private final ObservableListValue<ResultRecord> resultRecords;
+    private final ObservableList<ResultRecord> resultRecords;
     private Variable altVariable;
     private VariableType researchVariable;
 
 
     public VariableHolder() {
         activeVariables = new EnumMap<>(VariableType.class);
-        resultRecords = new SimpleListProperty<>();
+        resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
     }
 
@@ -69,7 +69,7 @@ public class VariableHolder {
         return researchVariable;
     }
 
-    public ObservableListValue<ResultRecord> getResultRecords() {
+    public ObservableList<ResultRecord> getResultRecords() {
         return resultRecords;
     }
 
