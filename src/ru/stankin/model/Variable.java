@@ -1,6 +1,8 @@
 package ru.stankin.model;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.beans.value.ObservableValue;
 
 /**
@@ -8,17 +10,17 @@ import javafx.beans.value.ObservableValue;
  */
 public final class Variable {
     private final VariableType type;
-    protected ObservableValue<Double> value;
+    private ObservableDoubleValue value;
     private int step;
 
     public Variable(VariableType type, double value) {
         this.type = type;
-        this.value = new SimpleObjectProperty<>(value);
+        this.value = new SimpleDoubleProperty(value);
         step = 0;
     }
 
     public void setValue(double newValue) {
-        value = new SimpleObjectProperty<>(newValue);
+        value = new SimpleDoubleProperty(newValue);
     }
 
     public String getName() {
@@ -30,10 +32,10 @@ public final class Variable {
     }
 
     public double getValue() {
-        return value.getValue();
+        return value.doubleValue();
     }
 
-    public ObservableValue<Double> getValuePropertie() {
+    public ObservableDoubleValue getValuePropertie() {
         return value;
     }
 
@@ -43,6 +45,6 @@ public final class Variable {
 
     public void addStep() {
         double old = getValue();
-        value = new SimpleObjectProperty<>(old + step);
+        value = new SimpleDoubleProperty(old + step);
     }
 }

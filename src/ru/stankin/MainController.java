@@ -39,7 +39,7 @@ public class MainController {
     @FXML
     private TableColumn<Variable, String> varTableColumnParam;
     @FXML
-    private TableColumn<Variable, Double> varTableColumnValue;
+    private TableColumn<Variable, Number> varTableColumnValue;
 
     @FXML
     private Button showIn3DButton;
@@ -56,15 +56,15 @@ public class MainController {
     @FXML
     private TableView<ResultRecord> resultTable;
     @FXML
-    private TableColumn<ResultRecord, Double> resultTableTimeColumn;
+    private TableColumn<ResultRecord, Number> resultTableTimeColumn;
     @FXML
-    private TableColumn<ResultRecord, Double> resultTableAltVarColumn;
+    private TableColumn<ResultRecord, Number> resultTableAltVarColumn;
     @FXML
-    private TableColumn<ResultRecord, Double> resultTableStaticReaction;
+    private TableColumn<ResultRecord, Number> resultTableStaticReaction;
     @FXML
-    private TableColumn<ResultRecord, Double> resultTableDynamicReaction;
+    private TableColumn<ResultRecord, Number> resultTableDynamicReaction;
     @FXML
-    private TableColumn<ResultRecord, Double> resultTableFullReaction;
+    private TableColumn<ResultRecord, Number> resultTableFullReaction;
 
     @FXML
     private Button showChartButton;
@@ -118,7 +118,7 @@ public class MainController {
 
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameProperty());
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValuePropertie());
-        varTableColumnValue.setCellFactory((TableColumn<Variable, Double> col) -> new EditableCell());
+        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditableCell());
         varTable.getItems().addAll(variableHolder.getAllVars());
 
         resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
@@ -234,18 +234,18 @@ public class MainController {
     }
 
 
-    private class EditableCell extends TextFieldTableCell<Variable, Double> {
+    private class EditableCell extends TextFieldTableCell<Variable, Number> {
         public EditableCell() {
             setConverter(new StringDoubleConverter());
         }
 
-        private class StringDoubleConverter extends StringConverter<Double> {
+        private class StringDoubleConverter extends StringConverter<Number> {
 
             private static final double NULL_CONST = 0.0;
 
             @Override
-            public String toString(Double object) {
-                return String.valueOf(object);
+            public String toString(Number object) {
+                return String.valueOf(object.doubleValue());
             }
 
             @Override

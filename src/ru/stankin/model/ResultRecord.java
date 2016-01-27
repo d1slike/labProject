@@ -1,5 +1,7 @@
 package ru.stankin.model;
 
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 
@@ -7,11 +9,11 @@ import javafx.beans.value.ObservableValue;
  * Created by DisDev on 25.01.2016.
  */
 public class ResultRecord {
-    private final ObservableValue<Double> time;
-    private final ObservableValue<Double> altVar;
-    private final ObservableValue<Double> staticReaction;
-    private final ObservableValue<Double> dynamicReaction;
-    private final ObservableValue<Double> fullReaction;
+    private final ReadOnlyDoubleProperty time;
+    private final ReadOnlyDoubleProperty altVar;
+    private final ReadOnlyDoubleProperty staticReaction;
+    private final ReadOnlyDoubleProperty dynamicReaction;
+    private final ReadOnlyDoubleProperty fullReaction;
 
     public ResultRecord(final double timeValue,
                         final double altVarValue,
@@ -19,52 +21,52 @@ public class ResultRecord {
                         final double dynamicRactionValue,
                         final double fullReactionValue)
     {
-        this.time = new SimpleObjectProperty<>(timeValue);
-        altVar = new SimpleObjectProperty<>(altVarValue);
-        staticReaction = new SimpleObjectProperty<>(staticReactionValue);
-        dynamicReaction = new SimpleObjectProperty<>(dynamicRactionValue);
-        fullReaction = new SimpleObjectProperty<>(fullReactionValue);
+        this.time = new SimpleDoubleProperty(timeValue);
+        altVar = new SimpleDoubleProperty(altVarValue);
+        staticReaction = new SimpleDoubleProperty(staticReactionValue);
+        dynamicReaction = new SimpleDoubleProperty(dynamicRactionValue);
+        fullReaction = new SimpleDoubleProperty(fullReactionValue);
 
     }
 
 
-    public Double getTime() {
+    public double getTime() {
         return time.getValue();
     }
 
-    public ObservableValue<Double> timeProperty() {
+    public ReadOnlyDoubleProperty timeProperty() {
         return time;
     }
 
-    public Double getAltVar() {
+    public double getAltVar() {
         return altVar.getValue();
     }
 
-    public ObservableValue<Double> altVarProperty() {
+    public ReadOnlyDoubleProperty altVarProperty() {
         return altVar;
     }
 
-    public Double getStaticReaction() {
+    public double getStaticReaction() {
         return staticReaction.getValue();
     }
 
-    public ObservableValue<Double> staticReactionProperty() {
+    public ReadOnlyDoubleProperty staticReactionProperty() {
         return staticReaction;
     }
 
-    public Double getDynamicReaction() {
+    public double getDynamicReaction() {
         return dynamicReaction.getValue();
     }
 
-    public ObservableValue<Double> dynamicReactionProperty() {
+    public ReadOnlyDoubleProperty dynamicReactionProperty() {
         return dynamicReaction;
     }
 
-    public Double getFullReaction() {
+    public double getFullReaction() {
         return fullReaction.getValue();
     }
 
-    public ObservableValue<Double> fullReactionProperty() {
+    public ReadOnlyDoubleProperty fullReactionProperty() {
         return fullReaction;
     }
 }
