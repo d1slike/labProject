@@ -66,6 +66,8 @@ public class MainController {
     private TableColumn<ResultRecord, Number> resultTableDynamicReaction;
     @FXML
     private TableColumn<ResultRecord, Number> resultTableFullReaction;
+    @FXML
+    private TableColumn<ResultRecord, Number> resultTableRPMColumn;
 
     @FXML
     private Button showChartButton;
@@ -127,6 +129,7 @@ public class MainController {
         resultTableStaticReaction.setCellValueFactory(param -> param.getValue().staticReactionProperty());
         resultTableDynamicReaction.setCellValueFactory(param -> param.getValue().dynamicReactionProperty());
         resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
+        resultTableRPMColumn.setCellValueFactory(param -> param.getValue().getRPM());
         resultTable.setItems(variableHolder.getResultRecords());
 
     }
@@ -190,9 +193,7 @@ public class MainController {
     private void onShowChartButtonClick() {
         if (chartController == null)
             return;
-        chartController.buildAndShow(variableHolder.getResultRecords(),
-                resultTableFullReaction.getText(),
-                VariableHolder.ALT_VAR_MAX_STEP_COUNT);
+        chartController.buildAndShow(variableHolder);
     }
 
     private void onChangedWorkStage() {
@@ -246,10 +247,10 @@ public class MainController {
 
 
                 /*variableHolder.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
+                        new ResultRecord(1, 2, 3, 4, 5, 1), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
-                        new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
-                        new ResultRecord(1, 2, 3, 4, 88), new ResultRecord(10, 1, 1, 3, 11), new ResultRecord(2, 2, 3, 4, 3), new ResultRecord(4, 2, 3, 4, 1));*/
-                //currentWorkStage = WorkStage.STAGE_5_FILL_RESULT_TABLE;
+                        new ResultRecord(1, 2, 3, 4, 88), new ResultRecord(10, 1, 1, 3, 11), new ResultRecord(2, 2, 3, 4, 3), new ResultRecord(4, 2, 3, 4, 1));
+                currentWorkStage = WorkStage.STAGE_5_FILL_RESULT_TABLE;*/
 
             }
             break;

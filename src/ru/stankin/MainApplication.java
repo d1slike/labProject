@@ -37,11 +37,11 @@ public class MainApplication extends Application {
 
             FXMLLoader workFrameLoader = new FXMLLoader();
             workFrameLoader.setLocation(getClass().getResource("workFrame.fxml"));
-            AnchorPane anchorPane = workFrameLoader.load();
+            BorderPane workFrame = workFrameLoader.load();
             MainController controller = workFrameLoader.getController();
             controller.setMainStage(primaryStage);
 
-            root.setCenter(anchorPane);
+            root.setCenter(workFrame);
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.show();

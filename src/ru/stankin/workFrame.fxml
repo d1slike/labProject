@@ -7,9 +7,10 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.MainController">
-   <children>
-      <BorderPane layoutX="12.0" layoutY="14.0" prefHeight="81.0" prefWidth="1000.0" style="-fx-border-color: gray; -fx-border-width: 1;">
+
+<BorderPane prefHeight="768.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.MainController">
+   <top>
+      <BorderPane prefHeight="81.0" prefWidth="1000.0" style="-fx-border-color: gray; -fx-border-width: 1;" BorderPane.alignment="CENTER">
          <center>
             <Label fx:id="informationTextLabel" prefHeight="65.0" prefWidth="980.0" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
@@ -41,97 +42,112 @@
             </Button>
          </left>
       </BorderPane>
-      <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="98.0" spacing="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+   </top>
+   <padding>
+      <Insets left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <left>
+      <VBox alignment="CENTER" fillWidth="false" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" fillWidth="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
+            <HBox fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="20.0">
                <children>
-                  <HBox fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="20.0">
-                     <children>
-                        <Label layoutX="40.0" layoutY="117.0" text="Изменяемый параметр" />
-                        <ComboBox fx:id="altVarSwitcher" layoutX="40.0" layoutY="144.0" onAction="#onChangedAltVariable" prefHeight="39.0" prefWidth="98.0">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></ComboBox>
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="162.0" prefHeight="91.0" prefWidth="311.0" spacing="30.0">
-                     <children>
-                        <Label layoutX="14.0" layoutY="162.0" prefHeight="91.0" prefWidth="130.0" text="Шаг изменяемого параметра" wrapText="true" />
-                        <TextField fx:id="altVarStepField" layoutX="122.0" layoutY="170.0" prefHeight="39.0" prefWidth="123.0">
-                           <cursor>
-                              <Cursor fx:constant="TEXT" />
-                           </cursor></TextField>
-                     </children>
-                  </HBox>
-                  <Label text="Таблица параметров" />
-                  <TableView fx:id="varTable" editable="true" layoutX="14.0" layoutY="253.0" prefHeight="311.0" prefWidth="311.0">
-                    <columns>
-                      <TableColumn fx:id="varTableColumnParam" prefWidth="109.0" resizable="false" text="Параметр" />
-                      <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" text="Значение" />
-                    </columns>
-                  </TableView>
-                  <Button fx:id="showIn3DButton" layoutX="129.0" layoutY="588.0" mnemonicParsing="false" onAction="#on3DButtonShowClick" text="Вид в 3D">
+                  <Label layoutX="40.0" layoutY="117.0" text="Изменяемый параметр" />
+                  <ComboBox fx:id="altVarSwitcher" layoutX="40.0" layoutY="144.0" onAction="#onChangedAltVariable" prefHeight="39.0" prefWidth="98.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></Button>
-                  <Button fx:id="resetButton" layoutX="98.0" layoutY="640.0" mnemonicParsing="false" text="Сброс значений">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                     </cursor>
+                  </ComboBox>
                </children>
-            </VBox>
-            <VBox alignment="CENTER" fillWidth="false" layoutX="323.0" layoutY="253.0" spacing="10.0">
+            </HBox>
+            <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="162.0" prefHeight="91.0" prefWidth="311.0" spacing="30.0">
                <children>
-                  <VBox alignment="CENTER">
-                     <children>
-                        <Label layoutX="325.0" layoutY="253.0" prefHeight="62.0" prefWidth="123.0" text="Исследуемое значение" wrapText="true" />
-                        <ComboBox fx:id="researchVarSwitcher" layoutX="323.0" layoutY="315.0" onAction="#onChangedResearchVariable" prefHeight="39.0" prefWidth="123.0">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></ComboBox>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER" fillWidth="false">
-                     <children>
-                        <Label layoutX="364.0" layoutY="362.0" text="Время" />
-                        <TextField fx:id="timeField" layoutX="323.0" layoutY="389.0" prefHeight="39.0" prefWidth="123.0">
-                           <cursor>
-                              <Cursor fx:constant="TEXT" />
-                           </cursor></TextField>
-                     </children>
-                  </VBox>
-                  <Button fx:id="calcButton" layoutX="323.0" layoutY="441.0" mnemonicParsing="false" onAction="#onCalcButtonClick" prefHeight="39.0" prefWidth="123.0" text="Рассчитать">
+                  <Label layoutX="14.0" layoutY="162.0" prefHeight="91.0" prefWidth="130.0" text="Шаг изменяемого параметра" wrapText="true" />
+                  <TextField fx:id="altVarStepField" layoutX="122.0" layoutY="170.0" prefHeight="39.0" prefWidth="123.0">
                      <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor></Button>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
                </children>
-            </VBox>
-            <VBox alignment="CENTER" layoutX="542.0" layoutY="98.0" spacing="20.0">
-               <children>
-                  <TableView fx:id="resultTable" layoutX="542.0" layoutY="98.0" prefHeight="555.0" prefWidth="468.0">
-                    <columns>
-                      <TableColumn fx:id="resultTableTimeColumn" editable="false" prefWidth="93.6" resizable="false" sortable="false" text="t" />
-                      <TableColumn fx:id="resultTableAltVarColumn" editable="false" prefWidth="93.6" resizable="false" sortable="false" />
-                        <TableColumn fx:id="resultTableStaticReaction" editable="false" prefWidth="93.6" resizable="false" />
-                        <TableColumn fx:id="resultTableDynamicReaction" editable="false" prefWidth="93.6" resizable="false" />
-                        <TableColumn fx:id="resultTableFullReaction" editable="false" prefWidth="93.6" resizable="false" />
-                    </columns>
-                  </TableView>
-                  <HBox alignment="CENTER" fillHeight="false" layoutX="542.0" layoutY="679.0" spacing="50.0">
-                     <children>
-                        <Button fx:id="showChartButton" layoutX="542.0" layoutY="679.0" mnemonicParsing="false" onAction="#onShowChartButtonClick" prefWidth="180.0" text="Построить график">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Button>
-                        <Button fx:id="cancelButton" layoutX="857.0" layoutY="679.0" mnemonicParsing="false" prefWidth="180.0" text="Начать сначала">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor></Button>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
+            </HBox>
+            <Label text="Таблица параметров" />
+            <TableView fx:id="varTable" editable="true" layoutX="14.0" layoutY="253.0" prefHeight="311.0" prefWidth="311.0">
+              <columns>
+                <TableColumn fx:id="varTableColumnParam" prefWidth="109.0" resizable="false" text="Параметр" />
+                <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" text="Значение" />
+              </columns>
+            </TableView>
+            <Button fx:id="showIn3DButton" layoutX="129.0" layoutY="588.0" mnemonicParsing="false" onAction="#on3DButtonShowClick" text="Вид в 3D">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="resetButton" layoutX="98.0" layoutY="640.0" mnemonicParsing="false" text="Сброс значений">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
-      </HBox>
-   </children>
-</AnchorPane>
+      </VBox>
+   </left>
+   <center>
+      <VBox alignment="CENTER" fillWidth="false" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label layoutX="325.0" layoutY="253.0" prefHeight="62.0" prefWidth="123.0" text="Исследуемое значение" wrapText="true" />
+                  <ComboBox fx:id="researchVarSwitcher" layoutX="323.0" layoutY="315.0" onAction="#onChangedResearchVariable" prefHeight="39.0" prefWidth="123.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ComboBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" fillWidth="false">
+               <children>
+                  <Label layoutX="364.0" layoutY="362.0" text="Время" />
+                  <TextField fx:id="timeField" layoutX="323.0" layoutY="389.0" prefHeight="39.0" prefWidth="123.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+               </children>
+            </VBox>
+            <Button fx:id="calcButton" layoutX="323.0" layoutY="441.0" mnemonicParsing="false" onAction="#onCalcButtonClick" prefHeight="39.0" prefWidth="123.0" text="Рассчитать">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </children>
+      </VBox>
+   </center>
+   <right>
+      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="resultTable" layoutX="542.0" layoutY="98.0" prefHeight="555.0" prefWidth="555.0">
+              <columns>
+                <TableColumn fx:id="resultTableTimeColumn" editable="false" prefWidth="93.6" resizable="false" sortable="false" text="t" />
+                <TableColumn fx:id="resultTableAltVarColumn" editable="false" prefWidth="93.6" resizable="false" sortable="false" />
+                  <TableColumn fx:id="resultTableStaticReaction" editable="false" prefWidth="93.6" resizable="false" />
+                  <TableColumn fx:id="resultTableDynamicReaction" editable="false" prefWidth="93.6" resizable="false" />
+                  <TableColumn fx:id="resultTableFullReaction" editable="false" prefWidth="93.6" resizable="false" />
+                  <TableColumn fx:id="resultTableRPMColumn" editable="false" prefWidth="84.0" resizable="false" sortable="false" text="N" />
+              </columns>
+            </TableView>
+            <HBox alignment="CENTER" fillHeight="false" layoutX="542.0" layoutY="679.0" spacing="50.0">
+               <children>
+                  <Button fx:id="showChartButton" layoutX="542.0" layoutY="679.0" mnemonicParsing="false" onAction="#onShowChartButtonClick" prefWidth="180.0" text="Построить график">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="cancelButton" layoutX="857.0" layoutY="679.0" mnemonicParsing="false" prefWidth="180.0" text="Начать сначала">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </right>
+</BorderPane>
