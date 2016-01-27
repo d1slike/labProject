@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 public class VariableHolder {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
             VariableType.GAMMA, VariableType.M, VariableType.H};
+    public static final int ALT_VAR_MAX_STEP_COUNT = 3;
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
@@ -34,11 +35,7 @@ public class VariableHolder {
         return activeVariables.get(type).getValue();
     }
 
-    public void setVarValue(VariableType type, double newValue) {
-        activeVariables.get(type).setValue(newValue);
-    }
-
-    public void reset() {
+    public void clear() {
         activeVariables.values().forEach(variable -> variable.setValue(0));
         altVariable = activeVariables.get(VariableType.RO);
         researchVariable = VariableType.Xa;
@@ -49,7 +46,7 @@ public class VariableHolder {
         return activeVariables.values();
     }
 
-    public void updateAlterVariable() {
+    private void updateAlterVariable() {
         altVariable.addStep();
     }
 

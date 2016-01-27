@@ -2,7 +2,7 @@ package ru.stankin.holders;
 
 import javafx.scene.control.Control;
 
-import ru.stankin.model.Stage;
+import ru.stankin.model.WorkStage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,11 +34,11 @@ public class InterfaceItemHolder {
         itemReferenceMap.values().forEach(item -> item.setDisable(true));
     }
 
-    public void prepareInterfaceForCurrentStage(Stage currentStage) {
+    public void prepareInterfaceForCurrentStage(WorkStage currentWorkStage) {
         disableAll();
         notDefaultStyleItems.forEach(name -> itemReferenceMap.get(name).setStyle(DEFAULT_BORDER_STYLE));
         notDefaultStyleItems.clear();
-        for (String itemName : currentStage.getAllowedUiItemsOnStage())
+        for (String itemName : currentWorkStage.getAllowedUiItemsOnStage())
             itemReferenceMap.get(itemName).setDisable(false);
     }
 

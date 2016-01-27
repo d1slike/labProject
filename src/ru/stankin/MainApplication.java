@@ -7,7 +7,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 
 /**
  * Created by DisDev on 21.01.2016.
@@ -39,6 +38,8 @@ public class MainApplication extends Application {
             FXMLLoader workFrameLoader = new FXMLLoader();
             workFrameLoader.setLocation(getClass().getResource("workFrame.fxml"));
             AnchorPane anchorPane = workFrameLoader.load();
+            MainController controller = workFrameLoader.getController();
+            controller.setMainStage(primaryStage);
 
             root.setCenter(anchorPane);
             Scene scene = new Scene(root);
@@ -50,4 +51,5 @@ public class MainApplication extends Application {
             ex.printStackTrace();
         }
     }
+
 }

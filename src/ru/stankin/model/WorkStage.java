@@ -5,7 +5,7 @@ import ru.stankin.view.ElementNames;
 /**
  * Created by Dislike on 23.01.2016.
  */
-public enum Stage {
+public enum WorkStage {
 
 
     STAGE_1_SELECT_ALT_VAR("Выберите изменяемый параметр в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_1_ALLOWED_UI_ITEMS),
@@ -19,7 +19,7 @@ public enum Stage {
     private final String description;
     private final String[] allowedUiItemsOnStage;
 
-    Stage(String description, String[] allowedUiItemsOnStage) {
+    WorkStage(String description, String[] allowedUiItemsOnStage) {
         this.description = description;
         this.allowedUiItemsOnStage = allowedUiItemsOnStage;
     }
@@ -32,11 +32,11 @@ public enum Stage {
         return allowedUiItemsOnStage;
     }
 
-    public Stage nextStage() {
+    public WorkStage nextStage() {
         return ordinal() == values().length - 1 ? this : values()[ordinal() + 1];
     }
 
-    public Stage prevStage() {
+    public WorkStage prevStage() {
         return ordinal() == 0 ? this : values()[ordinal() - 1];
     }
 

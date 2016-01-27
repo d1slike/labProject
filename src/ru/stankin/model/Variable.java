@@ -13,7 +13,7 @@ public final class Variable {
 
     public Variable(VariableType type, double value) {
         this.type = type;
-        this.value = new SimpleObjectProperty<>(0.);
+        this.value = new SimpleObjectProperty<>(value);
         step = 0;
     }
 

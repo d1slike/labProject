@@ -1,6 +1,8 @@
 package ru.stankin.model;
 
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanStringProperty;
 import javafx.beans.value.ObservableValue;
 
 /**
@@ -22,7 +24,7 @@ public enum  VariableType {
     Yb("Yb", Double.MIN_VALUE, Double.MAX_VALUE),
     T("T", Double.MIN_VALUE, Double.MAX_VALUE);
 
-    private final ObservableValue<String> name;
+    private final ReadOnlyStringProperty name;
     private final double leftValue;
     private final double rightValue;
 
@@ -40,7 +42,7 @@ public enum  VariableType {
         return leftValue <= value && rightValue >= value;
     }
 
-    public ObservableValue<String> getNameProperty() {
+    public ReadOnlyStringProperty getNameProperty() {
         return name;
     }
 }

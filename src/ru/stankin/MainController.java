@@ -4,15 +4,16 @@ package ru.stankin;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import ru.stankin.holders.ChartHolder;
 import ru.stankin.holders.InterfaceItemHolder;
 import ru.stankin.holders.VariableHolder;
 import ru.stankin.math.Calculator;
 import ru.stankin.model.ResultRecord;
-import ru.stankin.model.Stage;
+import ru.stankin.model.WorkStage;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
-import ru.stankin.view.ChartHolder;
 import ru.stankin.view.ElementNames;
 
 
@@ -23,7 +24,10 @@ public class MainController {
 
     private VariableHolder variableHolder;
     private InterfaceItemHolder interfaceItemHolder;
-    private Stage currentStage;
+    private ChartHolder chartHolder;
+    private WorkStage currentWorkStage;
+
+    private Stage mainStage;
 
     @FXML
     private ComboBox<VariableType> altVarSwitcher;
@@ -82,6 +86,7 @@ public class MainController {
 
         variableHolder = new VariableHolder();
         Calculator.initVarHolder(variableHolder);
+
         interfaceItemHolder = new InterfaceItemHolder();
         interfaceItemHolder.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
         interfaceItemHolder.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
@@ -97,9 +102,9 @@ public class MainController {
         interfaceItemHolder.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
         interfaceItemHolder.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
 
-        //currentStage = Stage.STAGE_1_SELECT_ALT_VAR;
-        currentStage = Stage.STAGE_4_SELECT_RESEARCH_VAR;
-        //currentStage = Stage.STAGE_6_CHECK_CHART;
+        //currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
+        currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
+        //currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
         onChangedStage();
 
 
@@ -116,6 +121,13 @@ public class MainController {
         varTableColumnValue.setCellFactory((TableColumn<Variable, Double> col) -> new EditableCell());
         varTable.getItems().addAll(variableHolder.getAllVars());
 
+        resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
+        resultTableAltVarColumn.setCellValueFactory(param -> param.getValue().altVarProperty());
+        resultTableStaticReaction.setCellValueFactory(param -> param.getValue().staticReactionProperty());
+        resultTableDynamicReaction.setCellValueFactory(param -> param.getValue().dynamicReactionProperty());
+        resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
+        resultTable.setItems(variableHolder.getResultRecords());
+
     }
 
     @FXML
@@ -125,36 +137,38 @@ public class MainController {
 
     @FXML
     private void onNextStageButtonClick() {
-        if (currentStage == null)
+        if (currentWorkStage == null)
             return;
         if (executeAllActionsOnCurrentStage()) {
-            currentStage = currentStage.nextStage();
+            currentWorkStage = currentWorkStage.nextStage();
             onChangedStage();
         }
     }
 
     @FXML
     private void onPrevStageButtonClick() {
-        if (currentStage == null || currentStage == Stage.STAGE_1_SELECT_ALT_VAR)
+        if (currentWorkStage == null || currentWorkStage == WorkStage.STAGE_1_SELECT_ALT_VAR)
             return;
-        currentStage = currentStage.prevStage();
+        currentWorkStage = currentWorkStage.prevStage();
         onChangedStage();
     }
 
     @FXML
     private void onShowChartButtonClick() {
-        if (ChartHolder.getInstance() == null)
+        if (chartHolder == null)
             return;
-        ChartHolder.getInstance().show();
+        chartHolder.buildAndShow(variableHolder.getResultRecords(),
+                resultTableFullReaction.getText(),
+                VariableHolder.ALT_VAR_MAX_STEP_COUNT);
     }
 
     private void onChangedStage() {
-        interfaceItemHolder.prepareInterfaceForCurrentStage(currentStage);
-        informationTextLabel.setText(currentStage.getDescription());
+        interfaceItemHolder.prepareInterfaceForCurrentStage(currentWorkStage);
+        informationTextLabel.setText(currentWorkStage.getDescription());
     }
 
     private boolean executeAllActionsOnCurrentStage() {
-        switch (currentStage) {
+        switch (currentWorkStage) {
             case STAGE_1_SELECT_ALT_VAR:
                 resultTableAltVarColumn.setText(variableHolder.getAltVariable().getName());
                 break;
@@ -197,29 +211,28 @@ public class MainController {
                 resultTableDynamicReaction.setText(name + "(динам.)");
                 resultTableFullReaction.setText(name + "(полн.)");
 
-                resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
-                resultTableAltVarColumn.setCellValueFactory(param -> param.getValue().altVarProperty());
-                resultTableStaticReaction.setCellValueFactory(param -> param.getValue().staticReactionProperty());
-                resultTableDynamicReaction.setCellValueFactory(param -> param.getValue().dynamicReactionProperty());
-                resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
-                resultTable.setItems(variableHolder.getResultRecords());
 
-                /*variableHolder.getResultRecords().addAll(new ResultRecord(1,2,3,4,5), new ResultRecord(10,1,1,3,4),  new ResultRecord(2,2,3,4,5), new ResultRecord(4,2,3,4,5),
-                        new ResultRecord(1,2,3,4,5), new ResultRecord(10,1,1,3,4),  new ResultRecord(2,2,3,4,5), new ResultRecord(4,2,3,4,5),
-                        new ResultRecord(1,2,3,4,5), new ResultRecord(10,1,1,3,4),  new ResultRecord(2,2,3,4,5), new ResultRecord(4,2,3,4,5),
-                        new ResultRecord(1,2,3,4,88), new ResultRecord(10,1,1,3, 11),  new ResultRecord(2,2,3,4,3), new ResultRecord(4,2,3,4,1));
-                currentStage = Stage.STAGE_5_FILL_RESULT_TABLE;
-                ChartHolder.initChart(variableHolder.getResultRecords(), variableHolder.getResearchVariable().getName(), 4);*/
+                variableHolder.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
+                        new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
+                        new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
+                        new ResultRecord(1, 2, 3, 4, 88), new ResultRecord(10, 1, 1, 3, 11), new ResultRecord(2, 2, 3, 4, 3), new ResultRecord(4, 2, 3, 4, 1));
+                currentWorkStage = WorkStage.STAGE_5_FILL_RESULT_TABLE;
+                chartHolder = new ChartHolder(mainStage);
             }
             break;
             case STAGE_5_FILL_RESULT_TABLE: {
-                ChartHolder.initChart(variableHolder.getResultRecords()
-                        , variableHolder.getResearchVariable().getName(), 4); //todo useless magic const
+
+                //todo check for complete
             }
         }
 
         return true;
     }
+
+    public void setMainStage(Stage mainStage) {
+        this.mainStage = mainStage;
+    }
+
 
     private class EditableCell extends TextFieldTableCell<Variable, Double> {
         public EditableCell() {
