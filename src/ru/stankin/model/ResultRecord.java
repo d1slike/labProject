@@ -21,7 +21,7 @@ public class ResultRecord {
                         final double dynamicRactionValue,
                         final double fullReactionValue)
     {
-        this.time = new SimpleDoubleProperty(timeValue);
+        time = new SimpleDoubleProperty(timeValue);
         altVar = new SimpleDoubleProperty(altVarValue);
         staticReaction = new SimpleDoubleProperty(staticReactionValue);
         dynamicReaction = new SimpleDoubleProperty(dynamicRactionValue);

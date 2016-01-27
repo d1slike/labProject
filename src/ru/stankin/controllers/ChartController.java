@@ -1,4 +1,4 @@
-package ru.stankin.holders;
+package ru.stankin.controllers;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -13,14 +13,14 @@ import ru.stankin.model.ResultRecord;
 /**
  * Created by DisDev on 27.01.2016.
  */
-public class ChartHolder {
+public class ChartController {
     private final NumberAxis yAxis;
     private final LineChart<Number, Number> chart;
     private final Stage stage;
 
     private boolean alreadyBuilt;
 
-    public ChartHolder(Stage primaryStage) {
+    public ChartController(Stage primaryStage) {
         yAxis = new NumberAxis();
         NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("Время(t)");
@@ -30,7 +30,7 @@ public class ChartHolder {
         BorderPane pane = new BorderPane(chart);
         Scene scene = new Scene(pane);
         stage = new Stage();
-        stage.initModality(Modality.NONE);
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);
         stage.setTitle("График");
         stage.setIconified(false);
@@ -72,7 +72,6 @@ public class ChartHolder {
             chart.getData().addAll(firstLine, secondLine, thirdLine, fourthLine);
             alreadyBuilt = true;
         }
-
         stage.showAndWait();
     }
 

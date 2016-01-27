@@ -70,7 +70,7 @@
                       <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" text="Значение" />
                     </columns>
                   </TableView>
-                  <Button fx:id="showIn3DButton" layoutX="129.0" layoutY="588.0" mnemonicParsing="false" text="Вид в 3D">
+                  <Button fx:id="showIn3DButton" layoutX="129.0" layoutY="588.0" mnemonicParsing="false" onAction="#on3DButtonShowClick" text="Вид в 3D">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>
@@ -85,7 +85,7 @@
                   <VBox alignment="CENTER">
                      <children>
                         <Label layoutX="325.0" layoutY="253.0" prefHeight="62.0" prefWidth="123.0" text="Исследуемое значение" wrapText="true" />
-                        <ComboBox fx:id="researchVarSwitcher" layoutX="323.0" layoutY="315.0" prefHeight="39.0" prefWidth="123.0">
+                        <ComboBox fx:id="researchVarSwitcher" layoutX="323.0" layoutY="315.0" onAction="#onChangedResearchVariable" prefHeight="39.0" prefWidth="123.0">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor></ComboBox>
@@ -100,7 +100,7 @@
                            </cursor></TextField>
                      </children>
                   </VBox>
-                  <Button fx:id="calcButton" layoutX="323.0" layoutY="441.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="123.0" text="Рассчитать">
+                  <Button fx:id="calcButton" layoutX="323.0" layoutY="441.0" mnemonicParsing="false" onAction="#onCalcButtonClick" prefHeight="39.0" prefWidth="123.0" text="Рассчитать">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor></Button>

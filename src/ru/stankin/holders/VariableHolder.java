@@ -2,6 +2,7 @@ package ru.stankin.holders;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ru.stankin.math.Calculator;
 import ru.stankin.model.ResultRecord;
 import ru.stankin.model.Variable;
 import ru.stankin.model.VariableType;
@@ -17,18 +18,27 @@ import java.util.stream.Stream;
 public class VariableHolder {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
             VariableType.GAMMA, VariableType.M, VariableType.H};
-    public static final int ALT_VAR_MAX_STEP_COUNT = 3;
+    public static final int ALT_VAR_MAX_STEP_COUNT = 4;
+    private static final int TIME_STEPS_COUNT = 10;
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
     private Variable altVariable;
     private VariableType researchVariable;
 
+    private double lastCheckedTime;
+    private int samplesForAllVarChange;
+    private int samplesForTime;
+
 
     public VariableHolder() {
         activeVariables = new EnumMap<>(VariableType.class);
         resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
+        Calculator.initVarHolder(this);
+        lastCheckedTime = 0;
+        samplesForTime = TIME_STEPS_COUNT;
+        samplesForAllVarChange = ALT_VAR_MAX_STEP_COUNT;
     }
 
     public double getVarValue(VariableType type) {
@@ -46,7 +56,7 @@ public class VariableHolder {
         return activeVariables.values();
     }
 
-    private void updateAlterVariable() {
+    private void updateAltVariable() {
         altVariable.addStep();
     }
 
@@ -68,6 +78,24 @@ public class VariableHolder {
 
     public ObservableList<ResultRecord> getResultRecords() {
         return resultRecords;
+    }
+
+    public boolean checkTime(double timeValue) {
+        boolean ok =  lastCheckedTime <= timeValue && timeValue >= 40;
+        if(ok)
+            lastCheckedTime = timeValue;
+        return ok;
+    }
+
+    public boolean calculateNextForTime(double time) {
+        resultRecords.add(Calculator.calculateReactions(time));
+        if (--samplesForTime == 0) {
+            samplesForAllVarChange--;
+            updateAltVariable();
+            samplesForTime = TIME_STEPS_COUNT;
+            lastCheckedTime = 0;
+        }
+        return samplesForAllVarChange == 0;
     }
 
 }
