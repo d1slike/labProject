@@ -44,8 +44,8 @@ public class MainController {
 
     @FXML
     private Button showIn3DButton;
-    @FXML
-    private Button resetButton;
+    /*@FXML
+    private Button resetButton;*/
 
     @FXML
     private ComboBox<VariableType> researchVarSwitcher;
@@ -95,7 +95,7 @@ public class MainController {
         interfaceItemHolder.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
         interfaceItemHolder.putItem(ElementNames.TABLE_VARIABLES, varTable);
         interfaceItemHolder.putItem(ElementNames.BUTTON_SHOW_IN_3D, showIn3DButton);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
+        //interfaceItemHolder.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
         interfaceItemHolder.putItem(ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER, researchVarSwitcher);
         interfaceItemHolder.putItem(ElementNames.TABLE_RESULTS, resultTable);
         interfaceItemHolder.putItem(ElementNames.BUTTON_SHOW_CHART, showChartButton);
