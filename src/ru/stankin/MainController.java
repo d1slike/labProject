@@ -1,6 +1,7 @@
 package ru.stankin;
 
 
+import javafx.beans.NamedArg;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -16,11 +17,17 @@ import ru.stankin.model.Variable;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.ElementNames;
 
+import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 /**
  * Created by Dislike on 22.01.2016.
  */
 public class MainController {
+
+    private static final Pattern STRING_VALIDATOR = Pattern.compile("\\-?\\d+(\\.\\d{0,})?");
 
     private VariableHolder variableHolder;
     private InterfaceItemHolder interfaceItemHolder;
@@ -131,6 +138,12 @@ public class MainController {
         resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
         resultTableRPMColumn.setCellValueFactory(param -> param.getValue().getRPM());
         resultTable.setItems(variableHolder.getResultRecords());
+
+
+        final UnaryOperator<TextFormatter.Change> condition = change -> STRING_VALIDATOR.matcher(change.getControlNewText()).matches() ? change : null;
+        timeField.setTextFormatter(new TextFormatter<Number>(condition));
+        altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
+
 
     }
 
@@ -271,6 +284,7 @@ public class MainController {
     private class EditableCell extends TextFieldTableCell<Variable, Number> {
         public EditableCell() {
             setConverter(new StringDoubleConverter());
+
         }
 
         private class StringDoubleConverter extends StringConverter<Number> {
@@ -299,6 +313,4 @@ public class MainController {
             }
         }
     }
-
-
 }

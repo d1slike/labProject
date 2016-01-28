@@ -32,7 +32,7 @@ public class MainApplication extends Application {
     private void initMainForm() {
         try {
             FXMLLoader mainFrameLoader = new FXMLLoader();
-            mainFrameLoader.setLocation(getClass().getResource("view/mainFrame.fxml"));
+            mainFrameLoader.setLocation(getClass().getResource("mainFrame.fxml"));
             BorderPane root = mainFrameLoader.load();
 
             FXMLLoader workFrameLoader = new FXMLLoader();

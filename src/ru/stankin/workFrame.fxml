@@ -130,7 +130,7 @@
             </TableView>
             <HBox alignment="CENTER" fillHeight="false" layoutX="542.0" layoutY="679.0" spacing="50.0">
                <children>
-                  <Button fx:id="showChartButton" layoutX="542.0" layoutY="588.0" mnemonicParsing="false" onAction="#onShowChartButtonClick" prefHeight="30.0" prefWidth="180.0" text="Построить график">
+                  <Button fx:id="showChartButton" layoutX="542.0" layoutY="588.0" mnemonicParsing="false" onAction="#onShowChartButtonClick" prefHeight="30.0" prefWidth="180.0" text="Построить графики">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
