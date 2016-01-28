@@ -10,7 +10,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.stankin.holders.VariableHolder;
 import ru.stankin.model.ResultRecord;
-import ru.stankin.model.VariableType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class ChartController {
         xAsisForFull.setLabel(xAxisName);
 
         dynamicReactionsChart = new LineChart<>(xAxisForDynamic, yAxisForDynamicReactionsChart);
-        fullReactionsChart = new LineChart<Number, Number>(xAsisForFull, yAxixForFullReqctionsChart);
+        fullReactionsChart = new LineChart<>(xAsisForFull, yAxixForFullReqctionsChart);
         dynamicReactionsChart.setPrefSize(CHART_WIDTH, CHART_HEIGHT);
         fullReactionsChart.setPrefSize(CHART_WIDTH, CHART_HEIGHT);
 

@@ -1,4 +1,4 @@
-package ru.stankin.view;
+package ru.stankin.enums;
 
 /**
  * Created by Dislike on 24.01.2016.

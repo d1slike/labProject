@@ -1,9 +1,8 @@
 package ru.stankin.model;
 
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableDoubleValue;
-import javafx.beans.value.ObservableValue;
+import ru.stankin.enums.VariableType;
 
 /**
  * Created by Dislike on 22.01.2016.

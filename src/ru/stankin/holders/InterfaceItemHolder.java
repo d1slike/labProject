@@ -2,7 +2,7 @@ package ru.stankin.holders;
 
 import javafx.scene.control.Control;
 
-import ru.stankin.model.WorkStage;
+import ru.stankin.enums.WorkStage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

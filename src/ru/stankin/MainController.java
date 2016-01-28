@@ -11,10 +11,10 @@ import ru.stankin.controllers.Scene3DController;
 import ru.stankin.holders.InterfaceItemHolder;
 import ru.stankin.holders.VariableHolder;
 import ru.stankin.model.ResultRecord;
-import ru.stankin.model.WorkStage;
+import ru.stankin.enums.WorkStage;
 import ru.stankin.model.Variable;
-import ru.stankin.model.VariableType;
-import ru.stankin.view.ElementNames;
+import ru.stankin.enums.VariableType;
+import ru.stankin.enums.ElementNames;
 
 
 /**

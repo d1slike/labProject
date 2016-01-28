@@ -5,7 +5,7 @@ import javafx.collections.ObservableList;
 import ru.stankin.math.Calculator;
 import ru.stankin.model.ResultRecord;
 import ru.stankin.model.Variable;
-import ru.stankin.model.VariableType;
+import ru.stankin.enums.VariableType;
 
 import java.util.Collection;
 import java.util.EnumMap;

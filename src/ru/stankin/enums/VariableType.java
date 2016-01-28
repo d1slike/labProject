@@ -1,4 +1,4 @@
-package ru.stankin.model;
+package ru.stankin.enums;
 
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;

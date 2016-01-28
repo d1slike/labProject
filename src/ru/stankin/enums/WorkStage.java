@@ -1,6 +1,4 @@
-package ru.stankin.model;
-
-import ru.stankin.view.ElementNames;
+package ru.stankin.enums;
 
 /**
  * Created by Dislike on 23.01.2016.
