@@ -1,5 +1,6 @@
 package ru.stankin.controllers;
 
+import javafx.scene.shape.Cylinder;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.stankin.holders.VariableHolder;
@@ -10,9 +11,8 @@ import ru.stankin.holders.VariableHolder;
 public class Scene3DController {
 
     private final Stage stage;
-    private final VariableHolder holder;
 
-    public Scene3DController(Stage mainStage, VariableHolder variableHolder) {
+    public Scene3DController(Stage mainStage) {
         stage = new Stage();
         stage.initModality(Modality.NONE);
         stage.initOwner(mainStage);
@@ -22,11 +22,9 @@ public class Scene3DController {
         stage.setWidth(600);
         stage.setResizable(false);
 
-        holder = variableHolder;
 
     }
 
-    public void buildAndShow() {
-
+    public void buildAndShow(VariableHolder variableHolder) {
     }
 }

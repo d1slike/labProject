@@ -11,11 +11,11 @@ import java.util.Map;
  * Created by Dislike on 23.01.2016.
  */
 public class Calculator {
-    private static final double G = 9.8066;
+    private static final double G = 9.81;
     private static final double TWO = 2D;
-    private static final double TWENTY_FOURTH = 24D;
-    private static final double EIGHT = 8;
-    private static final String OMEGA_IN_QRT = "omegaInQrt";
+    //private static final double TWENTY_FOURTH = 24D;
+    //private static final double EIGHT = 8;
+    private static final String OMEGA_IN_SQR = "omegaInSqr";
     private static final String EPSILON = "epsilon";
     private static final String MASS = "m";
     private static final String IXZ = "Ixz";
@@ -32,11 +32,11 @@ public class Calculator {
     }
 
     private static double getXc() {
-        return Math.sin(getPhi()) * getVar(VariableType.E);
+        return  getVar(VariableType.E) / Math.sin(getPhi());
     }
 
     private static double getYc() {
-        return Math.cos(getPhi()) * getVar(VariableType.E);
+        return  getVar(VariableType.E) / Math.cos(getPhi());
     }
 
     private static double getMass() {
@@ -61,11 +61,15 @@ public class Calculator {
     }
 
     private static double getIz() {
-        return 0; //TODO ?
+        //return getMass() * Math.pow(getVar(VariableType.R), TWO) / TWO; //TODO уточнить
+        double m = getMass();
+        double lInSqr = Math.pow(getVar(VariableType.L), TWO);
+        double rInSqr =  Math.pow(getVar(VariableType.R), TWO);
+        return  m * lInSqr / 12D +  m * rInSqr / 4D;
     }
 
     private static double getConstA() {
-        double bracketResult = Math.pow(getVar(VariableType.L), TWO) / TWENTY_FOURTH - Math.pow(getVar(VariableType.R), TWO) / EIGHT;
+        double bracketResult = Math.pow(getVar(VariableType.L), TWO) / 24D - Math.pow(getVar(VariableType.R), TWO) / 8D;
         double m = getMass();
         double firstSummand = m * bracketResult * Math.sin(TWO * getVar(VariableType.GAMMA));
         double secondSummand = m * getVar(VariableType.Zc) * getYc();
@@ -89,7 +93,7 @@ public class Calculator {
         final VariableType researchVarType = variableHolder.getResearchVariable();
         Map<String, Double> varCache = new HashMap<>();
         varCache.put(EPSILON, getEpsilon());
-        varCache.put(OMEGA_IN_QRT, Math.pow(getOmega(), TWO));
+        varCache.put(OMEGA_IN_SQR, Math.pow(getOmega(), TWO));
         varCache.put(MASS, getMass());
         varCache.put(IYZ, getIyz());
         varCache.put(IXZ, getIxz());
@@ -110,7 +114,7 @@ public class Calculator {
 
     private static double getReaction(boolean isStatic, VariableType type, Map<String, Double> varCache) {
         double epsilon = isStatic ? 0 : varCache.get(EPSILON);
-        double omegaInQrt = isStatic ? 0 : varCache.get(OMEGA_IN_QRT);
+        double omegaInSqr = isStatic ? 0 : varCache.get(OMEGA_IN_SQR);
         double m = varCache.get(MASS);
         double Ixz = varCache.get(IXZ);
         double Iyz = varCache.get(IYZ);
@@ -121,15 +125,15 @@ public class Calculator {
         switch (type) {
             case Ya:
             case Yb:
-                double Yb = (epsilon * Ixz - omegaInQrt * Iyz) / h;
+                double Yb = (epsilon * Ixz - omegaInSqr * Iyz) / h;
                 if (type == VariableType.Ya)
-                    return (m * xc * epsilon) - (m * yc * omegaInQrt) - Yb;
+                    return (m * xc * epsilon) - (m * yc * omegaInSqr) - Yb;
                 return Yb;
             case Xa:
             case Xb:
-                double Xb = ((m * G * getVar(VariableType.Zc)) - (epsilon * Iyz) - (omegaInQrt * Ixz)) / h;
+                double Xb = ((m * G * getVar(VariableType.Zc)) - (epsilon * Iyz) - (omegaInSqr * Ixz)) / h;
                 if (type == VariableType.Xa)
-                    return (m * G) - (m * yc * epsilon) - (m * xc * omegaInQrt) - Xb;
+                    return (m * G) - (m * yc * epsilon) - (m * xc * omegaInSqr) - Xb;
                 return Xb;
         }
 
@@ -137,7 +141,7 @@ public class Calculator {
     }
 
     public static double calcRPM() {
-        return 0;//todo fix
+        return 0;//todo вывести
     }
 
 

@@ -112,8 +112,8 @@ public class MainController {
         interfaceItemHolder.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
         interfaceItemHolder.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
 
-        //currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
-        currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
+        currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
+        //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
         //currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
         onChangedWorkStage();
 
@@ -126,7 +126,7 @@ public class MainController {
         researchVarSwitcher.setValue(VariableType.Xa);
         variableHolder.setResearchVariableType(VariableType.Xa);
 
-        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameProperty());
+        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansure());
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValuePropertie());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditableCell());
         varTable.getItems().addAll(variableHolder.getAllVars());
@@ -140,9 +140,9 @@ public class MainController {
         resultTable.setItems(variableHolder.getResultRecords());
 
 
-        final UnaryOperator<TextFormatter.Change> condition = change -> STRING_VALIDATOR.matcher(change.getControlNewText()).matches() ? change : null;
-        timeField.setTextFormatter(new TextFormatter<Number>(condition));
-        altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
+        //final UnaryOperator<TextFormatter.Change> condition = change -> STRING_VALIDATOR.matcher(change.getControlNewText()).matches() ? change : null;
+        //timeField.setTextFormatter(new TextFormatter<Number>(condition));
+        //altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
 
 
     }

@@ -2,36 +2,36 @@ package ru.stankin.enums;
 
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.adapter.ReadOnlyJavaBeanStringProperty;
-import javafx.beans.value.ObservableValue;
 
 /**
  * Created by Dislike on 22.01.2016.
  */
 public enum  VariableType {
 
-    RO("RO", -33, 8),
-    R("R", -54, 44),
-    L("L", -300, 80),
-    E("E", 0, 12),
-    Zc("Zc", 30, 285),
-    GAMMA("GAMMA", 0, 12),
-    M("M", 6, 60),
-    H("H", -420, 100),
-    Xa("Xa", Double.MIN_VALUE, Double.MAX_VALUE),
-    Xb("Xb", Double.MIN_VALUE, Double.MAX_VALUE),
-    Ya("Ya", Double.MIN_VALUE, Double.MAX_VALUE),
-    Yb("Yb", Double.MIN_VALUE, Double.MAX_VALUE),
-    T("T", Double.MIN_VALUE, Double.MAX_VALUE);
+    RO("RO", -33, 8, "Кг/м^3"),
+    R("R", -54, 44, "м"),
+    L("L", -300, 80, "м"),
+    E("E", 0, 12, "м"),
+    Zc("Zc", 30, 285, "м"),
+    GAMMA("GAMMA", 0, 12, "град"),
+    M("M", 6, 60, "H * м"),
+    H("H", -420, 100, "м"),
+    Xa("Xa", Double.MIN_VALUE, Double.MAX_VALUE, "-"), //TODO check
+    Xb("Xb", Double.MIN_VALUE, Double.MAX_VALUE, "-"),
+    Ya("Ya", Double.MIN_VALUE, Double.MAX_VALUE, "-"),
+    Yb("Yb", Double.MIN_VALUE, Double.MAX_VALUE, "-"),
+    T("T", Double.MIN_VALUE, Double.MAX_VALUE, "-");
 
     private final ReadOnlyStringProperty name;
+    private final ReadOnlyStringProperty nameWithMeansure;
     private final double leftValue;
     private final double rightValue;
 
-    VariableType(String name, double leftValue, double rightValue) {
+    VariableType(String name, double leftValue, double rightValue, String meansure) {
         this.leftValue = leftValue;
         this.rightValue = rightValue;
         this.name = new SimpleStringProperty(name);
+        this.nameWithMeansure = new SimpleStringProperty(name + "(" + meansure + ")");
     }
 
     public String getName() {
@@ -39,10 +39,14 @@ public enum  VariableType {
     }
 
     public boolean checkRange(double value) {
-        return leftValue <= value && rightValue >= value;
+        return true; //leftValue <= value && rightValue >= value;
     }
 
     public ReadOnlyStringProperty getNameProperty() {
         return name;
+    }
+
+    public ReadOnlyStringProperty getNameWithMeansure() {
+        return nameWithMeansure;
     }
 }
