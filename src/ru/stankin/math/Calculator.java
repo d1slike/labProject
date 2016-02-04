@@ -11,8 +11,8 @@ import java.util.Map;
  * Created by Dislike on 23.01.2016.
  */
 public class Calculator {
-    private static final double G = 9.81;
-    private static final double TWO = 2D;
+    private static final double G = 9.81E00;
+    private static final double TWO = 2.0E00;
     //private static final double TWENTY_FOURTH = 24D;
     //private static final double EIGHT = 8;
     private static final String OMEGA_IN_SQR = "omegaInSqr";
@@ -32,11 +32,11 @@ public class Calculator {
     }
 
     private static double getXc() {
-        return  getVar(VariableType.E) / Math.sin(getPhi());
+        return getVar(VariableType.E) / Math.sin(getPhiInRadians());
     }
 
     private static double getYc() {
-        return  getVar(VariableType.E) / Math.cos(getPhi());
+        return getVar(VariableType.E) / Math.cos(getPhiInRadians());
     }
 
     private static double getMass() {
@@ -52,8 +52,8 @@ public class Calculator {
         return getEpsilon() * getVar(VariableType.T);
     }
 
-    private static double getPhi() {
-        return getEpsilon() * Math.pow(getVar(VariableType.T), TWO) / TWO;
+    private static double getPhiInRadians() {
+        return Math.toRadians(getEpsilon() * Math.pow(getVar(VariableType.T), TWO) / TWO);
     }
 
     private static double getEpsilon() {
@@ -64,24 +64,29 @@ public class Calculator {
         //return getMass() * Math.pow(getVar(VariableType.R), TWO) / TWO; //TODO уточнить
         double m = getMass();
         double lInSqr = Math.pow(getVar(VariableType.L), TWO);
-        double rInSqr =  Math.pow(getVar(VariableType.R), TWO);
-        return  m * lInSqr / 12D +  m * rInSqr / 4D;
+        double rInSqr = Math.pow(getVar(VariableType.R), TWO);
+        double gammaInRadians = Math.toRadians(getVar(VariableType.GAMMA));
+        double sinInQrt = Math.pow(Math.sin(gammaInRadians), TWO);
+        double cosInQrt = Math.pow(Math.cos(gammaInRadians), TWO);
+        double firstSummand = (m * lInSqr / 12D + m * rInSqr / 4D) * sinInQrt;
+        double secondSummand = m * rInSqr / TWO * cosInQrt;
+        return firstSummand + secondSummand;
     }
 
     private static double getConstA() {
         double bracketResult = Math.pow(getVar(VariableType.L), TWO) / 24D - Math.pow(getVar(VariableType.R), TWO) / 8D;
         double m = getMass();
-        double firstSummand = m * bracketResult * Math.sin(TWO * getVar(VariableType.GAMMA));
+        double firstSummand = m * bracketResult * Math.sin(Math.toRadians(TWO * getVar(VariableType.GAMMA)));
         double secondSummand = m * getVar(VariableType.Zc) * getYc();
         return firstSummand + secondSummand;
     }
 
     private static double getIxz() {
-        return -getConstA() * Math.sin(getPhi());
+        return -getConstA() * Math.sin(getPhiInRadians());
     }
 
     private static double getIyz() {
-        return getConstA() * Math.cos(getPhi());
+        return getConstA() * Math.cos(getPhiInRadians());
     }
 
     private static double getVar(VariableType type) {
@@ -113,14 +118,14 @@ public class Calculator {
     }
 
     private static double getReaction(boolean isStatic, VariableType type, Map<String, Double> varCache) {
-        double epsilon = isStatic ? 0 : varCache.get(EPSILON);
-        double omegaInSqr = isStatic ? 0 : varCache.get(OMEGA_IN_SQR);
-        double m = varCache.get(MASS);
-        double Ixz = varCache.get(IXZ);
-        double Iyz = varCache.get(IYZ);
-        double xc = varCache.get(XC);
-        double yc = varCache.get(YC);
-        double h = varCache.get(H);
+        final double epsilon = isStatic ? 0 : varCache.get(EPSILON);
+        final double omegaInSqr = isStatic ? 0 : varCache.get(OMEGA_IN_SQR);
+        final double m = varCache.get(MASS);
+        final double Ixz = varCache.get(IXZ);
+        final double Iyz = varCache.get(IYZ);
+        final double xc = varCache.get(XC);
+        final double yc = varCache.get(YC);
+        final double h = varCache.get(H);
 
         switch (type) {
             case Ya:
@@ -141,7 +146,7 @@ public class Calculator {
     }
 
     public static double calcRPM() {
-        return 0;//todo вывести
+        return getOmega() * getVar(VariableType.T) / (TWO * Math.PI * 60D); //todo check
     }
 
 

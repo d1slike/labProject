@@ -96,7 +96,7 @@ public class MainController {
 
         variableHolder = new VariableHolder();
         chartController = new ChartController(mainStage);
-        scene3DController = new Scene3DController(mainStage, variableHolder);
+        scene3DController = new Scene3DController(mainStage);
         interfaceItemHolder = new InterfaceItemHolder();
         interfaceItemHolder.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
         interfaceItemHolder.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
@@ -112,10 +112,22 @@ public class MainController {
         interfaceItemHolder.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
         interfaceItemHolder.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
 
-        currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
+        //currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
         //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
-        //currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
+
+        currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
+        variableHolder.setResearchVariableType(VariableType.Yb);
+        variableHolder.setAltVariable(VariableType.R);
+        variableHolder.setVal(VariableType.H, 1.0);
+        variableHolder.setVal(VariableType.R, 0.1);
+        variableHolder.setVal(VariableType.L, 0.7);
+        variableHolder.setVal(VariableType.E, 0.001);
+        variableHolder.setVal(VariableType.Zc, 0.3);
+        variableHolder.setVal(VariableType.RO, 8000);
+        variableHolder.setVal(VariableType.GAMMA, 4);
+        variableHolder.setVal(VariableType.M, 0.6);
         onChangedWorkStage();
+        variableHolder.calculateNextForTime(50.0);
 
 
         altVarSwitcher.getItems().addAll(VariableHolder.EDITABLE_VAR_TYPES_ARRAY);

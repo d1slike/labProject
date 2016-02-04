@@ -87,6 +87,10 @@ public class VariableHolder {
         return ok;
     }
 
+    public void setVal(VariableType type, double v) {
+        activeVariables.get(type).setValue(v);
+    }
+
     public boolean calculateNextForTime(double time) {
         resultRecords.add(Calculator.calculateReactions(time));
         if (--samplesForTime == 0) {
