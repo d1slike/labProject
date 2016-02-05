@@ -23,7 +23,7 @@ public enum  VariableType {
     T("T", Double.MIN_VALUE, Double.MAX_VALUE, "-");
 
     private final ReadOnlyStringProperty name;
-    private final ReadOnlyStringProperty nameWithMeansure;
+    private final ReadOnlyStringProperty nameWithMeansurement;
     private final double leftValue;
     private final double rightValue;
 
@@ -31,7 +31,7 @@ public enum  VariableType {
         this.leftValue = leftValue;
         this.rightValue = rightValue;
         this.name = new SimpleStringProperty(name);
-        this.nameWithMeansure = new SimpleStringProperty(name + "(" + meansure + ")");
+        this.nameWithMeansurement = new SimpleStringProperty(name + "(" + meansure + ")");
     }
 
     public String getName() {
@@ -46,7 +46,7 @@ public enum  VariableType {
         return name;
     }
 
-    public ReadOnlyStringProperty getNameWithMeansure() {
-        return nameWithMeansure;
+    public ReadOnlyStringProperty getNameWithMeansurement() {
+        return nameWithMeansurement;
     }
 }

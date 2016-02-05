@@ -4,8 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import ru.stankin.work.WorkController;
+
+import java.net.URL;
 
 
 /**
@@ -14,41 +16,62 @@ import ru.stankin.work.WorkController;
 public class MainApplication extends Application {
 
     private Stage primaryStage;
+    private GlobalStage currentGlobalStage;
+    private BorderPane root;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Lab++");
-        //primaryStage.setResizable(false);
-        //primaryStage.setFullScreen(true);
-        initMainForm();
-
+        nextStage();
+        primaryStage.show();
     }
 
     private static void main(String args[]) {
         launch(args);
     }
 
-    private void initMainForm() {
+    private void prepareUI() {
         try {
-            FXMLLoader mainFrameLoader = new FXMLLoader();
-            mainFrameLoader.setLocation(getClass().getResource("mainFrame.fxml"));
-            BorderPane root = mainFrameLoader.load();
-
-            FXMLLoader workFrameLoader = new FXMLLoader();
-            workFrameLoader.setLocation(getClass().getResource("workFrame.fxml"));
-            BorderPane workFrame = workFrameLoader.load();
-            WorkController controller = workFrameLoader.getController();
-            controller.setMainStage(primaryStage);
-
-            root.setCenter(workFrame);
-            Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
+            if (root == null) {
+                root = FXMLLoader.load(getClass().getResource("mainFrame.fxml"));
+                primaryStage.setScene(new Scene(root));
+            }
+            URL url = getClass().getResource(currentGlobalStage.getPathToForm());
+            FXMLLoader loader = new FXMLLoader(url);
+            Pane pane = loader.load();
+            AbstractController controller = loader.getController();
+            controller.setMainApplication(this);
+            root.setPrefSize(pane.getPrefWidth(), pane.getPrefHeight());
+            root.setCenter(pane);
 
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void nextStage() {
+        currentGlobalStage = currentGlobalStage == null ? GlobalStage.WELCOME : currentGlobalStage.next();
+        prepareUI();
+    }
+
+    private enum GlobalStage {
+        WELCOME("welcome.fxml"),
+        TEST("test/frameForTest.fxml"),
+        MAIN_LAB_WORK("work/workFrame.fxml");
+
+        private final String pathToForm;
+
+        GlobalStage(String pathToForm) {
+            this.pathToForm = pathToForm;
+        }
+
+        public String getPathToForm() {
+            return pathToForm;
+        }
+
+        public GlobalStage next() {
+            return this == MAIN_LAB_WORK ? this : values()[ordinal() + 1];
         }
     }
 

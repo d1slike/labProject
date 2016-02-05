@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import ru.stankin.AbstractController;
 import ru.stankin.work.managers.UIManager;
 import ru.stankin.work.managers.VariableManager;
 import ru.stankin.work.subcontrollers.ChartController;
@@ -22,7 +23,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Dislike on 22.01.2016.
  */
-public class WorkController {
+public class WorkController extends AbstractController{
 
     private static final Pattern STRING_VALIDATOR = Pattern.compile("\\-?\\d+(\\.\\d{0,})?");
 
@@ -133,7 +134,7 @@ public class WorkController {
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
 
-        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansure());
+        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansurement());
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
         varTable.getItems().addAll(variableManager.getAllVars());
