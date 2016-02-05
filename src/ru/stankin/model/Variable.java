@@ -10,12 +10,10 @@ import ru.stankin.enums.VariableType;
 public final class Variable {
     private final VariableType type;
     private ObservableDoubleValue value;
-    private int step;
 
     public Variable(VariableType type, double value) {
         this.type = type;
         this.value = new SimpleDoubleProperty(value);
-        step = 0;
     }
 
     public void setValue(double newValue) {
@@ -34,16 +32,7 @@ public final class Variable {
         return value.doubleValue();
     }
 
-    public ObservableDoubleValue getValuePropertie() {
+    public ObservableDoubleValue getValueProperties() {
         return value;
-    }
-
-    public void setStep(int step) {
-        this.step = step;
-    }
-
-    public void addStep() {
-        double old = getValue();
-        value = new SimpleDoubleProperty(old + step);
     }
 }

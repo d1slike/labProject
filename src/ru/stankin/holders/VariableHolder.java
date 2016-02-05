@@ -24,6 +24,7 @@ public class VariableHolder {
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
     private Variable altVariable;
+    private int altVarStep;
     private VariableType researchVariable;
 
     private double lastCheckedTime;
@@ -36,9 +37,7 @@ public class VariableHolder {
         resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
         Calculator.initVarHolder(this);
-        lastCheckedTime = 0;
-        samplesForTime = TIME_STEPS_COUNT;
-        samplesForAllVarChange = ALT_VAR_MAX_STEP_COUNT;
+        clear();
     }
 
     public double getVarValue(VariableType type) {
@@ -48,7 +47,11 @@ public class VariableHolder {
     public void clear() {
         activeVariables.values().forEach(variable -> variable.setValue(0));
         altVariable = activeVariables.get(VariableType.RO);
+        altVarStep = 0;
         researchVariable = VariableType.Xa;
+        lastCheckedTime = 0;
+        samplesForTime = TIME_STEPS_COUNT;
+        samplesForAllVarChange = ALT_VAR_MAX_STEP_COUNT;
         resultRecords.clear();
     }
 
@@ -57,7 +60,7 @@ public class VariableHolder {
     }
 
     private void updateAltVariable() {
-        altVariable.addStep();
+        altVariable.setValue(altVariable.getValue() + altVarStep);
     }
 
     public Variable getAltVariable() {
@@ -102,4 +105,7 @@ public class VariableHolder {
         return samplesForAllVarChange == 0;
     }
 
+    public void setAltVarStep(int altVarStep) {
+        this.altVarStep = altVarStep;
+    }
 }

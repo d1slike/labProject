@@ -129,14 +129,12 @@ public class MainController {
 
         altVarSwitcher.getItems().addAll(VariableHolder.EDITABLE_VAR_TYPES_ARRAY);
         altVarSwitcher.setValue(VariableType.RO);
-        variableHolder.setAltVariable(VariableType.RO);
 
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
-        variableHolder.setResearchVariableType(VariableType.Xa);
 
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansure());
-        varTableColumnValue.setCellValueFactory(param -> param.getValue().getValuePropertie());
+        varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
         varTable.getItems().addAll(variableHolder.getAllVars());
 
@@ -245,7 +243,7 @@ public class MainController {
                     ok = false;
                 }
                 if (ok)
-                    variableHolder.getAltVariable().setStep(value);
+                    variableHolder.setAltVarStep(value);
                 else {
                     interfaceItemHolder.setRedBorder(ElementNames.FIELD_ALT_VAR_STEP);
                     return false;
