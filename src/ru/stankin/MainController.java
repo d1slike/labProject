@@ -1,7 +1,6 @@
 package ru.stankin;
 
 
-import javafx.beans.NamedArg;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -17,8 +16,6 @@ import ru.stankin.model.Variable;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.ElementNames;
 
-import java.util.function.UnaryOperator;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -140,14 +137,19 @@ public class MainController {
 
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansure());
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValuePropertie());
-        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditableCell());
+        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
         varTable.getItems().addAll(variableHolder.getAllVars());
 
         resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
+        resultTableTimeColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableAltVarColumn.setCellValueFactory(param -> param.getValue().altVarProperty());
+        resultTableAltVarColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableStaticReaction.setCellValueFactory(param -> param.getValue().staticReactionProperty());
+        resultTableStaticReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableDynamicReaction.setCellValueFactory(param -> param.getValue().dynamicReactionProperty());
+        resultTableDynamicReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
+        resultTableFullReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableRPMColumn.setCellValueFactory(param -> param.getValue().getRPM());
         resultTable.setItems(variableHolder.getResultRecords());
 
@@ -293,19 +295,16 @@ public class MainController {
     }
 
 
-    private class EditableCell extends TextFieldTableCell<Variable, Number> {
-        public EditableCell() {
+    private class CellForVarTable extends TextFieldTableCell<Variable, Number> {
+        public CellForVarTable() {
             setConverter(new StringDoubleConverter());
-
         }
 
         private class StringDoubleConverter extends StringConverter<Number> {
 
-            private static final double NULL_CONST = 0.0;
-
             @Override
             public String toString(Number object) {
-                return String.valueOf(object.doubleValue());
+                return String.format("%.3f", object.doubleValue());
             }
 
             @Override
@@ -319,9 +318,28 @@ public class MainController {
                     setStyle(InterfaceItemHolder.DEFAULT_BORDER_STYLE);
                 } catch (Exception ex) {
                     setStyle(InterfaceItemHolder.RED_BORDER_STYLE);
-                    return NULL_CONST;
+                    return 0.;
                 }
                 return val;
+            }
+        }
+    }
+
+    private class CellForResultTable extends TextFieldTableCell<ResultRecord, Number> {
+        public CellForResultTable() {
+            setConverter(new StringDoubleConverter());
+        }
+
+        private class StringDoubleConverter extends StringConverter<Number> {
+
+            @Override
+            public String toString(Number object) {
+                return String.format("%.3f", object.doubleValue());
+            }
+
+            @Override
+            public Double fromString(String string) {
+                return 0.;
             }
         }
     }

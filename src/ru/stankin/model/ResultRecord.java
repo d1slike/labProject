@@ -1,9 +1,6 @@
 package ru.stankin.model;
 
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.property.*;
 
 /**
  * Created by DisDev on 25.01.2016.
@@ -14,21 +11,21 @@ public class ResultRecord {
     private final ReadOnlyDoubleProperty staticReaction;
     private final ReadOnlyDoubleProperty dynamicReaction;
     private final ReadOnlyDoubleProperty fullReaction;
-    private final ReadOnlyDoubleProperty revPerMinute;
+    private final ReadOnlyLongProperty revPerMinute;
 
     public ResultRecord(final double timeValue,
                         final double altVarValue,
                         final double staticReactionValue,
                         final double dynamicRactionValue,
                         final double fullReactionValue,
-                        final double revPerMinuteValue)
+                        final long revPerMinuteValue)
     {
         time = new SimpleDoubleProperty(timeValue);
         altVar = new SimpleDoubleProperty(altVarValue);
         staticReaction = new SimpleDoubleProperty(staticReactionValue);
         dynamicReaction = new SimpleDoubleProperty(dynamicRactionValue);
         fullReaction = new SimpleDoubleProperty(fullReactionValue);
-        revPerMinute = new SimpleDoubleProperty(revPerMinuteValue);
+        revPerMinute = new SimpleLongProperty(revPerMinuteValue);
     }
 
 
@@ -72,7 +69,7 @@ public class ResultRecord {
         return fullReaction;
     }
 
-    public ReadOnlyDoubleProperty getRPM() {
+    public ReadOnlyLongProperty getRPM() {
         return revPerMinute;
     }
 }

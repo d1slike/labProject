@@ -145,8 +145,8 @@ public class Calculator {
         return Double.MAX_VALUE;
     }
 
-    public static double calcRPM() {
-        return getOmega() * getVar(VariableType.T) / (TWO * Math.PI * 60D); //todo check
+    public static long calcRPM() {
+        return Math.round(getOmega() * getVar(VariableType.T) / (TWO * Math.PI * 60D)); //todo check
     }
 
 
