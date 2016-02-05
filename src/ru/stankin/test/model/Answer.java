@@ -1,4 +1,4 @@
-package ru.stankin.model.test;
+package ru.stankin.test.model;
 
 import ru.stankin.enums.AnswerType;
 

@@ -1,14 +1,14 @@
-package ru.stankin.holders;
+package ru.stankin.test.holders;
 
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import ru.stankin.controllers.TestController;
+import ru.stankin.test.TestController;
 import ru.stankin.enums.AnswerType;
-import ru.stankin.model.test.Answer;
-import ru.stankin.model.test.Question;
+import ru.stankin.test.model.Answer;
+import ru.stankin.test.model.Question;
 import ru.stankin.utils.Rnd;
 
 import java.io.File;
@@ -81,7 +81,7 @@ public class QuestionsHolder {
         while (!copy.isEmpty() && toShows.size() < TestController.MAX_QUESTIONS) {
             int size = copy.size();
             Question question = size == 1 ? copy.remove(0) : copy.remove(Rnd.get(size));
-            toShows.add(new QuestionToShow(question.getCorrectAnswerId(), question.getText(), question.shakeAnswers()));
+            toShows.add(new QuestionToShow(question));
         }
         return toShows;
     }
@@ -91,10 +91,10 @@ public class QuestionsHolder {
         public final String text;
         public final List<Answer> answers;
 
-        public QuestionToShow(int correctAnswer, String text, List<Answer> answers) {
-            this.correctAnswer = correctAnswer;
-            this.text = text;
-            this.answers = answers;
+        public QuestionToShow(Question question) {
+            this.correctAnswer = question.getCorrectAnswerId();
+            this.text = question.getText();
+            this.answers = question.shakeAnswers();
         }
     }
 

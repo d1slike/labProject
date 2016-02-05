@@ -1,4 +1,4 @@
-package ru.stankin.model;
+package ru.stankin.work.model;
 
 import javafx.beans.property.*;
 

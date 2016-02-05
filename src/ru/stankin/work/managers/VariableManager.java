@@ -1,10 +1,10 @@
-package ru.stankin.holders;
+package ru.stankin.work.managers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import ru.stankin.math.Calculator;
-import ru.stankin.model.ResultRecord;
-import ru.stankin.model.Variable;
+import ru.stankin.work.math.Calculator;
+import ru.stankin.work.model.ResultRecord;
+import ru.stankin.work.model.Variable;
 import ru.stankin.enums.VariableType;
 
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 /**
  * Created by Dislike on 22.01.2016.
  */
-public class VariableHolder {
+public class VariableManager {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
             VariableType.GAMMA, VariableType.M, VariableType.H};
     public static final int ALT_VAR_MAX_STEP_COUNT = 4;
@@ -32,7 +32,7 @@ public class VariableHolder {
     private int samplesForTime;
 
 
-    public VariableHolder() {
+    public VariableManager() {
         activeVariables = new EnumMap<>(VariableType.class);
         resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));

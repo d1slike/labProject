@@ -1,4 +1,4 @@
-package ru.stankin;
+package ru.stankin.work;
 
 
 import javafx.fxml.FXML;
@@ -6,13 +6,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import ru.stankin.controllers.ChartController;
-import ru.stankin.controllers.Scene3DController;
-import ru.stankin.holders.InterfaceItemHolder;
-import ru.stankin.holders.VariableHolder;
-import ru.stankin.model.ResultRecord;
+import ru.stankin.work.managers.UIManager;
+import ru.stankin.work.managers.VariableManager;
+import ru.stankin.work.subcontrollers.ChartController;
+import ru.stankin.work.subcontrollers.Scene3DController;
+import ru.stankin.work.model.ResultRecord;
 import ru.stankin.enums.WorkStage;
-import ru.stankin.model.Variable;
+import ru.stankin.work.model.Variable;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.ElementNames;
 
@@ -22,12 +22,12 @@ import java.util.regex.Pattern;
 /**
  * Created by Dislike on 22.01.2016.
  */
-public class MainController {
+public class WorkController {
 
     private static final Pattern STRING_VALIDATOR = Pattern.compile("\\-?\\d+(\\.\\d{0,})?");
 
-    private VariableHolder variableHolder;
-    private InterfaceItemHolder interfaceItemHolder;
+    private VariableManager variableManager;
+    private UIManager UIManager;
     private ChartController chartController;
     private WorkStage currentWorkStage;
     private Scene3DController scene3DController;
@@ -85,49 +85,49 @@ public class MainController {
     @FXML
     private Button prevStageButton;
 
-    public MainController() {
+    public WorkController() {
     }
 
     @FXML
     private void initialize() {
 
-        variableHolder = new VariableHolder();
+        variableManager = new VariableManager();
         chartController = new ChartController(mainStage);
         scene3DController = new Scene3DController(mainStage);
-        interfaceItemHolder = new InterfaceItemHolder();
-        interfaceItemHolder.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
-        interfaceItemHolder.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
-        interfaceItemHolder.putItem(ElementNames.TABLE_VARIABLES, varTable);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_SHOW_IN_3D, showIn3DButton);
-        //interfaceItemHolder.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
-        interfaceItemHolder.putItem(ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER, researchVarSwitcher);
-        interfaceItemHolder.putItem(ElementNames.TABLE_RESULTS, resultTable);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_SHOW_CHART, showChartButton);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_CALCULATE, calcButton);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_NEXT_STAGE, nextStageButton);
-        interfaceItemHolder.putItem(ElementNames.FIELD_TIME, timeField);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
-        interfaceItemHolder.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
+        UIManager = new UIManager();
+        UIManager.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
+        UIManager.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
+        UIManager.putItem(ElementNames.TABLE_VARIABLES, varTable);
+        UIManager.putItem(ElementNames.BUTTON_SHOW_IN_3D, showIn3DButton);
+        //UIManager.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
+        UIManager.putItem(ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER, researchVarSwitcher);
+        UIManager.putItem(ElementNames.TABLE_RESULTS, resultTable);
+        UIManager.putItem(ElementNames.BUTTON_SHOW_CHART, showChartButton);
+        UIManager.putItem(ElementNames.BUTTON_CALCULATE, calcButton);
+        UIManager.putItem(ElementNames.BUTTON_NEXT_STAGE, nextStageButton);
+        UIManager.putItem(ElementNames.FIELD_TIME, timeField);
+        UIManager.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
+        UIManager.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
 
         //currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
         //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
 
         currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
-        variableHolder.setResearchVariableType(VariableType.Yb);
-        variableHolder.setAltVariable(VariableType.R);
-        variableHolder.setVal(VariableType.H, 1.0);
-        variableHolder.setVal(VariableType.R, 0.1);
-        variableHolder.setVal(VariableType.L, 0.7);
-        variableHolder.setVal(VariableType.E, 0.001);
-        variableHolder.setVal(VariableType.Zc, 0.3);
-        variableHolder.setVal(VariableType.RO, 8000);
-        variableHolder.setVal(VariableType.GAMMA, 4);
-        variableHolder.setVal(VariableType.M, 0.6);
+        variableManager.setResearchVariableType(VariableType.Yb);
+        variableManager.setAltVariable(VariableType.R);
+        variableManager.setVal(VariableType.H, 1.0);
+        variableManager.setVal(VariableType.R, 0.1);
+        variableManager.setVal(VariableType.L, 0.7);
+        variableManager.setVal(VariableType.E, 0.001);
+        variableManager.setVal(VariableType.Zc, 0.3);
+        variableManager.setVal(VariableType.RO, 8000);
+        variableManager.setVal(VariableType.GAMMA, 4);
+        variableManager.setVal(VariableType.M, 0.6);
         onChangedWorkStage();
-        variableHolder.calculateNextForTime(50.0);
+        variableManager.calculateNextForTime(50.0);
 
 
-        altVarSwitcher.getItems().addAll(VariableHolder.EDITABLE_VAR_TYPES_ARRAY);
+        altVarSwitcher.getItems().addAll(VariableManager.EDITABLE_VAR_TYPES_ARRAY);
         altVarSwitcher.setValue(VariableType.RO);
 
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
@@ -136,7 +136,7 @@ public class MainController {
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansure());
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
-        varTable.getItems().addAll(variableHolder.getAllVars());
+        varTable.getItems().addAll(variableManager.getAllVars());
 
         resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
         resultTableTimeColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
@@ -149,7 +149,7 @@ public class MainController {
         resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
         resultTableFullReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableRPMColumn.setCellValueFactory(param -> param.getValue().getRPM());
-        resultTable.setItems(variableHolder.getResultRecords());
+        resultTable.setItems(variableManager.getResultRecords());
 
 
         //final UnaryOperator<TextFormatter.Change> condition = change -> STRING_VALIDATOR.matcher(change.getControlNewText()).matches() ? change : null;
@@ -161,17 +161,17 @@ public class MainController {
 
     @FXML
     private void onChangedAltVariable() {
-        variableHolder.setAltVariable(altVarSwitcher.getValue());
+        variableManager.setAltVariable(altVarSwitcher.getValue());
     }
 
     @FXML
     private void onChangedResearchVariable() {
-        variableHolder.setResearchVariableType(researchVarSwitcher.getValue());
+        variableManager.setResearchVariableType(researchVarSwitcher.getValue());
     }
 
     @FXML
     private void on3DButtonShowClick() {
-        /*Scene3DController controller = new Scene3DController(mainStage, variableHolder);
+        /*Scene3DController controller = new Scene3DController(mainStage, variableManager);
         controller.buildAndShow();*/
     }
 
@@ -183,15 +183,15 @@ public class MainController {
         try {
             String timeInText = timeField.getText();
             time = Double.parseDouble(timeInText);
-            if(!variableHolder.checkTime(time))
+            if(!variableManager.checkTime(time))
                 throw new NumberFormatException();
-            timeField.setStyle(InterfaceItemHolder.DEFAULT_BORDER_STYLE);
+            timeField.setStyle(UIManager.DEFAULT_BORDER_STYLE);
         } catch (Exception ex) {
-            timeField.setStyle(InterfaceItemHolder.RED_BORDER_STYLE);
+            timeField.setStyle(UIManager.RED_BORDER_STYLE);
             return;
         }
 
-        if(variableHolder.calculateNextForTime(time))
+        if(variableManager.calculateNextForTime(time))
             onNextStageButtonClick();
 
     }
@@ -218,18 +218,18 @@ public class MainController {
     private void onShowChartButtonClick() {
         if (chartController == null)
             return;
-        chartController.buildAndShow(variableHolder);
+        chartController.buildAndShow(variableManager);
     }
 
     private void onChangedWorkStage() {
-        interfaceItemHolder.prepareInterfaceForCurrentStage(currentWorkStage);
+        UIManager.prepareInterfaceForCurrentStage(currentWorkStage);
         informationTextLabel.setText(currentWorkStage.getDescription());
     }
 
     private boolean executeAllActionsOnCurrentStage() {
         switch (currentWorkStage) {
             case STAGE_1_SELECT_ALT_VAR:
-                resultTableAltVarColumn.setText(variableHolder.getAltVariable().getName());
+                resultTableAltVarColumn.setText(variableManager.getAltVariable().getName());
                 break;
             case STAGE_2_WRITE_STEP_TO_ALT_VAR: {
                 String stringValue = altVarStepField.getText();
@@ -243,9 +243,9 @@ public class MainController {
                     ok = false;
                 }
                 if (ok)
-                    variableHolder.setAltVarStep(value);
+                    variableManager.setAltVarStep(value);
                 else {
-                    interfaceItemHolder.setRedBorder(ElementNames.FIELD_ALT_VAR_STEP);
+                    UIManager.setRedBorder(ElementNames.FIELD_ALT_VAR_STEP);
                     return false;
                 }
             }
@@ -259,19 +259,19 @@ public class MainController {
                         break;
                 }
                 if (!ok) {
-                    interfaceItemHolder.setRedBorder(ElementNames.TABLE_VARIABLES);
+                    UIManager.setRedBorder(ElementNames.TABLE_VARIABLES);
                     return false;
                 }
             }
             break;
             case STAGE_4_SELECT_RESEARCH_VAR: {
-                String name = variableHolder.getResearchVariable().getName();
+                String name = variableManager.getResearchVariable().getName();
                 resultTableStaticReaction.setText(name + "(стат.)");
                 resultTableDynamicReaction.setText(name + "(динам.)");
                 resultTableFullReaction.setText(name + "(полн.)");
 
 
-                /*variableHolder.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
+                /*variableManager.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 5, 1), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 88), new ResultRecord(10, 1, 1, 3, 11), new ResultRecord(2, 2, 3, 4, 3), new ResultRecord(4, 2, 3, 4, 1));
@@ -313,9 +313,9 @@ public class MainController {
                     VariableType type = varTable.getItems().get(getIndex()).getType();
                     if (!type.checkRange(val))
                         throw new NumberFormatException();
-                    setStyle(InterfaceItemHolder.DEFAULT_BORDER_STYLE);
+                    setStyle(UIManager.DEFAULT_BORDER_STYLE);
                 } catch (Exception ex) {
-                    setStyle(InterfaceItemHolder.RED_BORDER_STYLE);
+                    setStyle(UIManager.RED_BORDER_STYLE);
                     return 0.;
                 }
                 return val;

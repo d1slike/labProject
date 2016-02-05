@@ -1,4 +1,4 @@
-package ru.stankin.controllers;
+package ru.stankin.test;
 
 /**
  * Created by DisDev on 05.02.2016.

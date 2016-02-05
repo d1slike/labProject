@@ -1,4 +1,4 @@
-package ru.stankin.controllers;
+package ru.stankin.work.subcontrollers;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -8,8 +8,8 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.stankin.holders.VariableHolder;
-import ru.stankin.model.ResultRecord;
+import ru.stankin.work.managers.VariableManager;
+import ru.stankin.work.model.ResultRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,23 +64,23 @@ public class ChartController {
         stage.setScene(scene);
     }
 
-    public void buildAndShow(VariableHolder variableHolder) {
+    public void buildAndShow(VariableManager variableManager) {
 
         if (!alreadyBuilt) {
-            final String researchVarName = variableHolder.getResearchVariable().getName();
+            final String researchVarName = variableManager.getResearchVariable().getName();
             yAxixForFullReqctionsChart.setLabel(researchVarName + " полная");
             yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");
-            dynamicReactionsChart.getData().addAll(buildLines(variableHolder, false));
-            fullReactionsChart.getData().addAll(buildLines(variableHolder, true));
+            dynamicReactionsChart.getData().addAll(buildLines(variableManager, false));
+            fullReactionsChart.getData().addAll(buildLines(variableManager, true));
             alreadyBuilt = true;
         }
         stage.showAndWait();
     }
 
-    private List<XYChart.Series<Number, Number>> buildLines(VariableHolder variableHolder, boolean fullReaction) {
-        final int altVarStepsCount = VariableHolder.ALT_VAR_MAX_STEP_COUNT;
-        final ObservableList<ResultRecord> resultRecords = variableHolder.getResultRecords();
-        final String altVarName = variableHolder.getAltVariable().getName();
+    private List<XYChart.Series<Number, Number>> buildLines(VariableManager variableManager, boolean fullReaction) {
+        final int altVarStepsCount = VariableManager.ALT_VAR_MAX_STEP_COUNT;
+        final ObservableList<ResultRecord> resultRecords = variableManager.getResultRecords();
+        final String altVarName = variableManager.getAltVariable().getName();
 
         int currentPos = 0;
 

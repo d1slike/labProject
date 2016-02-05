@@ -1,7 +1,7 @@
-package ru.stankin.math;
+package ru.stankin.work.math;
 
-import ru.stankin.holders.VariableHolder;
-import ru.stankin.model.ResultRecord;
+import ru.stankin.work.managers.VariableManager;
+import ru.stankin.work.model.ResultRecord;
 import ru.stankin.enums.VariableType;
 
 import java.util.HashMap;
@@ -24,11 +24,11 @@ public class Calculator {
     private static final String YC = "yc";
     private static final String H = "h";
 
-    private static VariableHolder variableHolder;
+    private static VariableManager variableManager;
     private static double currentTime;
 
-    public static void initVarHolder(VariableHolder holder) {
-        variableHolder = holder;
+    public static void initVarHolder(VariableManager holder) {
+        variableManager = holder;
     }
 
     private static double getXc() {
@@ -90,12 +90,12 @@ public class Calculator {
     }
 
     private static double getVar(VariableType type) {
-        return type == VariableType.T ? currentTime : variableHolder.getVarValue(type);
+        return type == VariableType.T ? currentTime : variableManager.getVarValue(type);
     }
 
     public static ResultRecord calculateReactions(double time) {
         currentTime = time;
-        final VariableType researchVarType = variableHolder.getResearchVariable();
+        final VariableType researchVarType = variableManager.getResearchVariable();
         Map<String, Double> varCache = new HashMap<>();
         varCache.put(EPSILON, getEpsilon());
         varCache.put(OMEGA_IN_SQR, Math.pow(getOmega(), TWO));
@@ -109,7 +109,7 @@ public class Calculator {
         double dynamicReact = getReaction(false, researchVarType, varCache);
         return new ResultRecord(
                 getVar(VariableType.T),
-                variableHolder.getAltVariable().getValue(),
+                variableManager.getAltVariable().getValue(),
                 staticReact,
                 dynamicReact,
                 staticReact + dynamicReact,

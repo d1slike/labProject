@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="768.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.MainController">
+<BorderPane prefHeight="768.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.work.WorkController">
    <top>
       <BorderPane prefHeight="70.0" prefWidth="1000.0" style="-fx-border-color: gray; -fx-border-width: 1;" BorderPane.alignment="CENTER">
          <center>

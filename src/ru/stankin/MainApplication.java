@@ -3,9 +3,9 @@ package ru.stankin;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import ru.stankin.work.WorkController;
 
 
 /**
@@ -38,7 +38,7 @@ public class MainApplication extends Application {
             FXMLLoader workFrameLoader = new FXMLLoader();
             workFrameLoader.setLocation(getClass().getResource("workFrame.fxml"));
             BorderPane workFrame = workFrameLoader.load();
-            MainController controller = workFrameLoader.getController();
+            WorkController controller = workFrameLoader.getController();
             controller.setMainStage(primaryStage);
 
             root.setCenter(workFrame);

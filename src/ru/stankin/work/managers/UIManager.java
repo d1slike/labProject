@@ -1,4 +1,4 @@
-package ru.stankin.holders;
+package ru.stankin.work.managers;
 
 import javafx.scene.control.Control;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by Dislike on 23.01.2016.
  */
-public class InterfaceItemHolder {
+public class UIManager {
 
     public static final String RED_BORDER_STYLE = "-fx-border-color: red; -fx-border-width: 1;";
     public static final String DEFAULT_BORDER_STYLE = "";
@@ -21,7 +21,7 @@ public class InterfaceItemHolder {
     private final List<String> notDefaultStyleItems;
 
 
-    public InterfaceItemHolder() {
+    public UIManager() {
         itemReferenceMap = new HashMap<>();
         notDefaultStyleItems = new ArrayList<>();
     }

@@ -1,9 +1,8 @@
-package ru.stankin.controllers;
+package ru.stankin.work.subcontrollers;
 
-import javafx.scene.shape.Cylinder;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.stankin.holders.VariableHolder;
+import ru.stankin.work.managers.VariableManager;
 
 /**
  * Created by DisDev on 27.01.2016.
@@ -25,6 +24,6 @@ public class Scene3DController {
 
     }
 
-    public void buildAndShow(VariableHolder variableHolder) {
+    public void buildAndShow(VariableManager variableManager) {
     }
 }
