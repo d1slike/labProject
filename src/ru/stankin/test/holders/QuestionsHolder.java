@@ -5,10 +5,10 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import ru.stankin.test.TestController;
 import ru.stankin.enums.AnswerType;
 import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
+import ru.stankin.test.model.Test;
 import ru.stankin.utils.Rnd;
 
 import java.io.File;
@@ -75,27 +75,15 @@ public class QuestionsHolder {
         return value;
     }
 
-    public List<QuestionToShow> getRndListOfQuestion() {
+    public List<Question> getRndListOfQuestion() {
         List<Question> copy = new LinkedList<>(questions.valueCollection());
-        List<QuestionToShow> toShows = new ArrayList<>(TestController.MAX_QUESTIONS);
-        while (!copy.isEmpty() && toShows.size() < TestController.MAX_QUESTIONS) {
+        List<Question> toShows = new ArrayList<>(Test.MAX_QUESTIONS);
+        while (!copy.isEmpty() && toShows.size() < Test.MAX_QUESTIONS) {
             int size = copy.size();
             Question question = size == 1 ? copy.remove(0) : copy.remove(Rnd.get(size));
-            toShows.add(new QuestionToShow(question));
+            toShows.add(question);
         }
         return toShows;
-    }
-
-    public static class QuestionToShow {
-        public final int correctAnswer;
-        public final String text;
-        public final List<Answer> answers;
-
-        public QuestionToShow(Question question) {
-            this.correctAnswer = question.getCorrectAnswerId();
-            this.text = question.getText();
-            this.answers = question.shakeAnswers();
-        }
     }
 
 

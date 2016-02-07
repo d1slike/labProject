@@ -7,22 +7,37 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.test.TestController">
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="500.0" spacing="15.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" prefWidth="500.0" spacing="15.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="17.0" prefWidth="692.0" text="Text" textAlignment="CENTER" wrapText="true">
+            <Label fx:id="questionText" alignment="CENTER" prefHeight="17.0" prefWidth="692.0" text="Text" textAlignment="CENTER" wrapText="true">
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
             </Label>
-            <RadioButton mnemonicParsing="false" selected="true" text="A">
+            <RadioButton fx:id="firstAnswer" mnemonicParsing="false" onAction="#onSelectFirst" selected="true" text="A">
                <toggleGroup>
                   <ToggleGroup fx:id="answerGroup" />
                </toggleGroup>
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" text="B" toggleGroup="$answerGroup" />
-            <RadioButton mnemonicParsing="false" text="C" toggleGroup="$answerGroup" />
-            <RadioButton mnemonicParsing="false" text="D" toggleGroup="$answerGroup" />
+            <RadioButton fx:id="secondAnswer" mnemonicParsing="false" onAction="#onSelectSecond" text="B" toggleGroup="$answerGroup">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin></RadioButton>
+            <RadioButton fx:id="thirdAnswer" mnemonicParsing="false" onAction="#onSelectThird" text="C" toggleGroup="$answerGroup">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin></RadioButton>
+            <RadioButton fx:id="fourthAnswer" mnemonicParsing="false" onAction="#onSelectFourth" text="D" toggleGroup="$answerGroup">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin></RadioButton>
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </VBox>
    </center>
    <top>
@@ -65,7 +80,7 @@
       </BorderPane>
    </top>
    <bottom>
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Далее" BorderPane.alignment="CENTER">
+      <Button mnemonicParsing="false" onAction="#onNextButtonClick" prefHeight="30.0" prefWidth="120.0" text="Далее" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="50.0" />
          </BorderPane.margin>
