@@ -23,6 +23,7 @@ public class VariableManager {
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
+    private final Calculator calculator;
     private Variable altVariable;
     private int altVarStep;
     private VariableType researchVariable;
@@ -32,11 +33,13 @@ public class VariableManager {
     private int samplesForTime;
 
 
+
+
     public VariableManager() {
         activeVariables = new EnumMap<>(VariableType.class);
         resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
-        Calculator.initVarHolder(this);
+        calculator = new Calculator(this);
         clear();
     }
 
@@ -95,7 +98,7 @@ public class VariableManager {
     }
 
     public boolean calculateNextForTime(double time) {
-        resultRecords.add(Calculator.calculateReactions(time));
+        resultRecords.add(calculator.calculateReactions(time));
         if (--samplesForTime == 0) {
             samplesForAllVarChange--;
             updateAltVariable();
