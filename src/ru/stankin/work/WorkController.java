@@ -114,7 +114,7 @@ public class WorkController extends AbstractController{
         //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
 
         currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
-        variableManager.setResearchVariableType(VariableType.Yb);
+        variableManager.setResearchVariableType(VariableType.Xb);
         variableManager.setAltVariable(VariableType.R);
         variableManager.setVal(VariableType.H, 1.0);
         variableManager.setVal(VariableType.R, 0.1);
@@ -341,5 +341,10 @@ public class WorkController extends AbstractController{
                 return 0.;
             }
         }
+    }
+
+    @Override
+    public void prepareForNext() {
+
     }
 }

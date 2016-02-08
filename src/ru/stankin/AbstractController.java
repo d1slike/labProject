@@ -13,4 +13,6 @@ public abstract class AbstractController {
     public final void setMainApplication(MainApplication mainApplication) {
         this.mainApplication = mainApplication;
     }
+
+    public abstract void prepareForNext();
 }

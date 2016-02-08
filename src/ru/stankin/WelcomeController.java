@@ -26,4 +26,9 @@ public class WelcomeController extends AbstractController {
     private void onNextButtonClick() {
         getMainApplication().nextStage();
     }
+
+    @Override
+    public void prepareForNext() {
+
+    }
 }
