@@ -3,9 +3,22 @@ package ru.stankin.test;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.stankin.AbstractController;
 import ru.stankin.enums.AnswerNumber;
@@ -51,7 +64,7 @@ public class TestController extends AbstractController {
     @FXML
     private void initialize() {
         test = new Test();
-        clear();
+        prepareUIToStartTest();
         currentTimeLine = new Timeline(new KeyFrame(Duration.seconds(1),
                 event -> timeTick()));
         showNextQuestion();
@@ -75,14 +88,11 @@ public class TestController extends AbstractController {
     }
 
     private synchronized void tryAgain() {
-
-        clear();
+        currentTimeLine.stop();
         test.decrementAttempts();
-        if (test.getAvailableAttempts() == 0) {
-            //todo перейти лабе, оставить сообщение на главном экране о том что итоговый бал снижен
-            return;
-        }
-
+        test.clearAndUpdateQuestions();
+        showResults(false);
+        prepareUIToStartTest();
     }
 
     private void updateSecondsLabel() {
@@ -134,7 +144,10 @@ public class TestController extends AbstractController {
 
     }
 
-    private void clear() {
+    private void prepareUIToStartTest() {
+
+        if(test == null)
+            return;
 
         currentMinutesToCompleteTest = Test.MAX_MINUTES_TO_COMPLETE;
         secondsToShow = 59;
@@ -143,8 +156,6 @@ public class TestController extends AbstractController {
         attemptsLabel.setText(Integer.toString(test.getAvailableAttempts()));
         updateSecondsLabel();
 
-        if (currentTimeLine != null)
-            currentTimeLine.stop();
     }
 
     @FXML
@@ -169,7 +180,76 @@ public class TestController extends AbstractController {
 
     @FXML
     private void onNextButtonClick() {
+        if (test == null)
+            return;
         test.checkCurrentAnswer();
-        showNextQuestion();
+        if (test.haveMoreQuestion())
+            showNextQuestion();
+        else if (test.isCompleteCorrect())
+            showResults(true);
+        else if (test.haveAnyAttempts())
+            tryAgain();
+    }
+
+    private void showResults(boolean success) {
+        BorderPane borderPane = new BorderPane();
+
+        borderPane.setPadding(new Insets(20));
+        Stage tmpStage = new Stage();
+
+        VBox vBox = new VBox(25);
+        vBox.setAlignment(Pos.CENTER);
+
+        Label result = new Label(success ? "Тест завершен успешно" : "Тест не пройден");
+        Color textColor = success ? Color.GREEN : Color.RED;
+        result.setTextFill(Paint.valueOf(textColor.toString()));
+        result.setFont(Font.font(18));
+        result.setAlignment(Pos.CENTER);
+        vBox.getChildren().add(result);
+
+        Label correctAnswerCount = new Label(test.getCorrectAnswersCount() + " / " + Test.MAX_QUESTIONS);
+        correctAnswerCount.setFont(Font.font(14));
+        correctAnswerCount.setAlignment(Pos.CENTER);
+        vBox.getChildren().add(correctAnswerCount);
+
+        boolean next = success || !test.haveAnyAttempts();
+        Button actionButton = new Button(next ? "Приступить лабораторной работе" : "Пройти тест заново");
+        actionButton.setPrefSize(200, 30);
+        EventHandler<ActionEvent> eventHandler;
+        if (next)
+            eventHandler = event -> {
+                tmpStage.close();
+                getMainApplication().nextStage();
+            };
+        else
+            eventHandler = event -> {
+                tmpStage.close();
+                showNextQuestion();
+                currentTimeLine.play();
+            };
+        actionButton.setOnAction(eventHandler);
+        vBox.getChildren().add(actionButton);
+
+        borderPane.setCenter(vBox);
+        BorderPane.setAlignment(vBox, Pos.CENTER);
+        tmpStage.initOwner(getMainApplication().getPrimaryStage());
+        tmpStage.initModality(Modality.APPLICATION_MODAL);
+        tmpStage.setScene(new Scene(borderPane));
+        tmpStage.setResizable(false);
+        tmpStage.setTitle("Результат теста");
+        tmpStage.setOnCloseRequest(event -> {
+            tmpStage.close();
+            tmpStage.showAndWait();
+        });
+        tmpStage.showAndWait();
+    }
+
+    @Override
+    public void prepareForNext() {
+        if (currentTimeLine != null) {
+            currentTimeLine.stop();
+            currentTimeLine = null;
+        }
+        test = null;
     }
 }
