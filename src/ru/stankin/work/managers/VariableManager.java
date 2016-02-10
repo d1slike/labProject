@@ -2,10 +2,10 @@ package ru.stankin.work.managers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ru.stankin.enums.VariableType;
 import ru.stankin.work.math.Calculator;
 import ru.stankin.work.model.ResultRecord;
 import ru.stankin.work.model.Variable;
-import ru.stankin.enums.VariableType;
 
 import java.util.Collection;
 import java.util.EnumMap;
@@ -58,37 +58,9 @@ public class VariableManager {
         resultRecords.clear();
     }
 
-    public Collection<Variable> getAllVars() {
-        return activeVariables.values();
-    }
-
-    private void updateAltVariable() {
-        altVariable.setValue(altVariable.getValue() + altVarStep);
-    }
-
-    public Variable getAltVariable() {
-        return (Variable) altVariable;
-    }
-
-    public void setAltVariable(VariableType type) {
-        altVariable = activeVariables.get(type);
-    }
-
-    public void setResearchVariableType(VariableType type) {
-        researchVariable = type;
-    }
-
-    public VariableType getResearchVariable() {
-        return researchVariable;
-    }
-
-    public ObservableList<ResultRecord> getResultRecords() {
-        return resultRecords;
-    }
-
     public boolean checkTime(double timeValue) {
-        boolean ok =  lastCheckedTime <= timeValue && timeValue >= 40;
-        if(ok)
+        boolean ok = lastCheckedTime <= timeValue && timeValue >= 40;
+        if (ok)
             lastCheckedTime = timeValue;
         return ok;
     }
@@ -108,7 +80,35 @@ public class VariableManager {
         return samplesForAllVarChange == 0;
     }
 
+    public Collection<Variable> getAllVars() {
+        return activeVariables.values();
+    }
+
+    public Variable getAltVariable() {
+        return altVariable;
+    }
+
+    public void setAltVariable(VariableType type) {
+        altVariable = activeVariables.get(type);
+    }
+
+    public VariableType getResearchVariable() {
+        return researchVariable;
+    }
+
+    public ObservableList<ResultRecord> getResultRecords() {
+        return resultRecords;
+    }
+
+    public void setResearchVariableType(VariableType type) {
+        researchVariable = type;
+    }
+
     public void setAltVarStep(int altVarStep) {
         this.altVarStep = altVarStep;
+    }
+
+    private void updateAltVariable() {
+        altVariable.setValue(altVariable.getValue() + altVarStep);
     }
 }

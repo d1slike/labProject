@@ -30,8 +30,17 @@ public class MainApplication extends Application {
         primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
         nextStage();
         nextStage();
-        nextStage();
+        //nextStage();
         primaryStage.show();
+    }
+
+    public void nextStage() {
+        currentGlobalStage = currentGlobalStage == null ? GlobalStage.WELCOME : currentGlobalStage.next();
+        prepareUI();
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     private static void main(String args[]) {
@@ -70,11 +79,6 @@ public class MainApplication extends Application {
         }
     }
 
-    public void nextStage() {
-        currentGlobalStage = currentGlobalStage == null ? GlobalStage.WELCOME : currentGlobalStage.next();
-        prepareUI();
-    }
-
     private enum GlobalStage {
         WELCOME("welcome.fxml"),
         TEST("test/frameForTest.fxml"),
@@ -86,16 +90,12 @@ public class MainApplication extends Application {
             this.pathToForm = pathToForm;
         }
 
-        public String getPathToForm() {
-            return pathToForm;
-        }
-
         public GlobalStage next() {
             return this == MAIN_LAB_WORK ? this : values()[ordinal() + 1];
         }
-    }
 
-    public Stage getPrimaryStage() {
-        return primaryStage;
+        public String getPathToForm() {
+            return pathToForm;
+        }
     }
 }

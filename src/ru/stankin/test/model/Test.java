@@ -12,8 +12,8 @@ import java.util.List;
 public class Test {
 
     public static final int MAX_QUESTIONS = 1;
+    public static final int MAX_MINUTES_TO_COMPLETE = 9;
     private static final int MAX_ATTEMPTS = 2;
-    public static final int MAX_MINUTES_TO_COMPLETE = 10;
     private static final int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
 
     private List<Question> questions;
@@ -43,14 +43,6 @@ public class Test {
         questions = QuestionsHolder.getInstance().getRndListOfQuestion();
     }
 
-    private void clear() {
-        correctAnswersCount = 0;
-        currentQuestionCorrectAnswer = -1;
-        currentQuestionPosition = -1;
-        answersMap.clear();
-        currentStudentAnswer = -1;
-    }
-
     /**
      * Обновляет состояние объекта под новый вопрос и возвращает текст задания нового вопроса
      *
@@ -68,13 +60,17 @@ public class Test {
         return question.getText();
     }
 
-    public void setCurrentStudentAnswer(int number) {
-        currentStudentAnswer = number;
-    }
-
     public void checkCurrentAnswer() {
         if (answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer)
             correctAnswersCount++;
+    }
+
+    public boolean haveMoreQuestion() {
+        return currentQuestionPosition < MAX_QUESTIONS - 1;
+    }
+
+    public boolean haveAnyAttempts() {
+        return availableAttempts > 0;
     }
 
     public List<Answer> getCurrentAnswerList() {
@@ -89,15 +85,23 @@ public class Test {
         return availableAttempts;
     }
 
-    public boolean haveMoreQuestion() {
-        return currentQuestionPosition < MAX_QUESTIONS - 1;
-    }
-
     public int getCorrectAnswersCount() {
         return correctAnswersCount;
     }
 
-    public boolean haveAnyAttempts() {
-        return availableAttempts > 0;
+    public int getCurrentQustionNumber() {
+        return currentQuestionPosition + 1;
+    }
+
+    public void setCurrentStudentAnswer(int number) {
+        currentStudentAnswer = number;
+    }
+
+    private void clear() {
+        correctAnswersCount = 0;
+        currentQuestionCorrectAnswer = -1;
+        currentQuestionPosition = -1;
+        answersMap.clear();
+        currentStudentAnswer = -1;
     }
 }

@@ -6,15 +6,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
 import ru.stankin.AbstractController;
+import ru.stankin.enums.ElementNames;
+import ru.stankin.enums.VariableType;
+import ru.stankin.enums.WorkStage;
 import ru.stankin.utils.Executor;
 import ru.stankin.work.managers.UIManager;
 import ru.stankin.work.managers.VariableManager;
-import ru.stankin.work.subcontrollers.ChartController;
 import ru.stankin.work.model.ResultRecord;
-import ru.stankin.enums.WorkStage;
 import ru.stankin.work.model.Variable;
-import ru.stankin.enums.VariableType;
-import ru.stankin.enums.ElementNames;
+import ru.stankin.work.subcontrollers.ChartController;
 
 import java.util.regex.Pattern;
 
@@ -87,6 +87,11 @@ public class WorkController extends AbstractController{
     public WorkController() {
     }
 
+    @Override
+    public void prepareForNext() {
+
+    }
+
     @FXML
     private void initialize() {
 
@@ -98,12 +103,9 @@ public class WorkController extends AbstractController{
         //currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
         //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
 
-        Executor.getInstance().execute(this::prepareVarTable);
-        Executor.getInstance().execute(this::prepareResultTable);
-        Executor.getInstance().execute(this::prepareUI);
 
         currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
-        variableManager.setResearchVariableType(VariableType.Xa);
+        variableManager.setResearchVariableType(VariableType.Xb);
         variableManager.setAltVariable(VariableType.R);
         variableManager.setVal(VariableType.H, 1.0);
         variableManager.setVal(VariableType.R, 0.1);
@@ -114,7 +116,7 @@ public class WorkController extends AbstractController{
         variableManager.setVal(VariableType.GAMMA, 4);
         variableManager.setVal(VariableType.M, 0.6);
 
-        variableManager.calculateNextForTime(0);
+        variableManager.calculateNextForTime(50);
 
 
         altVarSwitcher.getItems().addAll(VariableManager.EDITABLE_VAR_TYPES_ARRAY);
@@ -122,6 +124,10 @@ public class WorkController extends AbstractController{
 
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
+
+        Executor.getInstance().execute(this::prepareVarTable);
+        Executor.getInstance().execute(this::prepareResultTable);
+        Executor.getInstance().execute(this::prepareUI);
 
 
 
@@ -349,10 +355,5 @@ public class WorkController extends AbstractController{
                 return 0.;
             }
         }
-    }
-
-    @Override
-    public void prepareForNext() {
-
     }
 }
