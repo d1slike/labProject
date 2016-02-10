@@ -31,7 +31,7 @@ public class ChartController {
 
     private boolean alreadyBuilt;
 
-    public ChartController(Stage primaryStage) {
+    public ChartController() {
         yAxisForDynamicReactionsChart = new NumberAxis();
         yAxixForFullReqctionsChart = new NumberAxis();
 
@@ -55,7 +55,6 @@ public class ChartController {
         Scene scene = new Scene(pane);
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(primaryStage);
         stage.setTitle("Графики");
         stage.setIconified(false);
         stage.setHeight(CHART_HEIGHT);
@@ -64,9 +63,12 @@ public class ChartController {
         stage.setScene(scene);
     }
 
-    public void buildAndShow(VariableManager variableManager) {
+    public void buildAndShow(VariableManager variableManager, Stage primaryStage) {
 
         if (!alreadyBuilt) {
+
+            stage.initOwner(primaryStage);
+
             final String researchVarName = variableManager.getResearchVariable().getName();
             yAxixForFullReqctionsChart.setLabel(researchVarName + " полная");
             yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");

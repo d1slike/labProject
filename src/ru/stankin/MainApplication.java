@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
+import ru.stankin.utils.Executor;
 import ru.stankin.utils.ImageCache;
 
 import java.net.URL;
@@ -25,14 +26,17 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        QuestionsHolder.getInstance();
-        ImageCache.getInstance();
         primaryStage.setTitle("Lab++");
+        primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
+        nextStage();
+        nextStage();
         nextStage();
         primaryStage.show();
     }
 
     private static void main(String args[]) {
+        Executor.getInstance().execute(QuestionsHolder::getInstance);
+        Executor.getInstance().execute(ImageCache::getInstance);
         launch(args);
     }
 

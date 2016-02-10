@@ -11,10 +11,9 @@ public class Scene3DController {
 
     private final Stage stage;
 
-    public Scene3DController(Stage mainStage) {
+    public Scene3DController() {
         stage = new Stage();
         stage.initModality(Modality.NONE);
-        stage.initOwner(mainStage);
         stage.setTitle("3D модель");
         stage.setIconified(false);
         stage.setHeight(400);
@@ -24,6 +23,6 @@ public class Scene3DController {
 
     }
 
-    public void buildAndShow(VariableManager variableManager) {
+    public void buildAndShow(VariableManager variableManager, Stage primaryStage) {
     }
 }

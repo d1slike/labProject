@@ -11,8 +11,8 @@ import java.util.Map;
  * Created by Dislike on 23.01.2016.
  */
 public class Calculator {
-    private static final double G = 9.81E00;
-    private static final double TWO = 2.0E00;
+    private static final double G = 9.81;
+    private static final double TWO = 2.0;
     //private static final double TWENTY_FOURTH = 24D;
     //private static final double EIGHT = 8;
     private static final String OMEGA_IN_SQR = "omegaInSqr";

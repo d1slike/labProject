@@ -17,7 +17,7 @@ public class WelcomeController extends AbstractController {
     @FXML
     private void initialize() {
         nextButton.setDisable(true);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1),
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5),
                 event -> nextButton.setDisable(false)));
         timeline.play();
     }
