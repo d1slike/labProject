@@ -11,8 +11,8 @@ import java.util.Map;
  * Created by Dislike on 23.01.2016.
  */
 public class Calculator {
-    private static final double G = 9.81E00;
-    private static final double TWO = 2.0E00;
+    private static final double G = 9.81;
+    private static final double TWO = 2.0;
     //private static final double TWENTY_FOURTH = 24D;
     //private static final double EIGHT = 8;
     private static final String OMEGA_IN_SQR = "omegaInSqr";
@@ -24,22 +24,18 @@ public class Calculator {
     private static final String YC = "yc";
     private static final String H = "h";
 
-    private static VariableManager variableManager;
-    private static double currentTime;
+    private final VariableManager variableManager;
+    private double currentTime;
 
-    public static void initVarHolder(VariableManager holder) {
-        variableManager = holder;
+    private double getXc() {
+        return getVar(VariableType.E) * Math.sin(getPhiInRadians());
     }
 
-    private static double getXc() {
-        return getVar(VariableType.E) / Math.sin(getPhiInRadians());
+    private double getYc() {
+        return getVar(VariableType.E) * Math.cos(getPhiInRadians());
     }
 
-    private static double getYc() {
-        return getVar(VariableType.E) / Math.cos(getPhiInRadians());
-    }
-
-    private static double getMass() {
+    private double getMass() {
         double mass = Math.PI;
         mass *= Math.pow(getVar(VariableType.R), TWO);
         mass *= getVar(VariableType.RO);
@@ -48,19 +44,19 @@ public class Calculator {
         return mass;
     }
 
-    private static double getOmega() {
+    private double getOmega() {
         return getEpsilon() * getVar(VariableType.T);
     }
 
-    private static double getPhiInRadians() {
+    private double getPhiInRadians() {
         return Math.toRadians(getEpsilon() * Math.pow(getVar(VariableType.T), TWO) / TWO);
     }
 
-    private static double getEpsilon() {
+    private double getEpsilon() {
         return getVar(VariableType.M) / getIz();
     }
 
-    private static double getIz() {
+    private double getIz() {
         //return getMass() * Math.pow(getVar(VariableType.R), TWO) / TWO; //TODO уточнить
         double m = getMass();
         double lInSqr = Math.pow(getVar(VariableType.L), TWO);
@@ -73,7 +69,7 @@ public class Calculator {
         return firstSummand + secondSummand;
     }
 
-    private static double getConstA() {
+    private double getConstA() {
         double bracketResult = Math.pow(getVar(VariableType.L), TWO) / 24D - Math.pow(getVar(VariableType.R), TWO) / 8D;
         double m = getMass();
         double firstSummand = m * bracketResult * Math.sin(Math.toRadians(TWO * getVar(VariableType.GAMMA)));
@@ -81,19 +77,19 @@ public class Calculator {
         return firstSummand + secondSummand;
     }
 
-    private static double getIxz() {
+    private double getIxz() {
         return -getConstA() * Math.sin(getPhiInRadians());
     }
 
-    private static double getIyz() {
+    private double getIyz() {
         return getConstA() * Math.cos(getPhiInRadians());
     }
 
-    private static double getVar(VariableType type) {
+    private double getVar(VariableType type) {
         return type == VariableType.T ? currentTime : variableManager.getVarValue(type);
     }
 
-    public static ResultRecord calculateReactions(double time) {
+    public ResultRecord calculateReactions(double time) {
         currentTime = time;
         final VariableType researchVarType = variableManager.getResearchVariable();
         Map<String, Double> varCache = new HashMap<>();
@@ -117,7 +113,7 @@ public class Calculator {
         );
     }
 
-    private static double getReaction(boolean isStatic, VariableType type, Map<String, Double> varCache) {
+    private double getReaction(boolean isStatic, VariableType type, Map<String, Double> varCache) {
         final double epsilon = isStatic ? 0 : varCache.get(EPSILON);
         final double omegaInSqr = isStatic ? 0 : varCache.get(OMEGA_IN_SQR);
         final double m = varCache.get(MASS);
@@ -145,9 +141,11 @@ public class Calculator {
         return Double.MAX_VALUE;
     }
 
-    public static long calcRPM() {
+    public long calcRPM() {
         return Math.round(getOmega() * getVar(VariableType.T) / (TWO * Math.PI * 60D)); //todo check
     }
 
-
+    public Calculator(VariableManager variableManager) {
+        this.variableManager = variableManager;
+    }
 }

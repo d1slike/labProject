@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class Test {
 
-    public static final int MAX_QUESTIONS = 10;
-    public static final int MAX_ATTEMPTS = 2;
+    public static final int MAX_QUESTIONS = 1;
+    private static final int MAX_ATTEMPTS = 2;
     public static final int MAX_MINUTES_TO_COMPLETE = 10;
-    public static final int MIN_CORRECT_ANSWERS_TO_COMPLETE = 6;
+    private static final int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
 
     private List<Question> questions;
     private TIntIntMap answersMap;
@@ -29,18 +29,18 @@ public class Test {
 
 
     public Test() {
-        this.questions = QuestionsHolder.getInstance().getRndListOfQuestion();
         availableAttempts = MAX_ATTEMPTS;
         answersMap = new TIntIntHashMap();
-        clear();
+        clearAndUpdateQuestions();
     }
 
     public void decrementAttempts() {
         availableAttempts--;
-        if (availableAttempts > 0) {
-            clear();
-            questions = QuestionsHolder.getInstance().getRndListOfQuestion();
-        }
+    }
+
+    public void clearAndUpdateQuestions() {
+        clear();
+        questions = QuestionsHolder.getInstance().getRndListOfQuestion();
     }
 
     private void clear() {
@@ -89,4 +89,15 @@ public class Test {
         return availableAttempts;
     }
 
+    public boolean haveMoreQuestion() {
+        return currentQuestionPosition < MAX_QUESTIONS - 1;
+    }
+
+    public int getCorrectAnswersCount() {
+        return correctAnswersCount;
+    }
+
+    public boolean haveAnyAttempts() {
+        return availableAttempts > 0;
+    }
 }

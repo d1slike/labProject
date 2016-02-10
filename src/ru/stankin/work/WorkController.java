@@ -4,13 +4,12 @@ package ru.stankin.work;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.stankin.AbstractController;
+import ru.stankin.utils.Executor;
 import ru.stankin.work.managers.UIManager;
 import ru.stankin.work.managers.VariableManager;
 import ru.stankin.work.subcontrollers.ChartController;
-import ru.stankin.work.subcontrollers.Scene3DController;
 import ru.stankin.work.model.ResultRecord;
 import ru.stankin.enums.WorkStage;
 import ru.stankin.work.model.Variable;
@@ -28,12 +27,11 @@ public class WorkController extends AbstractController{
     private static final Pattern STRING_VALIDATOR = Pattern.compile("\\-?\\d+(\\.\\d{0,})?");
 
     private VariableManager variableManager;
-    private UIManager UIManager;
+    private UIManager uiManager;
     private ChartController chartController;
     private WorkStage currentWorkStage;
-    private Scene3DController scene3DController;
+    //private Scene3DController scene3DController;
 
-    private Stage mainStage;
 
     @FXML
     private ComboBox<VariableType> altVarSwitcher;
@@ -93,28 +91,19 @@ public class WorkController extends AbstractController{
     private void initialize() {
 
         variableManager = new VariableManager();
-        chartController = new ChartController(mainStage);
-        scene3DController = new Scene3DController(mainStage);
-        UIManager = new UIManager();
-        UIManager.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
-        UIManager.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
-        UIManager.putItem(ElementNames.TABLE_VARIABLES, varTable);
-        UIManager.putItem(ElementNames.BUTTON_SHOW_IN_3D, showIn3DButton);
-        //UIManager.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
-        UIManager.putItem(ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER, researchVarSwitcher);
-        UIManager.putItem(ElementNames.TABLE_RESULTS, resultTable);
-        UIManager.putItem(ElementNames.BUTTON_SHOW_CHART, showChartButton);
-        UIManager.putItem(ElementNames.BUTTON_CALCULATE, calcButton);
-        UIManager.putItem(ElementNames.BUTTON_NEXT_STAGE, nextStageButton);
-        UIManager.putItem(ElementNames.FIELD_TIME, timeField);
-        UIManager.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
-        UIManager.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
+        chartController = new ChartController();
+        //scene3DController = new Scene3DController();
+
 
         //currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
         //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
 
+        Executor.getInstance().execute(this::prepareVarTable);
+        Executor.getInstance().execute(this::prepareResultTable);
+        Executor.getInstance().execute(this::prepareUI);
+
         currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
-        variableManager.setResearchVariableType(VariableType.Yb);
+        variableManager.setResearchVariableType(VariableType.Xa);
         variableManager.setAltVariable(VariableType.R);
         variableManager.setVal(VariableType.H, 1.0);
         variableManager.setVal(VariableType.R, 0.1);
@@ -124,8 +113,8 @@ public class WorkController extends AbstractController{
         variableManager.setVal(VariableType.RO, 8000);
         variableManager.setVal(VariableType.GAMMA, 4);
         variableManager.setVal(VariableType.M, 0.6);
-        onChangedWorkStage();
-        variableManager.calculateNextForTime(50.0);
+
+        variableManager.calculateNextForTime(0);
 
 
         altVarSwitcher.getItems().addAll(VariableManager.EDITABLE_VAR_TYPES_ARRAY);
@@ -134,11 +123,35 @@ public class WorkController extends AbstractController{
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
 
-        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansurement());
-        varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
-        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
-        varTable.getItems().addAll(variableManager.getAllVars());
 
+
+
+        //final UnaryOperator<TextFormatter.Change> condition = change -> STRING_VALIDATOR.matcher(change.getControlNewText()).matches() ? change : null;
+        //timeField.setTextFormatter(new TextFormatter<Number>(condition));
+        //altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
+
+
+    }
+
+    private void prepareUI() {
+        uiManager = new UIManager();
+        uiManager.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
+        uiManager.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
+        uiManager.putItem(ElementNames.TABLE_VARIABLES, varTable);
+        uiManager.putItem(ElementNames.BUTTON_SHOW_IN_3D, showIn3DButton);
+        //uiManager.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
+        uiManager.putItem(ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER, researchVarSwitcher);
+        uiManager.putItem(ElementNames.TABLE_RESULTS, resultTable);
+        uiManager.putItem(ElementNames.BUTTON_SHOW_CHART, showChartButton);
+        uiManager.putItem(ElementNames.BUTTON_CALCULATE, calcButton);
+        uiManager.putItem(ElementNames.BUTTON_NEXT_STAGE, nextStageButton);
+        uiManager.putItem(ElementNames.FIELD_TIME, timeField);
+        uiManager.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
+        uiManager.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
+        onChangedWorkStage();
+    }
+
+    private void prepareResultTable() {
         resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
         resultTableTimeColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableAltVarColumn.setCellValueFactory(param -> param.getValue().altVarProperty());
@@ -151,13 +164,13 @@ public class WorkController extends AbstractController{
         resultTableFullReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableRPMColumn.setCellValueFactory(param -> param.getValue().getRPM());
         resultTable.setItems(variableManager.getResultRecords());
+    }
 
-
-        //final UnaryOperator<TextFormatter.Change> condition = change -> STRING_VALIDATOR.matcher(change.getControlNewText()).matches() ? change : null;
-        //timeField.setTextFormatter(new TextFormatter<Number>(condition));
-        //altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
-
-
+    private void prepareVarTable() {
+        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansurement());
+        varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
+        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
+        varTable.getItems().addAll(variableManager.getAllVars());
     }
 
     @FXML
@@ -219,11 +232,11 @@ public class WorkController extends AbstractController{
     private void onShowChartButtonClick() {
         if (chartController == null)
             return;
-        chartController.buildAndShow(variableManager);
+        chartController.buildAndShow(variableManager, getMainApplication().getPrimaryStage());
     }
 
     private void onChangedWorkStage() {
-        UIManager.prepareInterfaceForCurrentStage(currentWorkStage);
+        uiManager.prepareInterfaceForCurrentStage(currentWorkStage);
         informationTextLabel.setText(currentWorkStage.getDescription());
     }
 
@@ -246,7 +259,7 @@ public class WorkController extends AbstractController{
                 if (ok)
                     variableManager.setAltVarStep(value);
                 else {
-                    UIManager.setRedBorder(ElementNames.FIELD_ALT_VAR_STEP);
+                    uiManager.setRedBorder(ElementNames.FIELD_ALT_VAR_STEP);
                     return false;
                 }
             }
@@ -260,7 +273,7 @@ public class WorkController extends AbstractController{
                         break;
                 }
                 if (!ok) {
-                    UIManager.setRedBorder(ElementNames.TABLE_VARIABLES);
+                    uiManager.setRedBorder(ElementNames.TABLE_VARIABLES);
                     return false;
                 }
             }
@@ -272,7 +285,7 @@ public class WorkController extends AbstractController{
                 resultTableFullReaction.setText(name + "(полн.)");
 
 
-                /*variableManager.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
+                /*variableManager.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5, ), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 5, 1), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
                         new ResultRecord(1, 2, 3, 4, 88), new ResultRecord(10, 1, 1, 3, 11), new ResultRecord(2, 2, 3, 4, 3), new ResultRecord(4, 2, 3, 4, 1));
@@ -288,11 +301,6 @@ public class WorkController extends AbstractController{
 
         return true;
     }
-
-    public void setMainStage(Stage mainStage) {
-        this.mainStage = mainStage;
-    }
-
 
     private class CellForVarTable extends TextFieldTableCell<Variable, Number> {
         public CellForVarTable() {
@@ -341,5 +349,10 @@ public class WorkController extends AbstractController{
                 return 0.;
             }
         }
+    }
+
+    @Override
+    public void prepareForNext() {
+
     }
 }
