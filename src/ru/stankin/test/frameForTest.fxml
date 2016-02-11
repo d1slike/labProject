@@ -80,7 +80,7 @@
          <center>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Label text="10" BorderPane.alignment="CENTER"/>
+                  <Label fx:id="currentQuestion" text="10" BorderPane.alignment="CENTER"/>
                   <Label text="/"/>
                   <Label fx:id="maxQuestion" contentDisplay="CENTER" text="10"/>
                </children>

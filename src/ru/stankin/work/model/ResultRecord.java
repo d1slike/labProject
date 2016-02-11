@@ -11,21 +11,21 @@ public class ResultRecord {
     private final ReadOnlyDoubleProperty staticReaction;
     private final ReadOnlyDoubleProperty dynamicReaction;
     private final ReadOnlyDoubleProperty fullReaction;
-    private final ReadOnlyLongProperty revPerMinute;
+    private final ReadOnlyDoubleProperty phiInDegrees;
 
     public ResultRecord(final double timeValue,
                         final double altVarValue,
                         final double staticReactionValue,
                         final double dynamicRactionValue,
                         final double fullReactionValue,
-                        final long revPerMinuteValue)
+                        final double phiInDegreesValue)
     {
         time = new SimpleDoubleProperty(timeValue);
         altVar = new SimpleDoubleProperty(altVarValue);
         staticReaction = new SimpleDoubleProperty(staticReactionValue);
         dynamicReaction = new SimpleDoubleProperty(dynamicRactionValue);
         fullReaction = new SimpleDoubleProperty(fullReactionValue);
-        revPerMinute = new SimpleLongProperty(revPerMinuteValue);
+        phiInDegrees = new SimpleDoubleProperty(phiInDegreesValue);
     }
 
 
@@ -69,7 +69,7 @@ public class ResultRecord {
         return fullReaction;
     }
 
-    public ReadOnlyLongProperty getRPM() {
-        return revPerMinute;
+    public ReadOnlyDoubleProperty phiInDegreesProperty() {
+        return phiInDegrees;
     }
 }

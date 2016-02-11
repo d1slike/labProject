@@ -109,8 +109,16 @@ public class Calculator {
                 staticReact,
                 dynamicReact,
                 staticReact + dynamicReact,
-                calcRPM()
+                getPhiInDegreesToShow()
         );
+    }
+
+    private double getPhiInDegreesToShow() {
+        double phi = getPhiInRadians();
+        double phiInDegrees = Math.toDegrees(phi);
+        while (phiInDegrees > 360)
+            phiInDegrees-= 360;
+        return phiInDegrees;
     }
 
     private double getReaction(boolean isStatic, VariableType type, Map<String, Double> varCache) {

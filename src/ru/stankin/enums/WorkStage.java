@@ -10,7 +10,7 @@ public enum WorkStage {
     STAGE_2_WRITE_STEP_TO_ALT_VAR("Введите шаг изменяемого параметра", AllowedItemsSpace.STAGE_2_ALLOWED_UI_ITEMS),
     STAGE_3_FILL_VAR_TABLE("Заполните таблицу переменных в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_3_ALLOWED_UI_ITEMS),
     STAGE_4_SELECT_RESEARCH_VAR("Выберите исследуемый параметр в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_4_ALLOWED_UI_ITEMS),
-    STAGE_5_FILL_RESULT_TABLE("Вычислите все необходимые реакции. Учтите каждые 10 замеров времени изменяется величина иссследуемого параметра.", AllowedItemsSpace.STAGE_5_ALLOWED_UI_ITEMS),
+    STAGE_5_WRITE_TIME_STEP("Для данного значения исследуемой переменной и вычисленного значения оборотов в минуты вычислите значение " + VariableType.VarName.DELTA + "t", AllowedItemsSpace.STAGE_5_ALLOWED_UI_ITEMS),
     STAGE_6_CHECK_CHART("Теперь Вы моежете построить график.", AllowedItemsSpace.STAGE_6_ALLOWED_UI_ITEMS);
 
 

@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="768.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.work.WorkController">
+<BorderPane prefHeight="680.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.work.WorkController">
    <top>
       <BorderPane prefHeight="70.0" prefWidth="1000.0" style="-fx-border-color: gray; -fx-border-width: 1;" BorderPane.alignment="CENTER">
          <center>
@@ -46,7 +46,7 @@
       <Insets left="20.0" right="20.0" top="20.0" />
    </padding>
    <left>
-      <VBox alignment="CENTER" fillWidth="false" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" fillWidth="false" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
                <children>
@@ -81,10 +81,13 @@
                </cursor>
             </Button>
          </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
       </VBox>
    </left>
    <center>
-      <VBox alignment="CENTER" fillWidth="false" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="500.0" prefWidth="195.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER">
                <children>
@@ -94,11 +97,31 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </ComboBox>
+                  <VBox fx:id="currentInfoVBox" alignment="CENTER" fillWidth="false" spacing="5.0">
+                     <children>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label fx:id="altVarNameLabel" text="altVar" />
+                              <Label text="=" />
+                              <Label fx:id="altVarValueLabel" text="?" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label text="Обороты в минуту(N)  =" />
+                              <Label fx:id="RPMValueLabel" text="?" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                  </VBox>
                </children>
             </VBox>
             <VBox alignment="CENTER">
                <children>
-                  <Label layoutX="364.0" layoutY="362.0" text="Время" />
+                  <Label fx:id="timeLabel" layoutX="364.0" layoutY="362.0" text="Время" />
                   <TextField fx:id="timeField" layoutX="323.0" layoutY="389.0" prefHeight="30.0" prefWidth="90.0">
                      <cursor>
                         <Cursor fx:constant="TEXT" />
@@ -110,12 +133,18 @@
                      </cursor>
                   </Button>
                </children>
+               <VBox.margin>
+                  <Insets top="50.0" />
+               </VBox.margin>
             </VBox>
          </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
       </VBox>
    </center>
    <right>
-      <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Таблица результатов" />
             <TableView fx:id="resultTable" layoutX="542.0" layoutY="98.0">
@@ -125,7 +154,7 @@
                   <TableColumn fx:id="resultTableStaticReaction" editable="false" prefWidth="93.6" resizable="false" />
                   <TableColumn fx:id="resultTableDynamicReaction" editable="false" prefWidth="93.6" resizable="false" />
                   <TableColumn fx:id="resultTableFullReaction" editable="false" prefWidth="93.6" resizable="false" />
-                  <TableColumn fx:id="resultTableRPMColumn" editable="false" prefWidth="84.0" resizable="false" sortable="false" text="N" />
+                  <TableColumn fx:id="resultTablePhiColumn" editable="false" prefWidth="84.0" resizable="false" sortable="false" text="N" />
               </columns>
             </TableView>
             <HBox alignment="CENTER" fillHeight="false" layoutX="542.0" layoutY="679.0" spacing="50.0">
@@ -143,6 +172,9 @@
                </children>
             </HBox>
          </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
       </VBox>
    </right>
 </BorderPane>

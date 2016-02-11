@@ -4,6 +4,7 @@ package ru.stankin.work;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import ru.stankin.AbstractController;
 import ru.stankin.enums.ElementNames;
@@ -70,7 +71,7 @@ public class WorkController extends AbstractController{
     @FXML
     private TableColumn<ResultRecord, Number> resultTableFullReaction;
     @FXML
-    private TableColumn<ResultRecord, Number> resultTableRPMColumn;
+    private TableColumn<ResultRecord, Number> resultTablePhiColumn;
 
     @FXML
     private Button showChartButton;
@@ -83,6 +84,18 @@ public class WorkController extends AbstractController{
     private Button nextStageButton;
     @FXML
     private Button prevStageButton;
+
+    @FXML
+    private Label timeLabel;
+
+    @FXML
+    private VBox currentInfoVBox;
+    @FXML
+    private Label altVarNameLabel;
+    @FXML
+    private Label altVarValueLabel;
+    @FXML
+    private Label RPMValueLabel;
 
     public WorkController() {
     }
@@ -104,8 +117,8 @@ public class WorkController extends AbstractController{
         //currentWorkStage = WorkStage.STAGE_4_SELECT_RESEARCH_VAR;
 
 
-        currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
-        variableManager.setResearchVariableType(VariableType.Xb);
+        currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
+        /*variableManager.setResearchVariableType(VariableType.Xb);
         variableManager.setAltVariable(VariableType.R);
         variableManager.setVal(VariableType.H, 1.0);
         variableManager.setVal(VariableType.R, 0.1);
@@ -116,19 +129,25 @@ public class WorkController extends AbstractController{
         variableManager.setVal(VariableType.GAMMA, 4);
         variableManager.setVal(VariableType.M, 0.6);
 
-        variableManager.calculateNextForTime(50);
+        variableManager.calculateNextForTime(50);*/
+
 
 
         altVarSwitcher.getItems().addAll(VariableManager.EDITABLE_VAR_TYPES_ARRAY);
+        altVarSwitcher.getItems().remove(VariableType.TAU);
         altVarSwitcher.setValue(VariableType.RO);
 
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
 
+        timeLabel.setText(VariableType.VarName.DELTA + VariableType.T.getName());
+
         Executor.getInstance().execute(this::prepareVarTable);
         Executor.getInstance().execute(this::prepareResultTable);
         Executor.getInstance().execute(this::prepareUI);
 
+        currentInfoVBox.setVisible(false);
+        resultTablePhiColumn.setText(VariableType.VarName.PHI);
 
 
 
@@ -157,6 +176,7 @@ public class WorkController extends AbstractController{
         onChangedWorkStage();
     }
 
+
     private void prepareResultTable() {
         resultTableTimeColumn.setCellValueFactory(param -> param.getValue().timeProperty());
         resultTableTimeColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
@@ -168,7 +188,8 @@ public class WorkController extends AbstractController{
         resultTableDynamicReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTableFullReaction.setCellValueFactory(param -> param.getValue().fullReactionProperty());
         resultTableFullReaction.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
-        resultTableRPMColumn.setCellValueFactory(param -> param.getValue().getRPM());
+        resultTablePhiColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
+        resultTablePhiColumn.setCellValueFactory(param -> param.getValue().phiInDegreesProperty());
         resultTable.setItems(variableManager.getResultRecords());
     }
 
@@ -177,6 +198,11 @@ public class WorkController extends AbstractController{
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
         varTable.getItems().addAll(variableManager.getAllVars());
+    }
+
+    private void updateCurrentInformation() {
+        altVarValueLabel.setText(variableManager.getAltVariable().getValue() + "");
+        RPMValueLabel.setText(variableManager.getRPM() + "");
     }
 
     @FXML
@@ -197,7 +223,7 @@ public class WorkController extends AbstractController{
 
     @FXML
     private void onCalcButtonClick() {
-        if (currentWorkStage != WorkStage.STAGE_5_FILL_RESULT_TABLE)
+        if (currentWorkStage != WorkStage.STAGE_5_WRITE_TIME_STEP)
             return;
         double time;
         try {
@@ -250,6 +276,7 @@ public class WorkController extends AbstractController{
         switch (currentWorkStage) {
             case STAGE_1_SELECT_ALT_VAR:
                 resultTableAltVarColumn.setText(variableManager.getAltVariable().getName());
+                altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeansurement().getValue());
                 break;
             case STAGE_2_WRITE_STEP_TO_ALT_VAR: {
                 String stringValue = altVarStepField.getText();
@@ -290,16 +317,12 @@ public class WorkController extends AbstractController{
                 resultTableDynamicReaction.setText(name + "(динам.)");
                 resultTableFullReaction.setText(name + "(полн.)");
 
+                currentInfoVBox.setVisible(true);
 
-                /*variableManager.getResultRecords().addAll(new ResultRecord(1, 2, 3, 4, 5, ), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
-                        new ResultRecord(1, 2, 3, 4, 5, 1), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
-                        new ResultRecord(1, 2, 3, 4, 5), new ResultRecord(10, 1, 1, 3, 4), new ResultRecord(2, 2, 3, 4, 5), new ResultRecord(4, 2, 3, 4, 5),
-                        new ResultRecord(1, 2, 3, 4, 88), new ResultRecord(10, 1, 1, 3, 11), new ResultRecord(2, 2, 3, 4, 3), new ResultRecord(4, 2, 3, 4, 1));
-                currentWorkStage = WorkStage.STAGE_5_FILL_RESULT_TABLE;*/
 
             }
             break;
-            case STAGE_5_FILL_RESULT_TABLE: {
+            case STAGE_5_WRITE_TIME_STEP: {
 
                 //todo check for complete
             }

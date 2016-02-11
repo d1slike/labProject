@@ -20,10 +20,12 @@ public enum  VariableType {
     Xb(VarName.Xb, Double.MIN_VALUE, Double.MAX_VALUE, "-"),
     Ya(VarName.Ya, Double.MIN_VALUE, Double.MAX_VALUE, "-"),
     Yb(VarName.Yb, Double.MIN_VALUE, Double.MAX_VALUE, "-"),
-    T(VarName.T, Double.MIN_VALUE, Double.MAX_VALUE, "-");
+    T(VarName.T, Double.MIN_VALUE, Double.MAX_VALUE, "с"),
+    TAU(VarName.TAU, Double.MIN_VALUE, Double.MAX_VALUE, "с");
 
     private final ReadOnlyStringProperty name;
     private final ReadOnlyStringProperty nameWithMeansurement;
+    private final String measurement;
     private final double leftValue;
     private final double rightValue;
 
@@ -32,7 +34,9 @@ public enum  VariableType {
         this.leftValue = leftValue;
         this.rightValue = rightValue;
         this.name = new SimpleStringProperty(name);
-        this.nameWithMeansurement = new SimpleStringProperty(name + "(" + meansure + ")");
+        String measurement = "(" + meansure + ")";
+        this.nameWithMeansurement = new SimpleStringProperty(name + measurement);
+        this.measurement = measurement;
     }
 
     public boolean checkRange(double value) {
@@ -56,19 +60,26 @@ public enum  VariableType {
         return nameWithMeansurement;
     }
 
-    private static class VarName {
-        private static final String RO = "\u03C1";
-        private static final String R = "R";
-        private static final String L = "L";
-        private static final String E = "e";
-        private static final String Zc = "Zc";
-        private static final String GAMMA = "\u03B3";
-        private static final String M = "M";
-        private static final String H = "H";
-        private static final String Xa = "Xa";
-        private static final String Xb = "Xb";
-        private static final String Ya = "Ya";
-        private static final String Yb = "Yb";
-        private static final String T = "t";
+    public static class VarName {
+        public static final String RO = "\u03C1";
+        public static final String R = "R";
+        public static final String L = "L";
+        public static final String E = "e";
+        public static final String Zc = "Zc";
+        public static final String GAMMA = "\u03B3";
+        public static final String M = "M";
+        public static final String H = "H";
+        public static final String Xa = "Xa";
+        public static final String Xb = "Xb";
+        public static final String Ya = "Ya";
+        public static final String Yb = "Yb";
+        public static final String T = "t";
+        public static final String TAU = "\u03C4";
+        public static final String DELTA = "\u0394";
+        public static final String PHI = "\u03C6";
+    }
+
+    public String getMeasurement() {
+        return measurement;
     }
 }

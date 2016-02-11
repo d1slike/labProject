@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  */
 public class VariableManager {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
-            VariableType.GAMMA, VariableType.M, VariableType.H};
+            VariableType.GAMMA, VariableType.M, VariableType.H, VariableType.TAU};
     public static final int ALT_VAR_MAX_STEP_COUNT = 4;
     private static final int TIME_STEPS_COUNT = 10;
 
@@ -110,5 +110,9 @@ public class VariableManager {
 
     private void updateAltVariable() {
         altVariable.setValue(altVariable.getValue() + altVarStep);
+    }
+
+    public long getRPM() {
+        return calculator.calcRPM();
     }
 }
