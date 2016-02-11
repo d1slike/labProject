@@ -9,11 +9,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class Executor {
     private final static Executor ourInstance = new Executor();
-
-    public static Executor getInstance() {
-        return ourInstance;
-    }
-
     private final ExecutorService service;
 
     private Executor() {
@@ -24,6 +19,20 @@ public class Executor {
         service.execute(executable);
     }
 
+    public void shutdown() {
+        try {
+            service.shutdown();
+            service.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static Executor getInstance() {
+        return ourInstance;
+    }
+
+    @FunctionalInterface
     public interface Executable extends Runnable {
         @Override
         default void run() {
@@ -35,14 +44,5 @@ public class Executor {
         }
 
         void action();
-    }
-
-    public void shutdown() {
-        try {
-            service.shutdown();
-            service.awaitTermination(1, TimeUnit.SECONDS);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 }

@@ -34,6 +34,8 @@ import java.util.stream.Stream;
  */
 public class TestController extends AbstractController {
 
+    private static final int SECONDS_INIT_VALUE = 59;
+
     private int currentMinutesToCompleteTest;
     private int secondsToShow;
 
@@ -53,6 +55,11 @@ public class TestController extends AbstractController {
     private Label questionText;
 
     @FXML
+    private Label currentQuestion;
+    @FXML
+    private Label maxQuestion;
+
+    @FXML
     private RadioButton firstAnswer;
     @FXML
     private RadioButton secondAnswer;
@@ -61,10 +68,20 @@ public class TestController extends AbstractController {
     @FXML
     private RadioButton fourthAnswer;
 
+    @Override
+    public void prepareForNext() {
+        if (currentTimeLine != null) {
+            currentTimeLine.stop();
+            currentTimeLine = null;
+        }
+        test = null;
+    }
+
     @FXML
     private void initialize() {
         test = new Test();
         prepareUIToStartTest();
+        maxQuestion.setText(Integer.toString(Test.MAX_QUESTIONS));
         currentTimeLine = new Timeline(new KeyFrame(Duration.seconds(1),
                 event -> timeTick()));
         showNextQuestion();
@@ -73,21 +90,20 @@ public class TestController extends AbstractController {
 
     }
 
-
-    private void timeTick() {
+    private synchronized void timeTick() {
         if (--secondsToShow == 0) {
             if (currentMinutesToCompleteTest == 0) {
                 tryAgain();
                 return;
             }
-            secondsToShow = 59;
+            secondsToShow = SECONDS_INIT_VALUE;
             currentMinutesToCompleteTest--;
             minutesLabel.setText(Integer.toString(currentMinutesToCompleteTest));
         }
         updateSecondsLabel();
     }
 
-    private synchronized void tryAgain() {
+    private void tryAgain() {
         currentTimeLine.stop();
         test.decrementAttempts();
         test.clearAndUpdateQuestions();
@@ -103,6 +119,7 @@ public class TestController extends AbstractController {
     private void showNextQuestion() {
         String currentQuestionText = test.prepareAndGetNextQuestion();
         questionText.setText(currentQuestionText);
+        currentQuestion.setText(Integer.toString(test.getCurrentQustionNumber()));
         int answerNum = AnswerNumber.FIRST;
         Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(radioButton -> {
             radioButton.setGraphic(null);
@@ -150,7 +167,7 @@ public class TestController extends AbstractController {
             return;
 
         currentMinutesToCompleteTest = Test.MAX_MINUTES_TO_COMPLETE;
-        secondsToShow = 59;
+        secondsToShow = SECONDS_INIT_VALUE;
 
         minutesLabel.setText(Integer.toString(currentMinutesToCompleteTest));
         attemptsLabel.setText(Integer.toString(test.getAvailableAttempts()));
@@ -179,7 +196,7 @@ public class TestController extends AbstractController {
     }
 
     @FXML
-    private void onNextButtonClick() {
+    private synchronized void onNextButtonClick() {
         if (test == null)
             return;
         test.checkCurrentAnswer();
@@ -242,14 +259,5 @@ public class TestController extends AbstractController {
             tmpStage.showAndWait();
         });
         tmpStage.showAndWait();
-    }
-
-    @Override
-    public void prepareForNext() {
-        if (currentTimeLine != null) {
-            currentTimeLine.stop();
-            currentTimeLine = null;
-        }
-        test = null;
     }
 }
