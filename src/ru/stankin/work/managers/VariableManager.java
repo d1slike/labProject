@@ -19,20 +19,20 @@ public class VariableManager {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
             VariableType.GAMMA, VariableType.M, VariableType.H, VariableType.TAU};
     public static final int ALT_VAR_MAX_STEP_COUNT = 4;
-    private static final int TIME_STEPS_COUNT = 10;
+    public static final int TIME_STEPS_COUNT = 10;
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
     private final Calculator calculator;
     private Variable altVariable;
-    private int altVarStep;
+    private double altVarStep;
     private VariableType researchVariable;
 
-    private double lastCheckedTime;
     private int samplesForAllVarChange;
-    private int samplesForTime;
+    //private int samplesForTime;
 
-
+    private double currentDeltaTime;
+    private double lastTime;
 
 
     public VariableManager() {
@@ -52,24 +52,17 @@ public class VariableManager {
         altVariable = activeVariables.get(VariableType.RO);
         altVarStep = 0;
         researchVariable = VariableType.Xa;
-        lastCheckedTime = 0;
-        samplesForTime = TIME_STEPS_COUNT;
+        currentDeltaTime = 0;
+        lastTime = 0;
         samplesForAllVarChange = ALT_VAR_MAX_STEP_COUNT;
         resultRecords.clear();
-    }
-
-    public boolean checkTime(double timeValue) {
-        boolean ok = lastCheckedTime <= timeValue && timeValue >= 40;
-        if (ok)
-            lastCheckedTime = timeValue;
-        return ok;
     }
 
     public void setVal(VariableType type, double v) {
         activeVariables.get(type).setValue(v);
     }
 
-    public boolean calculateNextForTime(double time) {
+    /*public boolean calculateNextForTime(double time) {
         resultRecords.add(calculator.calculateReactions(time));
         if (--samplesForTime == 0) {
             samplesForAllVarChange--;
@@ -78,6 +71,19 @@ public class VariableManager {
             lastCheckedTime = 0;
         }
         return samplesForAllVarChange == 0;
+    }*/
+
+    public boolean calculateAllForCurrentAltVarValue() {
+        for (int i = 0; i < TIME_STEPS_COUNT; i++) {
+            lastTime += currentDeltaTime;
+            getResultRecords().add(calculator.calculateReactions(lastTime));
+        }
+        samplesForAllVarChange--;
+        return samplesForAllVarChange == 0;
+    }
+
+    public void calculateForTau() {
+        getResultRecords().add(calculator.calculateReactions(lastTime));
     }
 
     public Collection<Variable> getAllVars() {
@@ -104,15 +110,23 @@ public class VariableManager {
         researchVariable = type;
     }
 
-    public void setAltVarStep(int altVarStep) {
+    public void setAltVarStep(double altVarStep) {
         this.altVarStep = altVarStep;
     }
 
-    private void updateAltVariable() {
+    public void updateAltVariable() {
         altVariable.setValue(altVariable.getValue() + altVarStep);
     }
 
     public long getRPM() {
-        return calculator.calcRPM();
+        return calculator.calcRPM(lastTime);
+    }
+
+    public void setCurrentDeltaTime(double currentDeltaTime) {
+        this.currentDeltaTime = currentDeltaTime;
+    }
+
+    public void setLastTimeToTau() {
+        lastTime = getVarValue(VariableType.TAU);
     }
 }

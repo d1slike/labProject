@@ -6,20 +6,22 @@ package ru.stankin.enums;
 public enum WorkStage {
 
 
-    STAGE_1_SELECT_ALT_VAR("Выберите изменяемый параметр в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_1_ALLOWED_UI_ITEMS),
-    STAGE_2_WRITE_STEP_TO_ALT_VAR("Введите шаг изменяемого параметра", AllowedItemsSpace.STAGE_2_ALLOWED_UI_ITEMS),
-    STAGE_3_FILL_VAR_TABLE("Заполните таблицу переменных в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_3_ALLOWED_UI_ITEMS),
-    STAGE_4_SELECT_RESEARCH_VAR("Выберите исследуемый параметр в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_4_ALLOWED_UI_ITEMS),
-    STAGE_5_WRITE_TIME_STEP("Для данного значения исследуемой переменной и вычисленного значения оборотов в минуты вычислите значение " + VariableType.VarName.DELTA + "t", AllowedItemsSpace.STAGE_5_ALLOWED_UI_ITEMS),
-    STAGE_6_CHECK_CHART("Теперь Вы моежете построить график.", AllowedItemsSpace.STAGE_6_ALLOWED_UI_ITEMS);
+    STAGE_1_SELECT_ALT_VAR("Выберите изменяемый параметр в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_1_ALLOWED_UI_ITEMS, ElementNames.COMBO_BOX_ALT_VAR_SWITCHER),
+    STAGE_2_WRITE_STEP_TO_ALT_VAR("Введите шаг изменяемого параметра", AllowedItemsSpace.STAGE_2_ALLOWED_UI_ITEMS, ElementNames.FIELD_ALT_VAR_STEP),
+    STAGE_3_FILL_VAR_TABLE("Заполните таблицу переменных в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_3_ALLOWED_UI_ITEMS, ElementNames.TABLE_VARIABLES),
+    STAGE_4_SELECT_RESEARCH_VAR("Выберите исследуемый параметр в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_4_ALLOWED_UI_ITEMS, ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER),
+    STAGE_5_WRITE_TIME_STEP("Для данного значения исследуемой переменной и вычисленного значения оборотов в минуты вычислите значение " + VariableType.VarName.DELTA + "t", AllowedItemsSpace.STAGE_5_ALLOWED_UI_ITEMS, ElementNames.FIELD_TIME),
+    STAGE_6_CHECK_CHART("Теперь Вы моежете построить график.", AllowedItemsSpace.STAGE_6_ALLOWED_UI_ITEMS, ElementNames.BUTTON_SHOW_CHART);
 
 
     private final String description;
     private final String[] allowedUiItemsOnStage;
+    private final String selectableElement;
 
-    WorkStage(String description, String[] allowedUiItemsOnStage) {
+    WorkStage(String description, String[] allowedUiItemsOnStage, String selectableElement) {
         this.description = description;
         this.allowedUiItemsOnStage = allowedUiItemsOnStage;
+        this.selectableElement = selectableElement;
     }
 
     public String getDescription() {
@@ -49,5 +51,8 @@ public enum WorkStage {
         //private static final String[] STAGE_7_ALLOWED_UI_ITEMS = {};
     }
 
+    public String getSelectableElement() {
+        return selectableElement;
+    }
 }
 
