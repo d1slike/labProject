@@ -60,7 +60,7 @@ public class Test {
         return question.getText();
     }
 
-    public void checkCurrentAnswer() {
+    public void checkCurrentStudentAnswer() {
         if (answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer)
             correctAnswersCount++;
     }

@@ -10,7 +10,6 @@ import ru.stankin.AbstractController;
 import ru.stankin.enums.ElementNames;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.WorkStage;
-import ru.stankin.utils.Executor;
 import ru.stankin.utils.Util;
 import ru.stankin.work.managers.UIManager;
 import ru.stankin.work.managers.VariableManager;
@@ -145,26 +144,25 @@ public class WorkController extends AbstractController{
         variableManager.setVal(VariableType.Zc, 0.3);
         variableManager.setVal(VariableType.RO, 8000);
         variableManager.setVal(VariableType.GAMMA, 4);
-        variableManager.setVal(VariableType.M, 0.6);
-        variableManager.setVal(VariableType.TAU, 50);
+        variableManager.setVal(VariableType.M, 10);
+        variableManager.setVal(VariableType.TAU, 10);
         variableManager.setAltVarStep(0.02);
-        variableManager.setCurrentDeltaTime(0.019);
+        variableManager.setCurrentDeltaTime(0.01911);
 
-        variableManager.setResearchVariableType(VariableType.Xa);
+        variableManager.setResearchVariableType(VariableType.Xb);
+        variableManager.setAltVariable(VariableType.R);
 
-        variableManager.calculateForTau();
         calculateForFirstTimeAndUpdateInfo();
         variableManager.calculateAllForCurrentAltVarValue();
 
-        variableManager.calculateForTau();
+        variableManager.updateAltVariable();
         calculateForFirstTimeAndUpdateInfo();
         variableManager.calculateAllForCurrentAltVarValue();
 
-        variableManager.calculateForTau();
+        variableManager.updateAltVariable();
         calculateForFirstTimeAndUpdateInfo();
         variableManager.calculateAllForCurrentAltVarValue();
-
-        variableManager.calculateForTau();
+        variableManager.updateAltVariable();
         calculateForFirstTimeAndUpdateInfo();
         variableManager.calculateAllForCurrentAltVarValue();
 
@@ -238,17 +236,10 @@ public class WorkController extends AbstractController{
     private void onCalcButtonClick() {
         if (currentWorkStage != WorkStage.STAGE_5_WRITE_TIME_STEP)
             return;
-        double deltaT;
-        try {
-            String deltaTInString = timeField.getText();
-            deltaT = Double.parseDouble(deltaTInString);
-            timeField.setStyle(UIManager.DEFAULT_BORDER_STYLE);
-            variableManager.setCurrentDeltaTime(deltaT);
-        } catch (Exception ex) {
-            timeField.setStyle(UIManager.RED_BORDER_STYLE);
+        ParseResult result = getDoubleValue(timeField, ElementNames.FIELD_TIME);
+        if (!result.success)
             return;
-        }
-
+        variableManager.setCurrentDeltaTime(result.value);
         if (variableManager.calculateAllForCurrentAltVarValue())
             onNextStageButtonClick();
         else {
@@ -295,22 +286,11 @@ public class WorkController extends AbstractController{
                 altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeansurement().getValue());
                 break;
             case STAGE_2_WRITE_STEP_TO_ALT_VAR: {
-                String stringValue = altVarStepField.getText();
-                boolean ok = true;
-                double value = -1d;
-                try {
-                    value = Double.parseDouble(stringValue);
-                } catch (Exception ex) {
-                    ok = false;
-                }
-                if (ok)
-                    variableManager.setAltVarStep(value);
-                else {
-                    uiManager.setRedBorder(ElementNames.FIELD_ALT_VAR_STEP);
-                    return false;
-                }
+                ParseResult result = getDoubleValue(altVarStepField, ElementNames.FIELD_ALT_VAR_STEP);
+                if (result.success)
+                    variableManager.setAltVarStep(result.value);
+                return result.success;
             }
-            break;
             case STAGE_3_FILL_VAR_TABLE: {
                 boolean ok = true;
                 for (Variable variable : varTable.getItems()) {
@@ -353,6 +333,32 @@ public class WorkController extends AbstractController{
 
     }
 
+    private ParseResult getDoubleValue(TextField field, String elementName) {
+        boolean success = true;
+        double val = 0.;
+        try {
+            val = Double.parseDouble(field.getText());
+            uiManager.setDefaultBorder(elementName);
+        } catch (Exception ex) {
+            uiManager.setRedBorder(elementName);
+            success = false;
+        }
+
+        return new ParseResult(success, val);
+    }
+
+
+    private static class ParseResult {
+
+        private final boolean success;
+        private final double value;
+
+        public ParseResult(boolean status, double value) {
+            this.success = status;
+            this.value = value;
+        }
+    }
+
     private class CellForVarTable extends TextFieldTableCell<Variable, Number> {
         public CellForVarTable() {
             setConverter(new StringDoubleConverter());
@@ -383,7 +389,7 @@ public class WorkController extends AbstractController{
         }
     }
 
-    private class CellForResultTable extends TextFieldTableCell<ResultRecord, Number> {
+    private static class CellForResultTable extends TextFieldTableCell<ResultRecord, Number> {
         public CellForResultTable() {
             setConverter(new StringDoubleConverter());
         }

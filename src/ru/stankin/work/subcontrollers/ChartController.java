@@ -145,6 +145,7 @@ public class ChartController {
         stage.showAndWait();
     }
 
+
     private List<XYChart.Series<Number, Number>> buildLines(List<ResultRecord> resultRecords, String altVarName, boolean fullReaction) {
         final int maxTimeSteps = VariableManager.TIME_STEPS_COUNT + 1;
 

@@ -199,7 +199,7 @@ public class TestController extends AbstractController {
     private synchronized void onNextButtonClick() {
         if (test == null)
             return;
-        test.checkCurrentAnswer();
+        test.checkCurrentStudentAnswer();
         if (test.haveMoreQuestion())
             showNextQuestion();
         else if (test.isCompleteCorrect())

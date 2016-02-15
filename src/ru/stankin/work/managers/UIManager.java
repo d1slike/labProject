@@ -58,6 +58,11 @@ public class UIManager {
         notDefaultStyleItems.add(elementName);
     }
 
+    public void setDefaultBorder(String elementName) {
+        itemReferenceMap.get(elementName).setStyle(DEFAULT_BORDER_STYLE);
+        notDefaultStyleItems.remove(elementName);
+    }
+
     public void playAnimationFor(String elementName) {
         stopAnimation();
         activeControl = itemReferenceMap.getOrDefault(elementName, null);

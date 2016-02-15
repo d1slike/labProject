@@ -29,11 +29,11 @@ public class Calculator {
     private double currentTime;
 
     private double getXc() {
-        return getVar(VariableType.E) / Math.sin(getPhiInRadians());
+        return getVar(VariableType.E) * Math.sin(getPhiInRadians());
     }
 
     private double getYc() {
-        return getVar(VariableType.E) / Math.cos(getPhiInRadians());
+        return getVar(VariableType.E) * Math.cos(getPhiInRadians());
     }
 
     private double getMass() {
@@ -52,10 +52,11 @@ public class Calculator {
     private double getPhiInRadians() {
         /*double phi = getEpsilon();
         phi *= Math.pow(getVar(VariableType.T), TWO);
-        //phi /= TWO;
+        phi /= TWO;
         while (phi >= DEGREES_360)
-            phi -= DEGREES_360;*/
-        return Math.toRadians(285.328);
+            phi -= DEGREES_360;
+        return Math.toRadians(phi);*/
+        return Math.toRadians(180 / Math.PI * ((getEpsilon() / TWO * Math.pow(getVar(VariableType.T), TWO)) % (TWO * Math.PI)));
     }
 
     private double getEpsilon() {
@@ -124,8 +125,8 @@ public class Calculator {
     }
 
     private double getReaction(boolean isStatic, VariableType researchValType, Map<String, Double> varCache) {
-        final double epsilon = isStatic ? 0 : varCache.get(EPSILON);
-        final double omegaInSqr = isStatic ? 0 : varCache.get(OMEGA_IN_SQR);
+        final double epsilon = varCache.get(EPSILON);
+        final double omegaInSqr = varCache.get(OMEGA_IN_SQR);
         final double m = varCache.get(MASS);
         final double Ixz = varCache.get(IXZ);
         final double Iyz = varCache.get(IYZ);
@@ -133,19 +134,33 @@ public class Calculator {
         final double yc = varCache.get(YC);
         final double h = varCache.get(H);
 
-        switch (researchValType) {
-            case Ya:
-            case Yb:
-                double Yb = (epsilon * Ixz - omegaInSqr * Iyz) / h;
-                if (researchValType == VariableType.Ya)
-                    return (m * xc * epsilon) - (m * yc * omegaInSqr) - Yb;
-                return Yb;
-            case Xa:
-            case Xb:
-                double Xb = ((m * G * getVar(VariableType.Zc)) - (epsilon * Iyz) - (omegaInSqr * Ixz)) / h;
-                if (researchValType == VariableType.Xa)
-                    return (m * G) - (m * yc * epsilon) - (m * xc * omegaInSqr) - Xb;
-                return Xb;
+        if (isStatic) {
+            switch (researchValType) {
+                case Ya:
+                case Yb:
+                        return 0D;
+                case Xa:
+                case Xb:
+                    double Xb = ((m * G * getVar(VariableType.Zc))) / h;
+                    if (researchValType == VariableType.Xa)
+                        return (m * G) - Xb;
+                    return Xb;
+            }
+        } else {
+            switch (researchValType) {
+                case Ya:
+                case Yb:
+                    double Yb = (epsilon * Ixz - omegaInSqr * Iyz) / h;
+                    if (researchValType == VariableType.Ya)
+                        return (m * xc * epsilon) - (m * yc * omegaInSqr) - Yb;
+                    return Yb;
+                case Xa:
+                case Xb:
+                    double Xb = (-(epsilon * Iyz) - (omegaInSqr * Ixz)) / h;
+                    if (researchValType == VariableType.Xa)
+                        return -(m * yc * epsilon) - (m * xc * omegaInSqr) - Xb;
+                    return Xb;
+            }
         }
 
         return Double.MAX_VALUE;
@@ -153,7 +168,7 @@ public class Calculator {
 
     public long calcRPM(double currentTime) {
         this.currentTime = currentTime;
-        return Math.round((getOmega() * 30D) / Math.PI); //todo check
+        return (long) Math.ceil((getOmega() * 30D) / Math.PI); //todo check
     }
 
     public Calculator(VariableManager variableManager) {
