@@ -73,17 +73,34 @@ public class VariableManager {
         return samplesForAllVarChange == 0;
     }*/
 
-    public boolean calculateAllForCurrentAltVarValue() {
+    /*public boolean calculateAllForCurrentAltVarValue() {
         for (int i = 0; i < TIME_STEPS_COUNT; i++) {
             lastTime += currentDeltaTime;
             getResultRecords().add(calculator.calculateReactions(lastTime));
         }
         samplesForAllVarChange--;
         return samplesForAllVarChange == 0;
-    }
+    }*/
 
     public void calculateForTau() {
-        getResultRecords().add(calculator.calculateReactions(lastTime));
+        getResultRecords().add(calculator.calculateReactions(lastTime, 1));
+        calculator.addToCacheOmega();
+    }
+
+    public void calculate() {
+        for (int i = 0; i < ALT_VAR_MAX_STEP_COUNT; i++) {
+            for (int j = 0; j < TIME_STEPS_COUNT; j++) {
+                lastTime += currentDeltaTime;
+                getResultRecords().add(calculator.calculateReactions(lastTime, j + 2));
+            }
+            if (i != ALT_VAR_MAX_STEP_COUNT - 1) {
+                updateAltVariable();
+                lastTime = calculator.getNextTime();
+                getResultRecords().add(calculator.calculateReactions(lastTime, 1));
+            }
+
+        }
+
     }
 
     public Collection<Variable> getAllVars() {

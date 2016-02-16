@@ -144,15 +144,15 @@ public class WorkController extends AbstractController{
         variableManager.setVal(VariableType.Zc, 0.3);
         variableManager.setVal(VariableType.RO, 8000);
         variableManager.setVal(VariableType.GAMMA, 4);
-        variableManager.setVal(VariableType.M, 10);
-        variableManager.setVal(VariableType.TAU, 10);
+        variableManager.setVal(VariableType.M, 0.6);
+        variableManager.setVal(VariableType.TAU, 50);
         variableManager.setAltVarStep(0.02);
         variableManager.setCurrentDeltaTime(0.01911);
 
         variableManager.setResearchVariableType(VariableType.Xb);
         variableManager.setAltVariable(VariableType.R);
 
-        calculateForFirstTimeAndUpdateInfo();
+        /*calculateForFirstTimeAndUpdateInfo();
         variableManager.calculateAllForCurrentAltVarValue();
 
         variableManager.updateAltVariable();
@@ -164,7 +164,9 @@ public class WorkController extends AbstractController{
         variableManager.calculateAllForCurrentAltVarValue();
         variableManager.updateAltVariable();
         calculateForFirstTimeAndUpdateInfo();
-        variableManager.calculateAllForCurrentAltVarValue();
+        variableManager.calculateAllForCurrentAltVarValue();*/
+        calculateForFirstTimeAndUpdateInfo();
+        variableManager.calculate();
 
         //final UnaryOperator<TextFormatter.Change> condition = change -> NUMBER_PATTERN.matcher(change.getControlNewText()).matches() ? change : null;
         //timeField.setTextFormatter(new TextFormatter<Number>(condition));
@@ -240,12 +242,13 @@ public class WorkController extends AbstractController{
         if (!result.success)
             return;
         variableManager.setCurrentDeltaTime(result.value);
-        if (variableManager.calculateAllForCurrentAltVarValue())
+        /*if (variableManager.calculateAllForCurrentAltVarValue())
             onNextStageButtonClick();
         else {
             variableManager.updateAltVariable();
             calculateForFirstTimeAndUpdateInfo();
-        }
+        }*/
+        variableManager.calculate();
 
     }
 

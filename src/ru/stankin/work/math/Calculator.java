@@ -27,6 +27,15 @@ public class Calculator {
 
     private final VariableManager variableManager;
     private double currentTime;
+    private double currentOmega;
+
+    public void addToCacheOmega() {
+        currentOmega = getOmega();
+    }
+
+    public double getNextTime() {
+        return currentOmega / getEpsilon();
+    }
 
     private double getXc() {
         return getVar(VariableType.E) * Math.sin(getPhiInRadians());
@@ -95,8 +104,7 @@ public class Calculator {
     private double getVar(VariableType type) {
         return type == VariableType.T ? currentTime : variableManager.getVarValue(type);
     }
-
-    public ResultRecord calculateReactions(double time) {
+    public ResultRecord calculateReactions(double time, float pointNum) {
         currentTime = time;
         final VariableType researchVarType = variableManager.getResearchVariable();
         Map<String, Double> varCache = new HashMap<>();
@@ -111,7 +119,7 @@ public class Calculator {
         double staticReact = getReaction(true, researchVarType, varCache);
         double dynamicReact = getReaction(false, researchVarType, varCache);
         return new ResultRecord(
-                getVar(VariableType.T),
+                pointNum,
                 variableManager.getAltVariable().getValue(),
                 staticReact,
                 dynamicReact,

@@ -47,10 +47,10 @@ public class ChartController {
         xAxisForDynamic.setLabel(xAxisName);
         xAsisForFull.setLabel(xAxisName);
 
-        xAsisForFull.setAutoRanging(false);
-        xAxisForDynamic.setAutoRanging(false);
-        yAxisForFullReactionsChart.setAutoRanging(false);
-        yAxisForDynamicReactionsChart.setAutoRanging(false);
+        //xAsisForFull.setAutoRanging(false);
+        //xAxisForDynamic.setAutoRanging(false);
+        //yAxisForFullReactionsChart.setAutoRanging(false);
+        //yAxisForDynamicReactionsChart.setAutoRanging(false);
 
         dynamicReactionsChart = new LineChart<>(xAxisForDynamic, yAxisForDynamicReactionsChart);
         fullReactionsChart = new LineChart<>(xAsisForFull, yAxisForFullReactionsChart);
@@ -84,12 +84,12 @@ public class ChartController {
 
             stage.initOwner(primaryStage);
             final String researchVarName = variableManager.getResearchVariable().getName();
-            yAxisForDynamicReactionsChart.setLabel(researchVarName + "динамическая");
+            yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");
             yAxisForFullReactionsChart.setLabel(researchVarName + " полная");
 
             ObservableList<ResultRecord> list = variableManager.getResultRecords();
 
-            ResultRecord firstRecord = list.get(0);
+            /*ResultRecord firstRecord = list.get(0);
 
             double minTime = firstRecord.getTime();
             double maxTime = firstRecord.getTime();
@@ -135,7 +135,7 @@ public class ChartController {
             yAxisForDynamicReactionsChart.setLowerBound(minResValueDynamic - additionToDynamic);
             yAxisForDynamicReactionsChart.setUpperBound(maxResValueDynamic + additionToDynamic);
             yAxisForFullReactionsChart.setLowerBound(minResValueFull - additionalToFull);
-            yAxisForFullReactionsChart.setUpperBound(maxResValueFull + additionalToFull);
+            yAxisForFullReactionsChart.setUpperBound(maxResValueFull + additionalToFull);*/
 
             String altVarName = variableManager.getAltVariable().getName();
             dynamicReactionsChart.getData().addAll(buildLines(list, altVarName, false));
