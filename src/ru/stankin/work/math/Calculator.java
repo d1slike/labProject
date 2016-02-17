@@ -13,9 +13,7 @@ import java.util.Map;
 public class Calculator {
     private static final double G = 9.81;
     private static final double TWO = 2.0;
-    private static final double DEGREES_360 = 360D;
-    //private static final double TWENTY_FOURTH = 24D;
-    //private static final double EIGHT = 8;
+    private static final double DEGREES_180 = 180D;
     private static final String OMEGA_IN_SQR = "omegaInSqr";
     private static final String EPSILON = "epsilon";
     private static final String MASS = "m";
@@ -27,14 +25,14 @@ public class Calculator {
 
     private final VariableManager variableManager;
     private double currentTime;
-    private double currentOmega;
+    private double omegaForCalculatingNextTime;
 
-    public void addToCacheOmega() {
-        currentOmega = getOmega();
+    public void initOmegaForNextTimeCalculate() {
+        omegaForCalculatingNextTime = getOmega(getVar(VariableType.TAU));
     }
 
     public double getNextTime() {
-        return currentOmega / getEpsilon();
+        return omegaForCalculatingNextTime / getEpsilon();
     }
 
     private double getXc() {
@@ -54,18 +52,17 @@ public class Calculator {
         return mass;
     }
 
-    private double getOmega() {
-        return getEpsilon() * getVar(VariableType.T);
+    private double getOmega(double time) {
+        return getEpsilon() * time;
     }
 
     private double getPhiInRadians() {
-        /*double phi = getEpsilon();
-        phi *= Math.pow(getVar(VariableType.T), TWO);
-        phi /= TWO;
-        while (phi >= DEGREES_360)
-            phi -= DEGREES_360;
-        return Math.toRadians(phi);*/
-        return Math.toRadians(180 / Math.PI * ((getEpsilon() / TWO * Math.pow(getVar(VariableType.T), TWO)) % (TWO * Math.PI)));
+
+        return Math.toRadians(getPhiInDegrees(getVar(VariableType.T)));
+    }
+
+    public double getPhiInDegrees(double time) {
+        return DEGREES_180 / Math.PI * ((getEpsilon() / TWO * Math.pow(time, TWO)) % (TWO * Math.PI));
     }
 
     private double getEpsilon() {
@@ -73,7 +70,6 @@ public class Calculator {
     }
 
     private double getIz() {
-        //return getMass() * Math.pow(getVar(VariableType.R), TWO) / TWO; //TODO уточнить
         double m = getMass();
         double lInSqr = Math.pow(getVar(VariableType.L), TWO);
         double rInSqr = Math.pow(getVar(VariableType.R), TWO);
@@ -104,12 +100,12 @@ public class Calculator {
     private double getVar(VariableType type) {
         return type == VariableType.T ? currentTime : variableManager.getVarValue(type);
     }
-    public ResultRecord calculateReactions(double time, float pointNum) {
+    public ResultRecord calculateReactions(double time, int pointNum) {
         currentTime = time;
         final VariableType researchVarType = variableManager.getResearchVariable();
         Map<String, Double> varCache = new HashMap<>();
         varCache.put(EPSILON, getEpsilon());
-        varCache.put(OMEGA_IN_SQR, Math.pow(getOmega(), TWO));
+        varCache.put(OMEGA_IN_SQR, Math.pow(getOmega(currentTime), TWO));
         varCache.put(MASS, getMass());
         varCache.put(IYZ, getIyz());
         varCache.put(IXZ, getIxz());
@@ -120,16 +116,13 @@ public class Calculator {
         double dynamicReact = getReaction(false, researchVarType, varCache);
         return new ResultRecord(
                 pointNum,
+                currentTime,
                 variableManager.getAltVariable().getValue(),
                 staticReact,
                 dynamicReact,
                 staticReact + dynamicReact,
-                getPhiInDegreesToShow()
+                getPhiInDegrees(currentTime)
         );
-    }
-
-    private double getPhiInDegreesToShow() {
-        return Math.toDegrees(getPhiInRadians());
     }
 
     private double getReaction(boolean isStatic, VariableType researchValType, Map<String, Double> varCache) {
@@ -174,10 +167,10 @@ public class Calculator {
         return Double.MAX_VALUE;
     }
 
-    public long calcRPM(double currentTime) {
-        this.currentTime = currentTime;
-        return (long) Math.ceil((getOmega() * 30D) / Math.PI); //todo check
+    public long calcRPMForTau() {
+        return (long) Math.ceil((getOmega(getVar(VariableType.TAU)) * 30D) / Math.PI);
     }
+
 
     public Calculator(VariableManager variableManager) {
         this.variableManager = variableManager;

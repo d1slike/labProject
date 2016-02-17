@@ -19,7 +19,7 @@ public class VariableManager {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
             VariableType.GAMMA, VariableType.M, VariableType.H, VariableType.TAU};
     public static final int ALT_VAR_MAX_STEP_COUNT = 4;
-    public static final int TIME_STEPS_COUNT = 10;
+    public static final int TIME_STEPS_COUNT = 11;
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
@@ -28,8 +28,6 @@ public class VariableManager {
     private double altVarStep;
     private VariableType researchVariable;
 
-    private int samplesForAllVarChange;
-    //private int samplesForTime;
 
     private double currentDeltaTime;
     private double lastTime;
@@ -54,7 +52,6 @@ public class VariableManager {
         researchVariable = VariableType.Xa;
         currentDeltaTime = 0;
         lastTime = 0;
-        samplesForAllVarChange = ALT_VAR_MAX_STEP_COUNT;
         resultRecords.clear();
     }
 
@@ -62,47 +59,23 @@ public class VariableManager {
         activeVariables.get(type).setValue(v);
     }
 
-    /*public boolean calculateNextForTime(double time) {
-        resultRecords.add(calculator.calculateReactions(time));
-        if (--samplesForTime == 0) {
-            samplesForAllVarChange--;
-            updateAltVariable();
-            samplesForTime = TIME_STEPS_COUNT;
-            lastCheckedTime = 0;
-        }
-        return samplesForAllVarChange == 0;
-    }*/
-
-    /*public boolean calculateAllForCurrentAltVarValue() {
-        for (int i = 0; i < TIME_STEPS_COUNT; i++) {
-            lastTime += currentDeltaTime;
-            getResultRecords().add(calculator.calculateReactions(lastTime));
-        }
-        samplesForAllVarChange--;
-        return samplesForAllVarChange == 0;
-    }*/
-
-    public void calculateForTau() {
-        getResultRecords().add(calculator.calculateReactions(lastTime, 1));
-        calculator.addToCacheOmega();
+    public double calculatePhiForTau() {
+        return calculator.getPhiInDegrees(getVarValue(VariableType.TAU));
     }
 
     public void calculate() {
+        lastTime = getVarValue(VariableType.TAU);
+        calculator.initOmegaForNextTimeCalculate();
         for (int i = 0; i < ALT_VAR_MAX_STEP_COUNT; i++) {
             for (int j = 0; j < TIME_STEPS_COUNT; j++) {
+                getResultRecords().add(calculator.calculateReactions(lastTime, j + 1));
                 lastTime += currentDeltaTime;
-                getResultRecords().add(calculator.calculateReactions(lastTime, j + 2));
             }
-            if (i != ALT_VAR_MAX_STEP_COUNT - 1) {
-                updateAltVariable();
-                lastTime = calculator.getNextTime();
-                getResultRecords().add(calculator.calculateReactions(lastTime, 1));
-            }
-
+            updateAltVariable();
+            lastTime = calculator.getNextTime();
         }
 
     }
-
     public Collection<Variable> getAllVars() {
         return activeVariables.values();
     }
@@ -135,15 +108,12 @@ public class VariableManager {
         altVariable.setValue(altVariable.getValue() + altVarStep);
     }
 
-    public long getRPM() {
-        return calculator.calcRPM(lastTime);
+    public long calculateRPMForTau() {
+        return calculator.calcRPMForTau();
     }
 
     public void setCurrentDeltaTime(double currentDeltaTime) {
         this.currentDeltaTime = currentDeltaTime;
     }
 
-    public void setLastTimeToTau() {
-        lastTime = getVarValue(VariableType.TAU);
-    }
 }

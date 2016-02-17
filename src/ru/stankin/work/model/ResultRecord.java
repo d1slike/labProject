@@ -6,6 +6,7 @@ import javafx.beans.property.*;
  * Created by DisDev on 25.01.2016.
  */
 public class ResultRecord {
+    private final ReadOnlyIntegerProperty number;
     private final ReadOnlyDoubleProperty time;
     private final ReadOnlyDoubleProperty altVar;
     private final ReadOnlyDoubleProperty staticReaction;
@@ -13,24 +14,20 @@ public class ResultRecord {
     private final ReadOnlyDoubleProperty fullReaction;
     private final ReadOnlyDoubleProperty phiInDegrees;
 
-    public ResultRecord(final double timeValue,
+    public ResultRecord(int number, final double timeValue,
                         final double altVarValue,
                         final double staticReactionValue,
                         final double dynamicRactionValue,
                         final double fullReactionValue,
                         final double phiInDegreesValue)
     {
+        this.number = new SimpleIntegerProperty(number);
         time = new SimpleDoubleProperty(timeValue);
         altVar = new SimpleDoubleProperty(altVarValue);
         staticReaction = new SimpleDoubleProperty(staticReactionValue);
         dynamicReaction = new SimpleDoubleProperty(dynamicRactionValue);
         fullReaction = new SimpleDoubleProperty(fullReactionValue);
         phiInDegrees = new SimpleDoubleProperty(phiInDegreesValue);
-    }
-
-
-    public double getTime() {
-        return time.getValue();
     }
 
     public ReadOnlyDoubleProperty timeProperty() {
@@ -43,10 +40,6 @@ public class ResultRecord {
 
     public ReadOnlyDoubleProperty altVarProperty() {
         return altVar;
-    }
-
-    public double getStaticReaction() {
-        return staticReaction.getValue();
     }
 
     public ReadOnlyDoubleProperty staticReactionProperty() {
@@ -71,5 +64,9 @@ public class ResultRecord {
 
     public ReadOnlyDoubleProperty phiInDegreesProperty() {
         return phiInDegrees;
+    }
+
+    public int getNumber() {
+        return number.intValue();
     }
 }

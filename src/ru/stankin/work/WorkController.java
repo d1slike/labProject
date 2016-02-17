@@ -10,6 +10,7 @@ import ru.stankin.AbstractController;
 import ru.stankin.enums.ElementNames;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.WorkStage;
+import ru.stankin.utils.Executor;
 import ru.stankin.utils.Util;
 import ru.stankin.work.managers.UIManager;
 import ru.stankin.work.managers.VariableManager;
@@ -18,6 +19,7 @@ import ru.stankin.work.model.Variable;
 import ru.stankin.work.subcontrollers.ChartController;
 
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 
 /**
@@ -31,8 +33,6 @@ public class WorkController extends AbstractController{
     private UIManager uiManager;
     private ChartController chartController;
     private WorkStage currentWorkStage;
-    //private Scene3DController scene3DController;
-
 
     @FXML
     private ComboBox<VariableType> altVarSwitcher;
@@ -45,11 +45,6 @@ public class WorkController extends AbstractController{
     private TableColumn<Variable, String> varTableColumnParam;
     @FXML
     private TableColumn<Variable, Number> varTableColumnValue;
-
-    @FXML
-    private Button showIn3DButton;
-    /*@FXML
-    private Button resetButton;*/
 
     @FXML
     private ComboBox<VariableType> researchVarSwitcher;
@@ -97,6 +92,11 @@ public class WorkController extends AbstractController{
     @FXML
     private Label RPMValueLabel;
 
+    @FXML
+    private Label phiNameLabel;
+    @FXML
+    private Label phiValueLabel;
+
     public WorkController() {
     }
 
@@ -110,32 +110,25 @@ public class WorkController extends AbstractController{
 
         variableManager = new VariableManager();
         chartController = new ChartController();
-        currentWorkStage = WorkStage.STAGE_6_CHECK_CHART;
+        currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
 
-        //variableManager.calculateNextForTime(50);
-
-        //altVarSwitcher.setVisibleRowCount(VariableManager.EDITABLE_VAR_TYPES_ARRAY.length - 1);
         altVarSwitcher.getItems().addAll(VariableManager.EDITABLE_VAR_TYPES_ARRAY);
         altVarSwitcher.getItems().remove(VariableType.TAU);
         altVarSwitcher.setValue(VariableType.RO);
 
-        //researchVarSwitcher.setVisibleRowCount(4);
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
         researchVarSwitcher.setValue(VariableType.Xa);
 
         timeLabel.setText(VariableType.VarName.DELTA + VariableType.T.getName());
 
-        //Executor.getInstance().execute(this::prepareVarTable);
-        //Executor.getInstance().execute(this::prepareResultTable);
-        //Executor.getInstance().execute(this::prepareUI);
+        resultTable.setVisible(false);
 
-        prepareVarTable();
-        prepareResultTable();
-        prepareUI();
+        Executor.getInstance().execute(this::prepareVarTable);
+        Executor.getInstance().execute(this::prepareResultTable);
+        Executor.getInstance().execute(this::prepareUI);
 
         currentInfoVBox.setVisible(false);
         resultTablePhiColumn.setText(VariableType.VarName.PHI);
-
 
         variableManager.setVal(VariableType.H, 1.0);
         variableManager.setVal(VariableType.R, 0.1);
@@ -149,24 +142,12 @@ public class WorkController extends AbstractController{
         variableManager.setAltVarStep(0.02);
         variableManager.setCurrentDeltaTime(0.01911);
 
-        variableManager.setResearchVariableType(VariableType.Xb);
-        variableManager.setAltVariable(VariableType.R);
+        //variableManager.setResearchVariableType(VariableType.Xb);
+        //variableManager.setAltVariable(VariableType.R);
 
-        /*calculateForFirstTimeAndUpdateInfo();
-        variableManager.calculateAllForCurrentAltVarValue();
 
-        variableManager.updateAltVariable();
-        calculateForFirstTimeAndUpdateInfo();
-        variableManager.calculateAllForCurrentAltVarValue();
-
-        variableManager.updateAltVariable();
-        calculateForFirstTimeAndUpdateInfo();
-        variableManager.calculateAllForCurrentAltVarValue();
-        variableManager.updateAltVariable();
-        calculateForFirstTimeAndUpdateInfo();
-        variableManager.calculateAllForCurrentAltVarValue();*/
-        calculateForFirstTimeAndUpdateInfo();
-        variableManager.calculate();
+        //calculateAndShowInformation();
+        //variableManager.calculate();
 
         //final UnaryOperator<TextFormatter.Change> condition = change -> NUMBER_PATTERN.matcher(change.getControlNewText()).matches() ? change : null;
         //timeField.setTextFormatter(new TextFormatter<Number>(condition));
@@ -180,8 +161,6 @@ public class WorkController extends AbstractController{
         uiManager.putItem(ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, altVarSwitcher);
         uiManager.putItem(ElementNames.FIELD_ALT_VAR_STEP, altVarStepField);
         uiManager.putItem(ElementNames.TABLE_VARIABLES, varTable);
-        uiManager.putItem(ElementNames.BUTTON_SHOW_IN_3D, showIn3DButton);
-        //uiManager.putItem(ElementNames.BUTTON_RESET_ALL_INPUT_VALUES, resetButton);
         uiManager.putItem(ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER, researchVarSwitcher);
         uiManager.putItem(ElementNames.TABLE_RESULTS, resultTable);
         uiManager.putItem(ElementNames.BUTTON_SHOW_CHART, showChartButton);
@@ -229,12 +208,6 @@ public class WorkController extends AbstractController{
     }
 
     @FXML
-    private void on3DButtonShowClick() {
-        /*Scene3DController controller = new Scene3DController(mainStage, variableManager);
-        controller.buildAndShow();*/
-    }
-
-    @FXML
     private void onCalcButtonClick() {
         if (currentWorkStage != WorkStage.STAGE_5_WRITE_TIME_STEP)
             return;
@@ -242,14 +215,8 @@ public class WorkController extends AbstractController{
         if (!result.success)
             return;
         variableManager.setCurrentDeltaTime(result.value);
-        /*if (variableManager.calculateAllForCurrentAltVarValue())
-            onNextStageButtonClick();
-        else {
-            variableManager.updateAltVariable();
-            calculateForFirstTimeAndUpdateInfo();
-        }*/
         variableManager.calculate();
-
+        onNextStageButtonClick();
     }
 
     @FXML
@@ -313,9 +280,8 @@ public class WorkController extends AbstractController{
                 resultTableStaticReaction.setText(name + "(стат.)");
                 resultTableDynamicReaction.setText(name + "(динам.)");
                 resultTableFullReaction.setText(name + "(полн.)");
-
-                calculateForFirstTimeAndUpdateInfo();
-                currentInfoVBox.setVisible(true);
+                resultTable.setVisible(true);
+                calculateAndShowInformation();
             }
             break;
             case STAGE_5_WRITE_TIME_STEP: {
@@ -327,12 +293,14 @@ public class WorkController extends AbstractController{
         return true;
     }
 
-    private void calculateForFirstTimeAndUpdateInfo() {
-        variableManager.setLastTimeToTau();
-        variableManager.calculateForTau();
+    private void calculateAndShowInformation() {
+        altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeansurement().getValue());
         altVarValueLabel.setText(Util.doubleFormat(variableManager.getAltVariable().getValue()) + "");
-        RPMValueLabel.setText(variableManager.getRPM() + "");
+        phiNameLabel.setText(VariableType.VarName.PHI + "(" + VariableType.VarName.TAU + ")");
+        phiValueLabel.setText(Util.doubleFormat(variableManager.calculatePhiForTau()));
+        RPMValueLabel.setText(variableManager.calculateRPMForTau() + "");
         uiManager.playAnimationFor(ElementNames.FIELD_TIME);
+        currentInfoVBox.setVisible(true);
 
     }
 
