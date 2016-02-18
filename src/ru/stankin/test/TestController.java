@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,8 +23,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.stankin.AbstractController;
 import ru.stankin.enums.AnswerNumber;
-import ru.stankin.enums.AnswerType;
 import ru.stankin.test.model.Answer;
+import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
 import ru.stankin.utils.ImageCache;
 
@@ -53,6 +54,8 @@ public class TestController extends AbstractController {
 
     @FXML
     private Label questionText;
+    @FXML
+    private ImageView imageView;
 
     @FXML
     private Label currentQuestion;
@@ -117,8 +120,14 @@ public class TestController extends AbstractController {
     }
 
     private void showNextQuestion() {
-        String currentQuestionText = test.prepareAndGetNextQuestion();
-        questionText.setText(currentQuestionText);
+        Question question = test.prepareAndGetNextQuestion();
+        imageView.setVisible(false);
+        if (question.getImgSource() != null) {
+            imageView.setVisible(true);
+            imageView.setImage(ImageCache.getInstance().getByName(question.getImgSource()).getImage());
+        }
+        if (question.getText() != null)
+            questionText.setText(question.getText());
         currentQuestion.setText(Integer.toString(test.getCurrentQustionNumber()));
         int answerNum = AnswerNumber.FIRST;
         Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(radioButton -> {
@@ -128,31 +137,32 @@ public class TestController extends AbstractController {
         firstAnswer.fire();
         onSelectFirst();
         for (Answer answer : test.getCurrentAnswerList()) {
-            String answerSource = answer.getSource();
+            String text = answer.getText();
+            String imgSource = answer.getImgSource();
             switch (answerNum) {
                 case AnswerNumber.FIRST:
-                    if (answer.getType() == AnswerType.IMG)
-                        firstAnswer.setGraphic(ImageCache.getInstance().getByName(answerSource));
-                    else
-                        firstAnswer.setText(answerSource);
+                    if (imgSource != null)
+                        firstAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
+                    if (text != null)
+                        firstAnswer.setText(text);
                     break;
                 case AnswerNumber.SECOND:
-                    if (answer.getType() == AnswerType.IMG)
-                        secondAnswer.setGraphic(ImageCache.getInstance().getByName(answerSource));
-                    else
-                        secondAnswer.setText(answerSource);
+                    if (imgSource != null)
+                        secondAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
+                    if (text != null)
+                        secondAnswer.setText(text);
                     break;
                 case AnswerNumber.THIRD:
-                    if (answer.getType() == AnswerType.IMG)
-                        thirdAnswer.setGraphic(ImageCache.getInstance().getByName(answerSource));
-                    else
-                        thirdAnswer.setText(answerSource);
+                    if (imgSource != null)
+                        thirdAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
+                    if (text != null)
+                        thirdAnswer.setText(text);
                     break;
                 case AnswerNumber.FOURTH:
-                    if (answer.getType() == AnswerType.IMG)
-                        fourthAnswer.setGraphic(ImageCache.getInstance().getByName(answerSource));
-                    else
-                        fourthAnswer.setText(answerSource);
+                    if (imgSource != null)
+                        fourthAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
+                    if (text != null)
+                        fourthAnswer.setText(text);
                     break;
             }
 

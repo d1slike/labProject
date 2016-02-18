@@ -30,7 +30,6 @@ public class MainApplication extends Application {
         primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
         nextStage();
         nextStage();
-        nextStage();
         primaryStage.show();
     }
 

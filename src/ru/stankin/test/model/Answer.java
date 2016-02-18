@@ -1,31 +1,29 @@
 package ru.stankin.test.model;
 
-import ru.stankin.enums.AnswerType;
-
 /**
  * Created by DisDev on 05.02.2016.
  */
 public class Answer {
     private final int id;
-    private final AnswerType type;
-    private final String source;
+    private final String imgSource;
+    private final String text;
 
-    public Answer(int id, AnswerType type, String source) {
+    public Answer(int id, String imgSource, String source) {
         this.id = id;
-        this.type = type;
-        this.source = source;
+        this.imgSource = imgSource;
+        this.text = source;
     }
 
     public int getId() {
         return id;
     }
 
-    public AnswerType getType() {
-        return type;
+    public String getText() {
+        return text;
     }
 
-    public String getSource() {
-        return source;
+    public String getImgSource() {
+        return imgSource;
     }
 }
 
