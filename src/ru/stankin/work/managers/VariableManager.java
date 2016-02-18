@@ -23,7 +23,7 @@ public class VariableManager {
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;
-    private final Calculator calculator;
+    private Calculator calculator;
     private Variable altVariable;
     private double altVarStep;
     private VariableType researchVariable;
@@ -37,7 +37,6 @@ public class VariableManager {
         activeVariables = new EnumMap<>(VariableType.class);
         resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
-        calculator = new Calculator(this);
         clear();
     }
 
@@ -53,6 +52,7 @@ public class VariableManager {
         currentDeltaTime = 0;
         lastTime = 0;
         resultRecords.clear();
+        calculator = new Calculator(this);
     }
 
     public void setVal(VariableType type, double v) {
@@ -63,7 +63,7 @@ public class VariableManager {
         return calculator.getPhiInDegrees(getVarValue(VariableType.TAU));
     }
 
-    public void calculate() {
+    public void calculateAllReactions() {
         lastTime = getVarValue(VariableType.TAU);
         calculator.initOmegaForNextTimeCalculate();
         for (int i = 0; i < ALT_VAR_MAX_STEP_COUNT; i++) {
