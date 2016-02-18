@@ -48,7 +48,7 @@ public class Test {
      *
      * @return текст задания нового вопроса
      */
-    public String prepareAndGetNextQuestion() {
+    public Question prepareAndGetNextQuestion() {
         Question question = questions.get(currentQuestionPosition + 1);
         currentQuestionPosition++;
         currentAnswers = question.shakeAnswers();
@@ -57,7 +57,7 @@ public class Test {
         int i = 0;
         for (Answer answer : currentAnswers)
             answersMap.put(i++, answer.getId());
-        return question.getText();
+        return question;
     }
 
     public void checkCurrentStudentAnswer() {

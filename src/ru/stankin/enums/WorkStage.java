@@ -46,8 +46,8 @@ public enum WorkStage {
         private static final String[] STAGE_2_ALLOWED_UI_ITEMS = {ElementNames.BUTTON_PREV_STAGE, ElementNames.BUTTON_NEXT_STAGE, ElementNames.FIELD_ALT_VAR_STEP};
         private static final String[] STAGE_3_ALLOWED_UI_ITEMS = {ElementNames.BUTTON_NEXT_STAGE, ElementNames.BUTTON_PREV_STAGE, ElementNames.TABLE_VARIABLES};
         private static final String[] STAGE_4_ALLOWED_UI_ITEMS = {ElementNames.BUTTON_NEXT_STAGE, ElementNames.BUTTON_PREV_STAGE, ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER};
-        private static final String[] STAGE_5_ALLOWED_UI_ITEMS = {ElementNames.FIELD_TIME, ElementNames.TABLE_RESULTS, ElementNames.BUTTON_CALCULATE};
-        private static final String[] STAGE_6_ALLOWED_UI_ITEMS = {ElementNames.TABLE_RESULTS, ElementNames.BUTTON_SHOW_CHART};
+        private static final String[] STAGE_5_ALLOWED_UI_ITEMS = {ElementNames.FIELD_TIME, ElementNames.TABLE_RESULTS, ElementNames.BUTTON_CALCULATE, ElementNames.BUTTON_PREV_STAGE};
+        private static final String[] STAGE_6_ALLOWED_UI_ITEMS = {ElementNames.TABLE_RESULTS, ElementNames.BUTTON_SHOW_CHART, ElementNames.BUTTON_CANCEL};
         //private static final String[] STAGE_7_ALLOWED_UI_ITEMS = {};
     }
 

@@ -12,12 +12,14 @@ import java.util.List;
  */
 public class Question {
     private final int id;
+    private final String imgSource;
     private final String text;
     private final int correctAnswerId;
     private final TIntObjectMap<Answer> answers;
 
-    public Question(int id, String text, int correctAnswerId, TIntObjectMap<Answer> answers) {
+    public Question(int id, String imgSource, String text, int correctAnswerId, TIntObjectMap<Answer> answers) {
         this.id = id;
+        this.imgSource = imgSource;
         this.text = text;
         this.correctAnswerId = correctAnswerId;
         this.answers = answers;
@@ -42,5 +44,9 @@ public class Question {
 
     public int getCorrectAnswerId() {
         return correctAnswerId;
+    }
+
+    public String getImgSource() {
+        return imgSource;
     }
 }

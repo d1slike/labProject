@@ -1,8 +1,8 @@
 <qlist>
     <question id="1" text="jj" correctAnswerId="1">
-        <answer id="1" type="IMG" source="35.jpg"/>
-        <answer id="2" type="TEXT" source="baa"/>
-        <answer id="3" type="TEXT" source="cde"/>
-        <answer id="4" type="TEXT" source="jfknf"/>
+        <answer id="1" imgSource="35.jpg" text="fff"/>
+        <answer id="2" text="baa"/>
+        <answer id="3" text="cde"/>
+        <answer id="4" text="jfknf"/>
     </question>
 </qlist>

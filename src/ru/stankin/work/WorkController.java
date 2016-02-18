@@ -196,6 +196,15 @@ public class WorkController extends AbstractController{
         varTable.getItems().addAll(variableManager.getAllVars());
     }
 
+    @FXML
+    private void onCancelButtonClick() {
+        currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
+        onChangedWorkStage();
+        resultTable.setVisible(false);
+        currentInfoVBox.setVisible(false);
+        variableManager.clear();
+        chartController.clear();
+    }
 
     @FXML
     private void onChangedAltVariable() {
@@ -233,6 +242,10 @@ public class WorkController extends AbstractController{
     private void onPrevStageButtonClick() {
         if (currentWorkStage == null || currentWorkStage == WorkStage.STAGE_1_SELECT_ALT_VAR)
             return;
+        if (currentWorkStage == WorkStage.STAGE_5_WRITE_TIME_STEP) {
+            resultTable.setVisible(false);
+            currentInfoVBox.setVisible(false);
+        }
         currentWorkStage = currentWorkStage.prevStage();
         onChangedWorkStage();
     }

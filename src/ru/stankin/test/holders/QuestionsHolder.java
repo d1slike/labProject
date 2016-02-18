@@ -5,7 +5,6 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import ru.stankin.enums.AnswerType;
 import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
@@ -52,12 +51,9 @@ public class QuestionsHolder {
                 TIntObjectMap<Answer> answers = new TIntObjectHashMap<>();
                 for (Element answer : question.elements("answer")) {
                     int aId = parseIntValue(answer, "id");
-                    AnswerType type = AnswerType.valueOf(answer.attributeValue("type"));
-                    if(type == null)
-                        throw new InvalidObjectException("bad answer type in " + qId + " answerId " + aId);
-                    answers.put(aId, new Answer(aId, type, answer.attributeValue("source")));
+                    answers.put(aId, new Answer(aId, answer.attributeValue("imgSource"), answer.attributeValue("text")));
                 }
-                questions.put(qId, new Question(qId, question.attributeValue("text"), correctAnswer, answers));
+                questions.put(qId, new Question(qId, question.attributeValue("imgSource"), question.attributeValue("text"), correctAnswer, answers));
             }
 
         } catch (Exception ex) {
