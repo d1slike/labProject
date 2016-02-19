@@ -191,6 +191,7 @@ public class WorkController extends AbstractController{
 
     private void prepareVarTable() {
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansurement());
+        varTableColumnParam.setStyle("-fx-font-weight: bold;");
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
         varTable.getItems().addAll(variableManager.getAllVars());
