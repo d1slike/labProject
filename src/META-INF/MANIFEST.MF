@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: lib/trove-3.1a1.jar lib/dom4j-2.0.0-RC1.jar
+Main-Class: ru.stankin.MainApplication
+
