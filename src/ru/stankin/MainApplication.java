@@ -30,7 +30,8 @@ public class MainApplication extends Application {
         primaryStage.setTitle("RCalc");
         primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
         nextStage();
-        //nextStage();
+        nextStage();
+        nextStage();
         primaryStage.show();
     }
 

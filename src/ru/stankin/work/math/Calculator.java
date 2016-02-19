@@ -22,6 +22,7 @@ public class Calculator {
     private static final String XC = "xc";
     private static final String YC = "yc";
     private static final String H = "h";
+    private static final String ZC = "zc";
 
     private final VariableManager variableManager;
     private double currentTime;
@@ -85,8 +86,12 @@ public class Calculator {
         double bracketResult = Math.pow(getVar(VariableType.L), TWO) / 24D - Math.pow(getVar(VariableType.R), TWO) / 8D;
         double m = getMass();
         double firstSummand = m * bracketResult * Math.sin(Math.toRadians(TWO * getVar(VariableType.GAMMA)));
-        double secondSummand = m * getVar(VariableType.Zc) * getYc();
+        double secondSummand = m * getZc() * getYc();
         return firstSummand + secondSummand;
+    }
+
+    private double getZc() {
+        return getVar(VariableType.E) * Math.tan(Math.toRadians(getVar(VariableType.GAMMA)));
     }
 
     private double getIxz() {
@@ -112,6 +117,7 @@ public class Calculator {
         varCache.put(XC, getXc());
         varCache.put(YC, getYc());
         varCache.put(H, getVar(VariableType.H));
+        varCache.put(ZC, getZc());
         double staticReact = getReaction(true, researchVarType, varCache);
         double dynamicReact = getReaction(false, researchVarType, varCache);
         return new ResultRecord(
@@ -133,6 +139,7 @@ public class Calculator {
         final double Iyz = varCache.get(IYZ);
         final double xc = varCache.get(XC);
         final double yc = varCache.get(YC);
+        final double zc = varCache.get(ZC);
         final double h = varCache.get(H);
 
         if (isStatic) {
@@ -142,7 +149,7 @@ public class Calculator {
                         return 0D;
                 case Xa:
                 case Xb:
-                    double Xb = ((m * G * getVar(VariableType.Zc))) / h;
+                    double Xb = ((m * G * zc)) / h;
                     if (researchValType == VariableType.Xa)
                         return (m * G) - Xb;
                     return Xb;

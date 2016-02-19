@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * Created by Dislike on 22.01.2016.
  */
 public class VariableManager {
-    public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, VariableType.Zc,
+    public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, /*VariableType.Zc,*/
             VariableType.GAMMA, VariableType.M, VariableType.H, VariableType.TAU};
     public static final int ALT_VAR_MAX_STEP_COUNT = 4;
     public static final int TIME_STEPS_COUNT = 11;

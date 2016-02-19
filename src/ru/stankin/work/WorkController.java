@@ -134,7 +134,7 @@ public class WorkController extends AbstractController{
         variableManager.setVal(VariableType.R, 0.1);
         variableManager.setVal(VariableType.L, 0.7);
         variableManager.setVal(VariableType.E, 0.001);
-        variableManager.setVal(VariableType.Zc, 0.3);
+        //variableManager.setVal(VariableType.Zc, 0.3);
         variableManager.setVal(VariableType.RO, 8000);
         variableManager.setVal(VariableType.GAMMA, 4);
         variableManager.setVal(VariableType.M, 0.6);
@@ -224,7 +224,7 @@ public class WorkController extends AbstractController{
         if (!result.success)
             return;
         variableManager.setCurrentDeltaTime(result.value);
-        variableManager.calculate();
+        variableManager.calculateAllReactions();
         onNextStageButtonClick();
     }
 
