@@ -46,7 +46,7 @@ public class Test {
     /**
      * Обновляет состояние объекта под новый вопрос и возвращает текст задания нового вопроса
      *
-     * @return текст задания нового вопроса
+     * @return подготовленный вопрос
      */
     public Question prepareAndGetNextQuestion() {
         Question question = questions.get(currentQuestionPosition + 1);

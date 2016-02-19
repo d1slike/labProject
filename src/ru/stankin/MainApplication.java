@@ -26,10 +26,11 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        primaryStage.setTitle("Lab++");
+        primaryStage.getIcons().add(ImageCache.getInstance().getByName("icon.png").getImage());
+        primaryStage.setTitle("RCalc");
         primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
         nextStage();
-        nextStage();
+        //nextStage();
         primaryStage.show();
     }
 
@@ -44,7 +45,7 @@ public class MainApplication extends Application {
 
     private static void main(String args[]) {
         Executor.getInstance().execute(QuestionsHolder::getInstance);
-        Executor.getInstance().execute(ImageCache::getInstance);
+        ImageCache.getInstance();
         launch(args);
     }
 
