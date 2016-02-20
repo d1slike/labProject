@@ -19,13 +19,12 @@ import ru.stankin.work.model.Variable;
 import ru.stankin.work.subcontrollers.ChartController;
 
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 
 /**
  * Created by Dislike on 22.01.2016.
  */
-public class WorkController extends AbstractController{
+public class WorkController extends AbstractController {
 
     private static final Pattern NUMBER_PATTERN = Pattern.compile("(?:\\d*\\.)?\\d+");
 
@@ -187,6 +186,27 @@ public class WorkController extends AbstractController{
         resultTablePhiColumn.setCellFactory((TableColumn<ResultRecord, Number> col) -> new CellForResultTable());
         resultTablePhiColumn.setCellValueFactory(param -> param.getValue().phiInDegreesProperty());
         resultTable.setItems(variableManager.getResultRecords());
+
+        resultTable.setRowFactory(param1 -> {
+            TableRow<ResultRecord> tableRow = new TableRow<>();
+            tableRow.itemProperty().addListener(((observable, oldValue, newValue) -> {
+
+                if (newValue == null)
+                    return;
+                int index = newValue.getIndex();
+                String color = "";
+                if (index >= 0 && index < 11)
+                    color = "ff7f50";
+                else if (index >= 11 && index < 22)
+                    color = "ffdb8b";
+                else if (index >= 22 && index < 33)
+                    color = "98fb98";
+                else if (index >= 33 && index < 44)
+                    color = "75c1ff";
+                tableRow.setStyle("-fx-background-color: #" + color);
+            }));
+            return tableRow;
+        });
     }
 
     private void prepareVarTable() {
@@ -344,6 +364,25 @@ public class WorkController extends AbstractController{
         }
     }
 
+    private static class CellForResultTable extends TextFieldTableCell<ResultRecord, Number> {
+        public CellForResultTable() {
+            setConverter(new StringDoubleConverter());
+        }
+
+        private class StringDoubleConverter extends StringConverter<Number> {
+
+            @Override
+            public String toString(Number object) {
+                return Util.doubleFormat(object.doubleValue());
+            }
+
+            @Override
+            public Double fromString(String string) {
+                return 0.;
+            }
+        }
+    }
+
     private class CellForVarTable extends TextFieldTableCell<Variable, Number> {
         public CellForVarTable() {
             setConverter(new StringDoubleConverter());
@@ -370,25 +409,6 @@ public class WorkController extends AbstractController{
                     return 0.;
                 }
                 return val;
-            }
-        }
-    }
-
-    private static class CellForResultTable extends TextFieldTableCell<ResultRecord, Number> {
-        public CellForResultTable() {
-            setConverter(new StringDoubleConverter());
-        }
-
-        private class StringDoubleConverter extends StringConverter<Number> {
-
-            @Override
-            public String toString(Number object) {
-                return Util.doubleFormat(object.doubleValue());
-            }
-
-            @Override
-            public Double fromString(String string) {
-                return 0.;
             }
         }
     }

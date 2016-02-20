@@ -105,7 +105,7 @@ public class Calculator {
     private double getVar(VariableType type) {
         return type == VariableType.T ? currentTime : variableManager.getVarValue(type);
     }
-    public ResultRecord calculateReactions(double time, int pointNum) {
+    public ResultRecord calculateReactions(double time) {
         currentTime = time;
         final VariableType researchVarType = variableManager.getResearchVariable();
         Map<String, Double> varCache = new HashMap<>();
@@ -121,7 +121,6 @@ public class Calculator {
         double staticReact = getReaction(true, researchVarType, varCache);
         double dynamicReact = getReaction(false, researchVarType, varCache);
         return new ResultRecord(
-                pointNum,
                 currentTime,
                 variableManager.getAltVariable().getValue(),
                 staticReact,

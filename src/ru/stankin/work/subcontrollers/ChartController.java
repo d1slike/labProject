@@ -1,7 +1,5 @@
 package ru.stankin.work.subcontrollers;
 
-import gnu.trove.list.TDoubleList;
-import gnu.trove.list.array.TDoubleArrayList;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -105,7 +103,7 @@ public class ChartController {
         firstLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
-            firstLine.getData().add(new XYChart.Data<>(record.getNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
+            firstLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
         }
 
         currentPos += maxTimeSteps;
@@ -115,7 +113,7 @@ public class ChartController {
         secondLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
-            secondLine.getData().add(new XYChart.Data<>(record.getNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
+            secondLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
         }
 
         currentPos += maxTimeSteps;
@@ -125,7 +123,7 @@ public class ChartController {
         thirdLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
-            thirdLine.getData().add(new XYChart.Data<>(record.getNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
+            thirdLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
         }
 
         currentPos += maxTimeSteps;
@@ -135,7 +133,7 @@ public class ChartController {
         fourthLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
-            fourthLine.getData().add(new XYChart.Data<>(record.getNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
+            fourthLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
         }
 
         List<XYChart.Series<Number, Number>> list = new ArrayList<>();

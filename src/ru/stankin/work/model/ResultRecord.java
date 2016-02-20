@@ -6,22 +6,22 @@ import javafx.beans.property.*;
  * Created by DisDev on 25.01.2016.
  */
 public class ResultRecord {
-    private final ReadOnlyIntegerProperty number;
     private final ReadOnlyDoubleProperty time;
     private final ReadOnlyDoubleProperty altVar;
     private final ReadOnlyDoubleProperty staticReaction;
     private final ReadOnlyDoubleProperty dynamicReaction;
     private final ReadOnlyDoubleProperty fullReaction;
     private final ReadOnlyDoubleProperty phiInDegrees;
+    private ReadOnlyIntegerProperty pointNumber;
+    private int index;
 
-    public ResultRecord(int number, final double timeValue,
+    public ResultRecord(final double timeValue,
                         final double altVarValue,
                         final double staticReactionValue,
                         final double dynamicRactionValue,
                         final double fullReactionValue,
                         final double phiInDegreesValue)
     {
-        this.number = new SimpleIntegerProperty(number);
         time = new SimpleDoubleProperty(timeValue);
         altVar = new SimpleDoubleProperty(altVarValue);
         staticReaction = new SimpleDoubleProperty(staticReactionValue);
@@ -34,10 +34,6 @@ public class ResultRecord {
         return time;
     }
 
-    public double getAltVar() {
-        return altVar.getValue();
-    }
-
     public ReadOnlyDoubleProperty altVarProperty() {
         return altVar;
     }
@@ -46,16 +42,8 @@ public class ResultRecord {
         return staticReaction;
     }
 
-    public double getDynamicReaction() {
-        return dynamicReaction.getValue();
-    }
-
     public ReadOnlyDoubleProperty dynamicReactionProperty() {
         return dynamicReaction;
-    }
-
-    public double getFullReaction() {
-        return fullReaction.getValue();
     }
 
     public ReadOnlyDoubleProperty fullReactionProperty() {
@@ -66,7 +54,28 @@ public class ResultRecord {
         return phiInDegrees;
     }
 
-    public int getNumber() {
-        return number.intValue();
+    public void setIndexAndPointNumber(int index, int pointNumber) {
+        this.index = index;
+        this.pointNumber = new SimpleIntegerProperty(pointNumber);
+    }
+
+    public double getAltVar() {
+        return altVar.getValue();
+    }
+
+    public double getDynamicReaction() {
+        return dynamicReaction.getValue();
+    }
+
+    public double getFullReaction() {
+        return fullReaction.getValue();
+    }
+
+    public int getPointNumber() {
+        return pointNumber.intValue();
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

@@ -68,7 +68,9 @@ public class VariableManager {
         calculator.initOmegaForNextTimeCalculate();
         for (int i = 0; i < ALT_VAR_MAX_STEP_COUNT; i++) {
             for (int j = 0; j < TIME_STEPS_COUNT; j++) {
-                getResultRecords().add(calculator.calculateReactions(lastTime, j + 1));
+                final ResultRecord resultRecord = calculator.calculateReactions(lastTime);
+                resultRecord.setIndexAndPointNumber(resultRecords.size(), j + 1);
+                getResultRecords().add(resultRecord);
                 lastTime += currentDeltaTime;
             }
             updateAltVariable();
