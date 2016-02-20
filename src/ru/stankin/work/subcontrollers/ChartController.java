@@ -1,6 +1,7 @@
 package ru.stankin.work.subcontrollers;
 
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -31,6 +32,7 @@ public class ChartController {
     private final Stage stage;
 
     private boolean alreadyBuilt;
+    private boolean inShowing;
 
     public ChartController() {
         yAxisForDynamicReactionsChart = new NumberAxis();
@@ -42,11 +44,6 @@ public class ChartController {
         final String xAxisName = "Время(t)";
         xAxisForDynamic.setLabel(xAxisName);
         xAsisForFull.setLabel(xAxisName);
-
-        //xAsisForFull.setAutoRanging(false);
-        //xAxisForDynamic.setAutoRanging(false);
-        //yAxisForFullReactionsChart.setAutoRanging(false);
-        //yAxisForDynamicReactionsChart.setAutoRanging(false);
 
         dynamicReactionsChart = new LineChart<>(xAxisForDynamic, yAxisForDynamicReactionsChart);
         fullReactionsChart = new LineChart<>(xAsisForFull, yAxisForFullReactionsChart);
@@ -65,19 +62,20 @@ public class ChartController {
 
         Scene scene = new Scene(pane);
         stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Графики");
-        stage.setIconified(false);
         stage.setHeight(CHART_HEIGHT);
         stage.setWidth(CHART_WIDTH * 2);
         //stage.setResizable(false);
         stage.setScene(scene);
+        stage.setOnCloseRequest(event -> inShowing = false);
     }
 
     public void buildAndShow(VariableManager variableManager, Stage primaryStage) {
 
-        if (!alreadyBuilt) {
+        if (inShowing)
+            return;
 
+        if (!alreadyBuilt) {
             stage.initOwner(primaryStage);
             final String researchVarName = variableManager.getResearchVariable().getName();
             yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");
@@ -89,9 +87,13 @@ public class ChartController {
             fullReactionsChart.getData().addAll(buildLines(list, altVarName, true));
             alreadyBuilt = true;
         }
+        inShowing = true;
         stage.showAndWait();
     }
 
+    public boolean isInShowing() {
+        return inShowing;
+    }
 
     private List<XYChart.Series<Number, Number>> buildLines(List<ResultRecord> resultRecords, String altVarName, boolean fullReaction) {
         final int maxTimeSteps = VariableManager.TIME_STEPS_COUNT;

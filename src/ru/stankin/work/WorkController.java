@@ -219,6 +219,8 @@ public class WorkController extends AbstractController {
 
     @FXML
     private void onCancelButtonClick() {
+        if (chartController.isInShowing())
+            return;
         currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
         onChangedWorkStage();
         resultTable.setVisible(false);
