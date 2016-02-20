@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -264,10 +265,7 @@ public class TestController extends AbstractController {
         tmpStage.setScene(new Scene(borderPane));
         tmpStage.setResizable(false);
         tmpStage.setTitle("Результат теста");
-        tmpStage.setOnCloseRequest(event -> {
-            tmpStage.close();
-            tmpStage.showAndWait();
-        });
+        tmpStage.setOnCloseRequest(Event::consume);
         tmpStage.showAndWait();
     }
 }
