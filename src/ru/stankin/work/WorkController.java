@@ -1,9 +1,12 @@
 package ru.stankin.work;
 
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import ru.stankin.AbstractController;
@@ -19,6 +22,7 @@ import ru.stankin.work.model.Variable;
 import ru.stankin.work.subcontrollers.ChartController;
 
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 
 /**
@@ -148,6 +152,16 @@ public class WorkController extends AbstractController {
         //calculateAndShowInformation();
         //variableManager.calculate();
 
+        EventHandler<KeyEvent> keyEventEventHandler = event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                onNextStageButtonClick();
+        };
+        Stream.of(varTable, altVarStepField, nextStageButton, altVarSwitcher, researchVarSwitcher)
+                .forEach(control -> control.setOnKeyPressed(keyEventEventHandler));
+        timeField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                onCalcButtonClick();
+        });
         //final UnaryOperator<TextFormatter.Change> condition = change -> NUMBER_PATTERN.matcher(change.getControlNewText()).matches() ? change : null;
         //timeField.setTextFormatter(new TextFormatter<Number>(condition));
         //altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
