@@ -13,7 +13,7 @@ import ru.stankin.AbstractController;
 import ru.stankin.enums.ElementNames;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.WorkStage;
-import ru.stankin.utils.Executor;
+import ru.stankin.utils.TaskManager;
 import ru.stankin.utils.Util;
 import ru.stankin.work.managers.UIManager;
 import ru.stankin.work.managers.VariableManager;
@@ -126,9 +126,9 @@ public class WorkController extends AbstractController {
 
         resultTable.setVisible(false);
 
-        Executor.getInstance().execute(this::prepareVarTable);
-        Executor.getInstance().execute(this::prepareResultTable);
-        Executor.getInstance().execute(this::prepareUI);
+        TaskManager.getInstance().execute(this::prepareVarTable);
+        TaskManager.getInstance().execute(this::prepareResultTable);
+        TaskManager.getInstance().execute(this::prepareUI);
 
         currentInfoVBox.setVisible(false);
         resultTablePhiColumn.setText(VariableType.VarName.PHI);
