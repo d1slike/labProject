@@ -101,12 +101,12 @@ public class TestController extends AbstractController {
         maxQuestion.setText(Integer.toString(Test.MAX_QUESTIONS));
         currentTimeLine = new Timeline(new KeyFrame(Duration.seconds(1),
                 event -> timeTick()));
+        allButtons = new ArrayList<>(4);
+        Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(allButtons::add);
+        currentResultLabel.setVisible(false);
         showNextQuestion();
         currentTimeLine.setCycleCount(Animation.INDEFINITE);
         currentTimeLine.play();
-        currentResultLabel.setVisible(false);
-        allButtons = new ArrayList<>(4);
-        Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(allButtons::add);
     }
 
     private synchronized void timeTick() {
