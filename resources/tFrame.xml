@@ -1,8 +1,14 @@
 <qlist>
-    <question id="1" text="jj" correctAnswerId="1">
-        <answer id="1" imgSource="35.jpg" text="fff"/>
-        <answer id="2" text="baa"/>
-        <answer id="3" text="cde"/>
-        <answer id="4" text="jfknf"/>
+    <question id="1" text="Теорема Гюйгенса-Штейнера" correctAnswerId="1">
+        <answer id="1" text="Момент инерции относительно какой-либо оси равен моменту инерции относительно параллельной оси, проходящей через центр масс плюс масса системы, умноженная на квадрат расстояния между ними"/>
+        <answer id="2" text="Относительно перпендикулярной оси"/>
+        <answer id="3" text="Момент составной площади равен сумме моментов ее частей"/>
+        <answer id="4" text="Умноженный на квадрат расстояния между осями"/>
+    </question>
+    <question id="2" text="Осевой момент инерции диска равен" correctAnswerId="1">
+        <answer id="1" imgSource="q2_a1.jpg"/>
+        <answer id="2" imgSource="q2_a2.jpg"/>
+        <answer id="3" imgSource="q2_a3.jpg"/>
+        <answer id="4" imgSource="q2_a4.jpg"/>
     </question>
 </qlist>
