@@ -146,7 +146,7 @@ public class TestController extends AbstractController {
             questionText.setText(question.getText());
         currentQuestion.setText(Integer.toString(test.getCurrentQustionNumber()));
         int answerNum = AnswerNumber.FIRST;
-        Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(radioButton -> {
+        allButtons.forEach(radioButton -> {
             radioButton.setGraphic(null);
             radioButton.setText("");
             radioButton.setVisible(false);
@@ -237,10 +237,11 @@ public class TestController extends AbstractController {
         currentResultLabel.setVisible(true);
         changeStateOfKeyElementsOnPanel(false);
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(DELAY_BEFORE_SHOW_NEXT_QUESTION_IN_SECONDS), (event) -> {
-            currentTimeLine.play();
             changeStateOfKeyElementsOnPanel(true);
-            if (test.haveMoreQuestion())
+            if (test.haveMoreQuestion()) {
                 showNextQuestion();
+                currentTimeLine.play();
+            }
             else if (test.isCompleteCorrect())
                 showResults(true);
             else if (test.haveAnyAttempts())
