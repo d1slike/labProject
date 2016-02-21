@@ -29,6 +29,8 @@ import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
 import ru.stankin.utils.ImageCache;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -37,6 +39,9 @@ import java.util.stream.Stream;
 public class TestController extends AbstractController {
 
     private static final int SECONDS_INIT_VALUE = 59;
+    private static final int DELAY_BEFORE_SHOW_NEXT_QUESTION_IN_SECONDS = 5;
+    private static final Paint RED = Paint.valueOf(Color.RED.toString());
+    private static final Paint GREEN = Paint.valueOf(Color.DARKGREEN.toString());
 
     private int currentMinutesToCompleteTest;
     private int secondsToShow;
@@ -52,6 +57,8 @@ public class TestController extends AbstractController {
     private Label minutesLabel;
     @FXML
     private Label secondsLabel;
+    @FXML
+    private Button nextButton;
 
     @FXML
     private Label questionText;
@@ -64,6 +71,9 @@ public class TestController extends AbstractController {
     private Label maxQuestion;
 
     @FXML
+    private Label currentResultLabel;
+
+    @FXML
     private RadioButton firstAnswer;
     @FXML
     private RadioButton secondAnswer;
@@ -72,6 +82,8 @@ public class TestController extends AbstractController {
     @FXML
     private RadioButton fourthAnswer;
 
+    private List<RadioButton> allButtons;
+
     @Override
     public void prepareForNext() {
         if (currentTimeLine != null) {
@@ -79,6 +91,7 @@ public class TestController extends AbstractController {
             currentTimeLine = null;
         }
         test = null;
+        allButtons.clear();
     }
 
     @FXML
@@ -91,7 +104,9 @@ public class TestController extends AbstractController {
         showNextQuestion();
         currentTimeLine.setCycleCount(Animation.INDEFINITE);
         currentTimeLine.play();
-
+        currentResultLabel.setVisible(false);
+        allButtons = new ArrayList<>(4);
+        Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(allButtons::add);
     }
 
     private synchronized void timeTick() {
@@ -179,7 +194,7 @@ public class TestController extends AbstractController {
 
     private void prepareUIToStartTest() {
 
-        if(test == null)
+        if (test == null)
             return;
 
         currentMinutesToCompleteTest = Test.MAX_MINUTES_TO_COMPLETE;
@@ -215,13 +230,30 @@ public class TestController extends AbstractController {
     private synchronized void onNextButtonClick() {
         if (test == null)
             return;
-        test.checkCurrentStudentAnswer();
-        if (test.haveMoreQuestion())
-            showNextQuestion();
-        else if (test.isCompleteCorrect())
-            showResults(true);
-        else if (test.haveAnyAttempts())
-            tryAgain();
+        currentTimeLine.pause();
+        boolean isCorrect = test.checkCurrentStudentAnswer();
+        currentResultLabel.setText(isCorrect ? "Верный ответ" : "Неверный ответ");
+        currentResultLabel.setTextFill(isCorrect ? GREEN : RED);
+        currentResultLabel.setVisible(true);
+        changeStateOfKeyElementsOnPanel(false);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(DELAY_BEFORE_SHOW_NEXT_QUESTION_IN_SECONDS), (event) -> {
+            currentTimeLine.play();
+            changeStateOfKeyElementsOnPanel(true);
+            if (test.haveMoreQuestion())
+                showNextQuestion();
+            else if (test.isCompleteCorrect())
+                showResults(true);
+            else if (test.haveAnyAttempts())
+                tryAgain();
+        }));
+        timeline.setCycleCount(1);
+        timeline.play();
+    }
+
+    private void changeStateOfKeyElementsOnPanel(boolean enable) {
+        allButtons.forEach(radioButton -> radioButton.setDisable(!enable));
+        currentResultLabel.setVisible(!enable);
+        nextButton.setDisable(!enable);
     }
 
     private void showResults(boolean success) {
@@ -234,8 +266,7 @@ public class TestController extends AbstractController {
         vBox.setAlignment(Pos.CENTER);
 
         Label result = new Label(success ? "Тест завершен успешно" : "Тест не пройден");
-        Color textColor = success ? Color.GREEN : Color.RED;
-        result.setTextFill(Paint.valueOf(textColor.toString()));
+        result.setTextFill(success ? GREEN : RED);
         result.setFont(Font.font(18));
         result.setAlignment(Pos.CENTER);
         vBox.getChildren().add(result);

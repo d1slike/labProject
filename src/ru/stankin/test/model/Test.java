@@ -60,9 +60,11 @@ public class Test {
         return question;
     }
 
-    public void checkCurrentStudentAnswer() {
-        if (answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer)
+    public boolean checkCurrentStudentAnswer() {
+        boolean correct = answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer;
+        if (correct)
             correctAnswersCount++;
+        return correct;
     }
 
     public boolean haveMoreQuestion() {
