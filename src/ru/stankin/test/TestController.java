@@ -39,7 +39,7 @@ import java.util.stream.Stream;
 public class TestController extends AbstractController {
 
     private static final int SECONDS_INIT_VALUE = 59;
-    private static final int DELAY_BEFORE_SHOW_NEXT_QUESTION_IN_SECONDS = 5;
+    private static final int DELAY_BEFORE_SHOW_NEXT_QUESTION_IN_SECONDS = 3;
     private static final Paint RED = Paint.valueOf(Color.RED.toString());
     private static final Paint GREEN = Paint.valueOf(Color.DARKGREEN.toString());
 
