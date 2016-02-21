@@ -31,7 +31,7 @@ public class ImageCache {
             File imagesDirectory = new File(IMAGE_PATH);
             if (!imagesDirectory.exists())
                 throw new FileNotFoundException("dirrectory " + IMAGE_PATH + " is not found");
-            final FilenameFilter filter = (dir, name) -> name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg");
+            final FilenameFilter filter = (dir, name) ->  !name.startsWith("icon") && (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg"));
             for (File image : imagesDirectory.listFiles(filter))
                 images.put(image.getName(), new ImageView(image.toURI().toURL().toString()));
         } catch (Exception ex) {

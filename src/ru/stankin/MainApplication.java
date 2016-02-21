@@ -3,6 +3,7 @@ package ru.stankin;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -10,6 +11,7 @@ import ru.stankin.test.holders.QuestionsHolder;
 import ru.stankin.utils.TaskManager;
 import ru.stankin.utils.ImageCache;
 
+import java.io.File;
 import java.net.URL;
 
 
@@ -26,7 +28,9 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        primaryStage.getIcons().add(ImageCache.getInstance().getByName("icon.png").getImage());
+        File file = new File("resources/image/icon.png");
+        if (file.exists())
+            primaryStage.getIcons().add(new Image(file.toURI().toURL().toString()));
         primaryStage.setTitle("RCalc");
         nextStage();
         nextStage();
@@ -45,7 +49,7 @@ public class MainApplication extends Application {
 
     private static void main(String args[]) {
         TaskManager.getInstance().execute(QuestionsHolder::getInstance);
-        ImageCache.getInstance();
+        TaskManager.getInstance().execute(ImageCache::getInstance);
         launch(args);
     }
 
