@@ -31,7 +31,7 @@ public class MainApplication extends Application {
         primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
         nextStage();
         nextStage();
-        nextStage();
+        //nextStage();
         primaryStage.show();
     }
 
@@ -66,14 +66,9 @@ public class MainApplication extends Application {
             Pane pane = loader.load();
             activeController = loader.getController();
             activeController.setMainApplication(this);
-            root.setPrefSize(pane.getPrefWidth(), pane.getPrefHeight());
-            primaryStage.setWidth(pane.getPrefWidth());
-            primaryStage.setHeight(pane.getPrefHeight());
             root.setCenter(pane);
-            if (currentGlobalStage == GlobalStage.MAIN_LAB_WORK) {
-                primaryStage.setX(0);
-                primaryStage.setY(0);
-            }
+
+            primaryStage.sizeToScene();
 
         } catch (Exception ex) {
             ex.printStackTrace();
