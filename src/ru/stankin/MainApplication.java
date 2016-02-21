@@ -7,7 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
-import ru.stankin.utils.Executor;
+import ru.stankin.utils.TaskManager;
 import ru.stankin.utils.ImageCache;
 
 import java.net.URL;
@@ -28,7 +28,6 @@ public class MainApplication extends Application {
         this.primaryStage = primaryStage;
         primaryStage.getIcons().add(ImageCache.getInstance().getByName("icon.png").getImage());
         primaryStage.setTitle("RCalc");
-        primaryStage.setOnCloseRequest(event -> Executor.getInstance().shutdown());
         nextStage();
         nextStage();
         //nextStage();
@@ -45,7 +44,7 @@ public class MainApplication extends Application {
     }
 
     private static void main(String args[]) {
-        Executor.getInstance().execute(QuestionsHolder::getInstance);
+        TaskManager.getInstance().execute(QuestionsHolder::getInstance);
         ImageCache.getInstance();
         launch(args);
     }
@@ -53,7 +52,7 @@ public class MainApplication extends Application {
     private void prepareUI() {
         try {
             if (root == null) {
-                root = FXMLLoader.load(getClass().getResource("mainFrame.fxml"));
+                root = new BorderPane();
                 primaryStage.setScene(new Scene(root));
             }
             if (activeController != null) {
@@ -67,9 +66,7 @@ public class MainApplication extends Application {
             activeController = loader.getController();
             activeController.setMainApplication(this);
             root.setCenter(pane);
-
             primaryStage.sizeToScene();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
