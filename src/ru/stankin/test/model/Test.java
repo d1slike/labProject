@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Test {
 
-    public static final int MAX_QUESTIONS = 1;
+    public static final int MAX_QUESTIONS = 2;
     public static final int MAX_MINUTES_TO_COMPLETE = 9;
     private static final int MAX_ATTEMPTS = 2;
     private static final int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;

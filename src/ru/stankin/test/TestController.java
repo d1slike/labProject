@@ -134,6 +134,7 @@ public class TestController extends AbstractController {
         Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(radioButton -> {
             radioButton.setGraphic(null);
             radioButton.setText("");
+            radioButton.setVisible(false);
         });
         firstAnswer.fire();
         onSelectFirst();
@@ -146,24 +147,28 @@ public class TestController extends AbstractController {
                         firstAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
                     if (text != null)
                         firstAnswer.setText(text);
+                    firstAnswer.setVisible(true);
                     break;
                 case AnswerNumber.SECOND:
                     if (imgSource != null)
                         secondAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
                     if (text != null)
                         secondAnswer.setText(text);
+                    secondAnswer.setVisible(true);
                     break;
                 case AnswerNumber.THIRD:
                     if (imgSource != null)
                         thirdAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
                     if (text != null)
                         thirdAnswer.setText(text);
+                    thirdAnswer.setVisible(true);
                     break;
                 case AnswerNumber.FOURTH:
                     if (imgSource != null)
                         fourthAnswer.setGraphic(ImageCache.getInstance().getByName(imgSource));
                     if (text != null)
                         fourthAnswer.setText(text);
+                    fourthAnswer.setVisible(true);
                     break;
             }
 
@@ -235,14 +240,13 @@ public class TestController extends AbstractController {
         result.setAlignment(Pos.CENTER);
         vBox.getChildren().add(result);
 
-        Label correctAnswerCount = new Label(test.getCorrectAnswersCount() + " / " + Test.MAX_QUESTIONS);
+        Label correctAnswerCount = new Label("Верных ответов: " + test.getCorrectAnswersCount() + " / " + Test.MAX_QUESTIONS);
         correctAnswerCount.setFont(Font.font(14));
         correctAnswerCount.setAlignment(Pos.CENTER);
         vBox.getChildren().add(correctAnswerCount);
 
         boolean next = success || !test.haveAnyAttempts();
-        Button actionButton = new Button(next ? "Приступить лабораторной работе" : "Пройти тест заново");
-        actionButton.setPrefSize(200, 30);
+        Button actionButton = new Button(next ? "Приступить к лабораторной работе" : "Пройти тест заново");
         EventHandler<ActionEvent> eventHandler;
         if (next)
             eventHandler = event -> {
@@ -264,7 +268,7 @@ public class TestController extends AbstractController {
         tmpStage.initModality(Modality.APPLICATION_MODAL);
         tmpStage.setScene(new Scene(borderPane));
         tmpStage.setResizable(false);
-        tmpStage.setTitle("Результат теста");
+        tmpStage.setTitle("Результаты теста");
         tmpStage.setOnCloseRequest(Event::consume);
         tmpStage.showAndWait();
     }
