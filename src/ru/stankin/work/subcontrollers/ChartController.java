@@ -1,20 +1,17 @@
 package ru.stankin.work.subcontrollers;
 
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.stankin.utils.Util;
 import ru.stankin.work.managers.VariableManager;
 import ru.stankin.work.model.ResultRecord;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -24,14 +21,12 @@ import java.util.stream.Stream;
  */
 public class ChartController {
 
+    public static final String FIRST_LINE_COLOR = "ff7f50";
+    public static final String SECOND_LINE_COLOR = "ffd700";
+    public static final String THIRD_LINE_COLOR = "00a550";
+    public static final String FORTH_LINE_COLOR = "75c1ff";
     private static final int CHART_HEIGHT = 600;
     private static final int CHART_WIDTH = 650;
-
-    public static final String FIRST_LINE_COLOR = "ff7f50";
-    public static final String SECOND_LINE_COLOR = "ffdb8b";
-    public static final String THIRD_LINE_COLOR = "98fb98";
-    public static final String FORTH_LINE_COLOR = "75c1ff";
-
     private final NumberAxis yAxisForDynamicReactionsChart;
     private final NumberAxis yAxisForFullReactionsChart;
     private final LineChart<Number, Number> dynamicReactionsChart;
@@ -92,7 +87,7 @@ public class ChartController {
         stage.setTitle("Графики");
         stage.setHeight(CHART_HEIGHT);
         stage.setWidth(CHART_WIDTH * 2);
-        //stage.setResizable(false);
+        stage.setIconified(false);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> inShowing = false);
     }
@@ -104,6 +99,8 @@ public class ChartController {
 
         if (!alreadyBuilt) {
             stage.initOwner(primaryStage);
+            stage.getIcons().clear();
+            stage.getIcons().add(primaryStage.getIcons().get(0));
             final String researchVarName = variableManager.getResearchVariable().getName();
             yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");
             yAxisForFullReactionsChart.setLabel(researchVarName + " полная");
@@ -116,6 +113,14 @@ public class ChartController {
         }
         inShowing = true;
         stage.showAndWait();
+    }
+
+    public void clear() {
+        if (alreadyBuilt) {
+            fullReactionsChart.getData().clear();
+            dynamicReactionsChart.getData().clear();
+            alreadyBuilt = false;
+        }
     }
 
     public boolean isInShowing() {
@@ -168,13 +173,5 @@ public class ChartController {
         List<XYChart.Series<Number, Number>> list = new ArrayList<>();
         Stream.of(firstLine, secondLine, thirdLine, fourthLine).forEach(list::add);
         return list;
-    }
-
-    public void clear() {
-        if (alreadyBuilt) {
-            fullReactionsChart.getData().clear();
-            dynamicReactionsChart.getData().clear();
-            alreadyBuilt = false;
-        }
     }
 }
