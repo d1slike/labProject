@@ -296,7 +296,11 @@ public class TestController extends AbstractController {
 
         borderPane.setCenter(vBox);
         BorderPane.setAlignment(vBox, Pos.CENTER);
-        tmpStage.initOwner(getMainApplication().getPrimaryStage());
+        Stage primaryStage = getMainApplication().getPrimaryStage();
+        tmpStage.initOwner(primaryStage);
+        tmpStage.setIconified(false);
+        tmpStage.getIcons().clear();
+        tmpStage.getIcons().add(primaryStage.getIcons().get(0));
         tmpStage.initModality(Modality.APPLICATION_MODAL);
         tmpStage.setScene(new Scene(borderPane));
         tmpStage.setResizable(false);
