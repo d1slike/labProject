@@ -34,7 +34,7 @@ public class MainApplication extends Application {
         primaryStage.setTitle("RCalc");
         nextStage();
         nextStage();
-        nextStage();
+        //nextStage();
         primaryStage.show();
     }
 

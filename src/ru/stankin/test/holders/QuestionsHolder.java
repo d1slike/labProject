@@ -10,9 +10,10 @@ import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
 import ru.stankin.utils.Rnd;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InvalidObjectException;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 public class QuestionsHolder {
     private static QuestionsHolder ourInstance = new QuestionsHolder();
+    private static final byte[] KEY = "jcnhjdcrjuj18".getBytes();
+    private static final String ALGORITHM = "Blowfish";
 
     public static QuestionsHolder getInstance() {
         return ourInstance;
@@ -36,12 +39,16 @@ public class QuestionsHolder {
 
     private void load() {
         try {
-            File file = new File("resources/tFrame.xml");
+            File file = new File("resources/ex_data.bin");
             if(!file.exists())
                 throw new FileNotFoundException("source file not found");
             SAXReader reader = new SAXReader();
             reader.setIgnoreComments(true);
-            Document document = reader.read(file);
+            SecretKeySpec keySpec = new SecretKeySpec("jcnhjdcrjuj18".getBytes("UTF-8"), "Blowfish");
+            Cipher cipher = Cipher.getInstance("Blowfish");
+            cipher.init(Cipher.DECRYPT_MODE, keySpec);
+            InputStream inputStream = new CipherInputStream(new FileInputStream(file), cipher);
+            Document document = reader.read(inputStream);
             Element element = document.getRootElement();
             if(!element.getName().equals("qlist"))
                 throw new InvalidObjectException("source file is bad");
