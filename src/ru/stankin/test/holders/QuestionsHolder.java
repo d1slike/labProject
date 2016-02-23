@@ -9,6 +9,7 @@ import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
 import ru.stankin.utils.Rnd;
+import ru.stankin.utils.Util;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -23,8 +24,6 @@ import java.util.List;
  */
 public class QuestionsHolder {
     private static QuestionsHolder ourInstance = new QuestionsHolder();
-    private static final byte[] KEY = "jcnhjdcrjuj18".getBytes();
-    private static final String ALGORITHM = "Blowfish";
 
     public static QuestionsHolder getInstance() {
         return ourInstance;
@@ -41,7 +40,7 @@ public class QuestionsHolder {
         try {
             File file = new File("resources/ex_data.bin");
             if(!file.exists())
-                throw new FileNotFoundException("source file not found");
+                throw new FileNotFoundException("Data file is not found!");
             SAXReader reader = new SAXReader();
             reader.setIgnoreComments(true);
             SecretKeySpec keySpec = new SecretKeySpec("jcnhjdcrjuj18".getBytes("UTF-8"), "Blowfish");
@@ -64,7 +63,7 @@ public class QuestionsHolder {
             }
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Util.showMessageAndCloseProgram(ex);
         }
     }
 

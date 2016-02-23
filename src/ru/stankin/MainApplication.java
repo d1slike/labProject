@@ -8,10 +8,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
-import ru.stankin.utils.TaskManager;
 import ru.stankin.utils.ImageCache;
+import ru.stankin.utils.Util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 
@@ -20,6 +21,9 @@ import java.net.URL;
  */
 public class MainApplication extends Application {
 
+    public static final String PROGRAM_NAME = "RCalc";
+    private static Image MAIN_APP_ICON;
+
     private Stage primaryStage;
     private GlobalStage currentGlobalStage;
     private BorderPane root;
@@ -27,13 +31,22 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        try {
+            File file = new File("resources/image/icon.png");
+            if (file.exists())
+                MAIN_APP_ICON = new Image(file.toURI().toURL().toString());
+            else
+                throw new FileNotFoundException();
+        } catch (Exception ex) {
+            Util.showMessageAndCloseProgram("Повреждение файлов программы!", "Пожалуйста переустановите программу и попробуйте запустить повторно.");
+        }
+        QuestionsHolder.getInstance();
+        ImageCache.getInstance();
         this.primaryStage = primaryStage;
-        File file = new File("resources/image/icon.png");
-        if (file.exists())
-            primaryStage.getIcons().add(new Image(file.toURI().toURL().toString()));
-        primaryStage.setTitle("RCalc");
+        primaryStage.getIcons().add(MAIN_APP_ICON);
+        primaryStage.setTitle(PROGRAM_NAME);
         nextStage();
-        nextStage();
+        //nextStage();
         //nextStage();
         primaryStage.show();
     }
@@ -48,9 +61,11 @@ public class MainApplication extends Application {
     }
 
     private static void main(String args[]) {
-        TaskManager.getInstance().execute(QuestionsHolder::getInstance);
-        TaskManager.getInstance().execute(ImageCache::getInstance);
         launch(args);
+    }
+
+    public static Image getIcon() {
+        return MAIN_APP_ICON;
     }
 
     private void prepareUI() {
