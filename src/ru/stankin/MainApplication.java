@@ -46,8 +46,8 @@ public class MainApplication extends Application {
         primaryStage.getIcons().add(MAIN_APP_ICON);
         primaryStage.setTitle(PROGRAM_NAME);
         nextStage();
-        //nextStage();
-        //nextStage();
+        nextStage();
+        nextStage();
         primaryStage.show();
     }
 
@@ -60,12 +60,12 @@ public class MainApplication extends Application {
         return primaryStage;
     }
 
-    private static void main(String args[]) {
-        launch(args);
-    }
-
     public static Image getIcon() {
         return MAIN_APP_ICON;
+    }
+
+    private static void main(String args[]) {
+        launch(args);
     }
 
     private void prepareUI() {
@@ -87,7 +87,7 @@ public class MainApplication extends Application {
             root.setCenter(pane);
             primaryStage.sizeToScene();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Util.showMessageAndCloseProgram(ex);
         }
     }
 

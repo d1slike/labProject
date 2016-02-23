@@ -12,13 +12,18 @@ import ru.stankin.MainApplication;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Locale;
 
 /**
  * Created by DisDev on 12.02.2016.
  */
 public class Util {
-    public static String doubleFormat(double value) {
+    public static String doubleCommaFormat(double value) {
         return String.format("%.3f", value);
+    }
+
+    public static String doubleDotFormat(double value) {
+        return String.format(Locale.UK, "%.3f", value);
     }
 
     public static void showMessageAndCloseProgram(String header, String message) {
@@ -31,7 +36,6 @@ public class Util {
     public static void showMessageAndCloseProgram(Exception ex) {
         Alert alert = prepareErrorAlertWindow();
         alert.setHeaderText(ex.getMessage());
-        alert.setContentText("Exception");
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);

@@ -20,7 +20,7 @@ import ru.stankin.work.model.ResultRecord;
 import ru.stankin.work.model.Variable;
 import ru.stankin.work.subcontrollers.ChartController;
 
-import java.util.regex.Pattern;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 
@@ -29,7 +29,17 @@ import java.util.stream.Stream;
  */
 public class WorkController extends AbstractController {
 
-    private static final Pattern NUMBER_PATTERN = Pattern.compile("(?:\\d*\\.)?\\d+");
+    private static final UnaryOperator<TextFormatter.Change> TEXT_FORMAT_CONDITION = change -> {
+        String content = change.getControlNewText();
+        int length = content.length();
+        if (length == 0)
+            return change;
+        else if (length > 9)
+            return null;
+        char[] chars = content.toCharArray();
+        char lastChar = chars[chars.length - 1];
+        return ((lastChar >= '0' && lastChar <= '9') || lastChar == '.') ? change : null;
+    };
 
     private VariableManager variableManager;
     private UIManager uiManager;
@@ -154,18 +164,22 @@ public class WorkController extends AbstractController {
         EventHandler<KeyEvent> keyEventEventHandler = event -> {
             if (event.getCode() == KeyCode.ENTER)
                 onNextStageButtonClick();
+            else if (event.getCode() == KeyCode.ESCAPE)
+                onPrevStageButtonClick();
+            event.consume();
         };
-        Stream.of(varTable, altVarStepField, nextStageButton, altVarSwitcher, researchVarSwitcher)
-                .forEach(control -> control.setOnKeyPressed(keyEventEventHandler));
-        timeField.setOnKeyPressed(event -> {
+        Stream.of(altVarStepField, nextStageButton, altVarSwitcher, researchVarSwitcher)
+                .forEach(control -> control.setOnKeyReleased(keyEventEventHandler));
+        timeField.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ENTER)
                 onCalcButtonClick();
+            else if (event.getCode() == KeyCode.ESCAPE)
+                onPrevStageButtonClick();
+            event.consume();
         });
-        //final UnaryOperator<TextFormatter.Change> condition = change -> NUMBER_PATTERN.matcher(change.getControlNewText()).matches() ? change : null;
-        //timeField.setTextFormatter(new TextFormatter<Number>(condition));
-        //altVarStepField.setTextFormatter(new TextFormatter<Number>(condition));
 
-
+        timeField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
+        altVarStepField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
     }
 
     private void prepareUI() {
@@ -226,7 +240,7 @@ public class WorkController extends AbstractController {
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansurement());
         varTableColumnParam.setStyle("-fx-font-weight: bold;");
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
-        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new CellForVarTable());
+        varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditingCell());
         varTable.getItems().addAll(variableManager.getAllVars());
     }
 
@@ -344,9 +358,9 @@ public class WorkController extends AbstractController {
 
     private void calculateAndShowInformation() {
         altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeansurement().getValue());
-        altVarValueLabel.setText(Util.doubleFormat(variableManager.getAltVariable().getValue()) + "");
+        altVarValueLabel.setText(Util.doubleCommaFormat(variableManager.getAltVariable().getValue()) + "");
         phiNameLabel.setText(VariableType.VarName.PHI + "(" + VariableType.VarName.TAU + ")");
-        phiValueLabel.setText(Util.doubleFormat(variableManager.calculatePhiForTau()));
+        phiValueLabel.setText(Util.doubleCommaFormat(variableManager.calculatePhiForTau()));
         RPMValueLabel.setText(variableManager.calculateRPMForTau() + "");
         uiManager.playAnimationFor(ElementNames.FIELD_TIME);
         currentInfoVBox.setVisible(true);
@@ -388,7 +402,7 @@ public class WorkController extends AbstractController {
 
             @Override
             public String toString(Number object) {
-                return Util.doubleFormat(object.doubleValue());
+                return Util.doubleCommaFormat(object.doubleValue());
             }
 
             @Override
@@ -398,33 +412,84 @@ public class WorkController extends AbstractController {
         }
     }
 
-    private class CellForVarTable extends TextFieldTableCell<Variable, Number> {
-        public CellForVarTable() {
-            setConverter(new StringDoubleConverter());
+    private static class EditingCell extends TableCell<Variable, Number> {
+
+        private TextField textField;
+
+        public EditingCell() {
         }
 
-        private class StringDoubleConverter extends StringConverter<Number> {
-
-            @Override
-            public String toString(Number object) {
-                return Util.doubleFormat(object.doubleValue());
+        @Override
+        public void startEdit() {
+            if (!isEmpty()) {
+                super.startEdit();
+                createTextField();
+                setText(null);
+                setGraphic(textField);
+                textField.selectAll();
             }
+        }
 
-            @Override
-            public Double fromString(String string) {
-                double val;
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+
+            setText(Util.doubleCommaFormat(getItem().doubleValue()));
+            setGraphic(null);
+        }
+
+        @Override
+        public void updateItem(Number item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if (isEditing()) {
+                    if (textField != null) {
+                        textField.setText(getString());
+                    }
+                    setText(null);
+                    setGraphic(textField);
+                } else {
+                    setText(getString());
+                    setGraphic(null);
+                }
+            }
+        }
+
+        private String getString() {
+            return getItem() == null ? "" : Util.doubleDotFormat(getItem().doubleValue());
+        }
+
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+            textField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
+            textField.setOnAction(event -> {
+                double val = 0.;
+                boolean ok = false;
                 try {
-                    val = Double.parseDouble(string);
-                    VariableType type = varTable.getItems().get(getIndex()).getType();
-                    if (!type.checkRange(val))
-                        throw new NumberFormatException();
-                    setStyle(UIManager.DEFAULT_BORDER_STYLE);
+                    val = Double.parseDouble(textField.getText());
+                    ok = true;
                 } catch (Exception ex) {
                     setStyle(UIManager.RED_BORDER_STYLE);
-                    return 0.;
                 }
-                return val;
-            }
+                if (ok) {
+                    setStyle(UIManager.DEFAULT_BORDER_STYLE);
+                    commitEdit(val);
+                    requestFocus();
+                }
+                event.consume();
+            });
+            textField.setOnKeyReleased(event -> {
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    cancelEdit();
+                    setStyle(UIManager.DEFAULT_BORDER_STYLE);
+                    event.consume();
+                }
+            });
         }
     }
 }

@@ -126,7 +126,7 @@ public class ChartController {
         int lastTime = maxTimeSteps;
 
         XYChart.Series<Number, Number> firstLine = new XYChart.Series<>();
-        firstLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
+        firstLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
             firstLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
@@ -136,7 +136,7 @@ public class ChartController {
         lastTime += maxTimeSteps;
 
         XYChart.Series<Number, Number> secondLine = new XYChart.Series<>();
-        secondLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
+        secondLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
             secondLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
@@ -146,7 +146,7 @@ public class ChartController {
         lastTime += maxTimeSteps;
 
         XYChart.Series<Number, Number> thirdLine = new XYChart.Series<>();
-        thirdLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
+        thirdLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
             thirdLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
@@ -156,7 +156,7 @@ public class ChartController {
         lastTime += maxTimeSteps;
 
         XYChart.Series<Number, Number> fourthLine = new XYChart.Series<>();
-        fourthLine.setName(altVarName + " = " + Util.doubleFormat(resultRecords.get(currentPos).getAltVar()) + " ");
+        fourthLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
         for (int i = currentPos; i < lastTime; i++) {
             ResultRecord record = resultRecords.get(i);
             fourthLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
