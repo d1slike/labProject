@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.stankin.AbstractController;
+import ru.stankin.MainApplication;
 import ru.stankin.enums.AnswerNumber;
 import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
@@ -300,7 +301,7 @@ public class TestController extends AbstractController {
         tmpStage.initOwner(primaryStage);
         tmpStage.setIconified(false);
         tmpStage.getIcons().clear();
-        tmpStage.getIcons().add(primaryStage.getIcons().get(0));
+        tmpStage.getIcons().add(MainApplication.getIcon());
         tmpStage.initModality(Modality.APPLICATION_MODAL);
         tmpStage.setScene(new Scene(borderPane));
         tmpStage.setResizable(false);

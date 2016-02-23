@@ -7,6 +7,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import ru.stankin.MainApplication;
 import ru.stankin.utils.Util;
 import ru.stankin.work.managers.VariableManager;
 import ru.stankin.work.model.ResultRecord;
@@ -57,15 +58,6 @@ public class ChartController {
         fullReactionsChart.setCreateSymbols(true);
         fullReactionsChart.setTitle("Зависимость полных реакций от времени");
 
-        /*String cssStyleForChart = new StringBuilder(".default-color0.chart-series-line { -fx-stroke: #").append(FIRST_LINE_COLOR).append("; }")
-                .append(".default-color1.chart-series-line { -fx-stroke: #").append(SECOND_LINE_COLOR).append("; }")
-                .append(".default-color2.chart-series-line { -fx-stroke: #").append(THIRD_LINE_COLOR).append("; }")
-                .append(".default-color3.chart-series-line { -fx-stroke: #").append(FORTH_LINE_COLOR).append("; }")
-                .append(".default-color0.chart-line-symbol { -fx-background-color: #").append(FIRST_LINE_COLOR).append(", white; }")
-                .append(".default-color1.chart-line-symbol { -fx-background-color: #").append(SECOND_LINE_COLOR).append(", white; }")
-                .append(".default-color2.chart-line-symbol { -fx-background-color: #").append(THIRD_LINE_COLOR).append(", white; }")
-                .append(".default-color3.chart-line-symbol { -fx-background-color: #").append(FORTH_LINE_COLOR).append(", white; }")
-                .toString();*/
         String url = "";
         try {
             url = new File("resources/css/Chart.css").toURI().toURL().toString();
@@ -100,7 +92,7 @@ public class ChartController {
         if (!alreadyBuilt) {
             stage.initOwner(primaryStage);
             stage.getIcons().clear();
-            stage.getIcons().add(primaryStage.getIcons().get(0));
+            stage.getIcons().add(MainApplication.getIcon());
             final String researchVarName = variableManager.getResearchVariable().getName();
             yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");
             yAxisForFullReactionsChart.setLabel(researchVarName + " полная");
