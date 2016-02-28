@@ -63,7 +63,7 @@ public class QuestionsHolder {
             }
 
         } catch (Exception ex) {
-            Util.showMessageAndCloseProgram(ex);
+            Util.showProgramsFilesSpoiled();
         }
     }
 

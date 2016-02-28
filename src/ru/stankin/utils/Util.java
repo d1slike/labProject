@@ -78,4 +78,8 @@ public class Util {
                 .filter(buttonType -> buttonType == ButtonType.OK)
                 .ifPresent(buttonType1 -> System.exit(-1));
     }
+
+    public static void showProgramsFilesSpoiled() {
+        showMessageAndCloseProgram("Повреждение файлов программы!", "Пожалуйста переустановите программу и попробуйте запустить повторно.");
+    }
 }

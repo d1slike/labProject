@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
+import ru.stankin.utils.ApplicationUpdater;
 import ru.stankin.utils.ImageCache;
 import ru.stankin.utils.Util;
 
@@ -31,6 +32,8 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ApplicationUpdater updater = new ApplicationUpdater();
+        updater.update();
         try {
             File file = new File("resources/image/icon.png");
             if (file.exists())
@@ -38,8 +41,9 @@ public class MainApplication extends Application {
             else
                 throw new FileNotFoundException();
         } catch (Exception ex) {
-            Util.showMessageAndCloseProgram("Повреждение файлов программы!", "Пожалуйста переустановите программу и попробуйте запустить повторно.");
+            Util.showProgramsFilesSpoiled();
         }
+        Config.getInstance();
         QuestionsHolder.getInstance();
         ImageCache.getInstance();
         this.primaryStage = primaryStage;
