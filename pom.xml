@@ -101,6 +101,7 @@
                     <vendor>Yan</vendor>
                     <bundler>ALL</bundler>
                     <appName>RCalc</appName>
+                    <deployDir>deploy</deployDir>
                     <mainClass>ru.stankin.MainApplication</mainClass>
                 </configuration>
             </plugin>
