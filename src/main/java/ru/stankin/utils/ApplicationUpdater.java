@@ -7,6 +7,7 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.Metadata;
+import ru.stankin.utils.files.FileUtils;
 
 import java.io.*;
 import java.util.List;
@@ -34,32 +35,20 @@ public class ApplicationUpdater {
         DbxRequestConfig config = new DbxRequestConfig("LabProjectClient", Locale.getDefault().toString());
         client = new DbxClientV2(config, APPLICATION_TOKEN);
         if (checkForNeedUpdate()) {
-            if (deleteFiles(RESOURCES_DIRECTORY_NAME)) {
+            if (FileUtils.deleteFiles(RESOURCES_DIRECTORY_NAME)) {
                 if (new File(RESOURCES_DIRECTORY_NAME).mkdir()) {
                     currentUpdateStatus = UpdateStatus.PREPARED;
                     downloadResource("/" + RESOURCES_DIRECTORY_NAME);
                     if (currentUpdateStatus != UpdateStatus.FAIL) {
                         currentUpdateStatus = UpdateStatus.SUCCESS;
-                        deleteFiles(LOCAL_VER_FILE_NAME);
-                        new File(REMOTE_VER_FILE_NAME).renameTo( new File(LOCAL_VER_FILE_NAME));
+                        FileUtils.deleteFiles(LOCAL_VER_FILE_NAME);
+                        FileUtils.rename(REMOTE_VER_FILE_NAME, LOCAL_VER_FILE_NAME);
                     }
                 }
             }
         }
 
         return currentUpdateStatus;
-    }
-
-    private boolean deleteFiles(String fileOrDirectoryName) {
-        File resourcesDirectory = new File(fileOrDirectoryName);
-        return delete(resourcesDirectory);
-    }
-
-    private static boolean delete(File file) {
-        if (file.isDirectory())
-            for (File inFile : file.listFiles())
-                delete(inFile);
-        return file.delete();
     }
 
 
@@ -94,7 +83,7 @@ public class ApplicationUpdater {
         Version remoteVersion = downloadAndGetRemoteVersion();
         boolean needUpdate = remoteVersion != null && remoteVersion.isOlderThen(localVersion);
         if (!needUpdate)
-            deleteFiles(REMOTE_VER_FILE_NAME);
+            FileUtils.deleteFiles(REMOTE_VER_FILE_NAME);
         return needUpdate;
 
     }
@@ -135,6 +124,10 @@ public class ApplicationUpdater {
         return new Version(main, sub, rev);
     }
 
+    public enum UpdateStatus {
+        PREPARED, SUCCESS, FAIL, NOT_NEED_UPDATE;
+    }
+
     private static class Version {
         private final int mainVersion;
         private final int subVersion;
@@ -165,9 +158,5 @@ public class ApplicationUpdater {
                 return true;
             return false;
         }
-    }
-
-    public enum UpdateStatus {
-        PREPARED, SUCCESS, FAIL, NOT_NEED_UPDATE;
     }
 }
