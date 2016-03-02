@@ -2,6 +2,7 @@ package ru.stankin;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -24,8 +25,6 @@ import java.net.URL;
 public class MainApplication extends Application {
 
     public static final String PROGRAM_NAME = "RCalc";
-    public static final Object LOCK = new Object();
-    public static boolean wait = true;
     private static Image MAIN_APP_ICON;
 
     private Stage primaryStage;
@@ -35,9 +34,14 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        ApplicationUpdater updater = new ApplicationUpdater();
-        new Thread(updater::update).start();
-        waitUpdate();
+        this.primaryStage = primaryStage;
+        primaryStage.setTitle(PROGRAM_NAME);
+        nextStage();
+        primaryStage.show();
+    }
+
+    public void initMainApp() {
+        primaryStage.close();
         try {
             File file = new File("resources/image/icon.png");
             if (file.exists())
@@ -47,32 +51,16 @@ public class MainApplication extends Application {
         } catch (Exception ex) {
             Util.showProgramsFilesSpoiled();
         }
-        //Config.getInstance();
+
         QuestionsHolder.getInstance();
         ImageCache.getInstance();
-        this.primaryStage = primaryStage;
         primaryStage.getIcons().add(MAIN_APP_ICON);
-        primaryStage.setTitle(PROGRAM_NAME);
         nextStage();
-        nextStage();
-        nextStage();
-        //updater.terminate();
-        //primaryStage.show();
-    }
-
-    private void waitUpdate() {
-        synchronized (LOCK) {
-            while(wait)
-                try {
-                    LOCK.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-        }
+        primaryStage.show();
     }
 
     public void nextStage() {
-        currentGlobalStage = currentGlobalStage == null ? GlobalStage.WELCOME : currentGlobalStage.next();
+        currentGlobalStage = currentGlobalStage == null ? GlobalStage.UPDATE : currentGlobalStage.next();
         prepareUI();
     }
 
@@ -106,12 +94,17 @@ public class MainApplication extends Application {
             activeController.setMainApplication(this);
             root.setCenter(pane);
             primaryStage.sizeToScene();
+            if (currentGlobalStage == GlobalStage.UPDATE) {
+                primaryStage.setResizable(false);
+                primaryStage.setOnCloseRequest(Event::consume);
+            }
         } catch (Exception ex) {
             Util.showMessageAndCloseProgram(ex);
         }
     }
 
     private enum GlobalStage {
+        UPDATE("update.fxml"),
         WELCOME("welcome.fxml"),
         TEST("frameForTest.fxml"),
         MAIN_LAB_WORK("workFrame.fxml");

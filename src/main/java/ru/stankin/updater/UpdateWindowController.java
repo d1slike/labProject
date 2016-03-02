@@ -1,58 +1,51 @@
 package ru.stankin.updater;
 
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.event.Event;
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ru.stankin.MainApplication;
+import ru.stankin.AbstractController;
 
 /**
  * Created by DisDev on 02.03.2016.
  */
-public class UpdateWindowController {
+public class UpdateWindowController extends AbstractController {
 
-    private final Stage window;
-    private final Label currentStateLabel;
-    private final ProgressBar progressBar;
+    @FXML
+    private Label currentStateLabel;
+    @FXML
+    private ProgressBar progressBar;
+
+    private ApplicationUpdater updater;
 
     public UpdateWindowController() {
 
-        BorderPane pane = new BorderPane();
-        pane.setPadding(new Insets(20));
-        pane.setPrefSize(400, 100);
+    }
 
-        currentStateLabel = new Label(ApplicationUpdater.UPDATE_STATE_CHECK_NEED_UPDATE);
-        progressBar = new ProgressBar(0);
-        currentStateLabel.setAlignment(Pos.CENTER);
+    @FXML
+    private void initialize() {
+        updater = new ApplicationUpdater(this);
+        updater.setOnSucceeded(event -> getMainApplication().initMainApp());
+        currentStateLabel.setText(ApplicationUpdater.UPDATE_STATE_CHECK_NEED_UPDATE);
+        progressBar.progressProperty().bind(updater.progressProperty());
+        updater.start();
 
-        VBox vBox = new VBox(10, currentStateLabel, progressBar);
-        vBox.setAlignment(Pos.CENTER);
-        pane.setCenter(vBox);
+    }
 
-        window = new Stage();
-        window.sizeToScene();
-        window.setTitle(MainApplication.PROGRAM_NAME);
-        window.setScene(new Scene(pane));
+    @Override
+    public void prepareForNext() {
+        updater.terminate();
+        updater = null;
+        Stage primaryStage = getMainApplication().getPrimaryStage();
+        primaryStage.setResizable(true);
+        primaryStage.setOnCloseRequest(null);
     }
 
     public void setCurrentStateText(String text) {
-        currentStateLabel.setText(text);
+        Platform.runLater(() -> currentStateLabel.setText(text));
     }
 
-    public void updateProgressBar(double newValue) {
-        Platform.runLater(() -> progressBar.setProgress(newValue));
-    }
 
-    public void showWindow() {
-        window.show();
-    }
-
-    public void closeWindow() {
-        window.close();
-    }
 }
