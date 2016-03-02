@@ -16,12 +16,12 @@ public enum WorkStage {
 
     private final String description;
     private final String[] allowedUiItemsOnStage;
-    private final String selectableElement;
+    //private final String selectableElement;
 
     WorkStage(String description, String[] allowedUiItemsOnStage, String selectableElement) {
         this.description = description;
         this.allowedUiItemsOnStage = allowedUiItemsOnStage;
-        this.selectableElement = selectableElement;
+        //this.selectableElement = selectableElement;
     }
 
     public WorkStage nextStage() {
@@ -40,9 +40,9 @@ public enum WorkStage {
         return allowedUiItemsOnStage;
     }
 
-    public String getSelectableElement() {
+    /*public String getSelectableElement() {
         return selectableElement;
-    }
+    }*/
 
     private static final class AllowedItemsSpace {
         private static final String[] STAGE_1_ALLOWED_UI_ITEMS = {ElementNames.COMBO_BOX_ALT_VAR_SWITCHER, ElementNames.BUTTON_NEXT_STAGE};

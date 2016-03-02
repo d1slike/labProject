@@ -14,7 +14,7 @@
          <center>
             <Label fx:id="informationTextLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="980.0" textAlignment="CENTER" wrapText="true" BorderPane.alignment="CENTER">
                <font>
-                  <Font name="System Bold Italic" size="18.0" />
+                  <Font name="System Bold Italic" size="14.0" />
                </font>
                <BorderPane.margin>
                   <Insets />

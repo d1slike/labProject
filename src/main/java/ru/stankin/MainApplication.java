@@ -1,6 +1,7 @@
 package ru.stankin;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -8,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
-import ru.stankin.utils.ApplicationUpdater;
+import ru.stankin.updater.ApplicationUpdater;
 import ru.stankin.utils.ImageCache;
 import ru.stankin.utils.Util;
 
@@ -23,6 +24,8 @@ import java.net.URL;
 public class MainApplication extends Application {
 
     public static final String PROGRAM_NAME = "RCalc";
+    public static final Object LOCK = new Object();
+    public static boolean wait = true;
     private static Image MAIN_APP_ICON;
 
     private Stage primaryStage;
@@ -33,7 +36,8 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ApplicationUpdater updater = new ApplicationUpdater();
-        updater.update();
+        new Thread(updater::update).start();
+        waitUpdate();
         try {
             File file = new File("resources/image/icon.png");
             if (file.exists())
@@ -52,7 +56,19 @@ public class MainApplication extends Application {
         nextStage();
         nextStage();
         nextStage();
-        primaryStage.show();
+        //updater.terminate();
+        //primaryStage.show();
+    }
+
+    private void waitUpdate() {
+        synchronized (LOCK) {
+            while(wait)
+                try {
+                    LOCK.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
     public void nextStage() {

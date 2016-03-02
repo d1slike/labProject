@@ -362,7 +362,7 @@ public class WorkController extends AbstractController {
         phiNameLabel.setText(VariableType.VarName.PHI + "(" + VariableType.VarName.TAU + ")");
         phiValueLabel.setText(Util.doubleCommaFormat(variableManager.calculatePhiForTau()));
         RPMValueLabel.setText(variableManager.calculateRPMForTau() + "");
-        uiManager.playAnimationFor(ElementNames.FIELD_TIME);
+        //uiManager.playAnimationFor(ElementNames.FIELD_TIME);
         currentInfoVBox.setVisible(true);
 
     }

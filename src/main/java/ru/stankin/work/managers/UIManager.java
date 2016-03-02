@@ -25,15 +25,15 @@ public class UIManager {
 
     private final Map<String, Control> itemReferenceMap;
     private final List<String> notDefaultStyleItems;
-    private Timeline activeAnimation;
+    /*private Timeline activeAnimation;
     private AtomicBoolean activeState;
-    private Control activeControl;
+    private Control activeControl;*/
 
 
     public UIManager() {
         itemReferenceMap = new HashMap<>();
         notDefaultStyleItems = new ArrayList<>();
-        activeState = new AtomicBoolean(false);
+        //activeState = new AtomicBoolean(false);
     }
 
     public void putItem(String name, Control control) {
@@ -50,7 +50,7 @@ public class UIManager {
         notDefaultStyleItems.clear();
         for (String itemName : currentWorkStage.getAllowedUiItemsOnStage())
             itemReferenceMap.get(itemName).setDisable(false);
-        playAnimationFor(currentWorkStage.getSelectableElement());
+        //playAnimationFor(currentWorkStage.getSelectableElement());
     }
 
     public void setRedBorder(String elementName) {
@@ -63,7 +63,7 @@ public class UIManager {
         notDefaultStyleItems.remove(elementName);
     }
 
-    public void playAnimationFor(String elementName) {
+    /*public void playAnimationFor(String elementName) {
         stopAnimation();
         activeControl = itemReferenceMap.getOrDefault(elementName, null);
         if (activeControl == null)
@@ -87,5 +87,5 @@ public class UIManager {
         }
         activeState.set(false);
 
-    }
+    }*/
 }

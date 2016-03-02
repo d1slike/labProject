@@ -1,4 +1,4 @@
-package ru.stankin.utils;
+package ru.stankin.updater;
 
 import com.dropbox.core.DbxDownloader;
 import com.dropbox.core.DbxException;
@@ -7,6 +7,9 @@ import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
 import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.Metadata;
+import javafx.application.Platform;
+import ru.stankin.MainApplication;
+import ru.stankin.utils.Util;
 import ru.stankin.utils.files.FileUtils;
 
 import java.io.*;
@@ -24,28 +27,44 @@ public class ApplicationUpdater {
     private static final String LOCAL_VER_FILE_NAME = "version.ini";
     private static final String RESOURCES_DIRECTORY_NAME = "res";
 
+    public static final String UPDATE_STATE_CHECK_NEED_UPDATE = "Проверка наличия обновлений...";
+    public static final String UPDATE_STATE_UPDATING = "Обновление...";
+    public static final String UPDATE_STATE_PROGRAMM_RUNING = "Запуск программы...";
+
     private DbxClientV2 client;
+    private UpdateWindowController controller;
     private UpdateStatus currentUpdateStatus;
 
+
     public ApplicationUpdater() {
+        DbxRequestConfig config = new DbxRequestConfig("LabProjectClient", Locale.getDefault().toString());
+        client = new DbxClientV2(config, APPLICATION_TOKEN);
+        controller = new UpdateWindowController();
         currentUpdateStatus = UpdateStatus.NOT_NEED_UPDATE;
+        controller.setCurrentStateText(UPDATE_STATE_CHECK_NEED_UPDATE);
+        controller.showWindow();
     }
 
     public UpdateStatus update() {
-        DbxRequestConfig config = new DbxRequestConfig("LabProjectClient", Locale.getDefault().toString());
-        client = new DbxClientV2(config, APPLICATION_TOKEN);
         if (checkForNeedUpdate()) {
             if (FileUtils.deleteFiles(RESOURCES_DIRECTORY_NAME)) {
                 if (new File(RESOURCES_DIRECTORY_NAME).mkdir()) {
                     currentUpdateStatus = UpdateStatus.PREPARED;
+                    controller.setCurrentStateText(UPDATE_STATE_UPDATING);
                     downloadResource("/" + RESOURCES_DIRECTORY_NAME);
                     if (currentUpdateStatus != UpdateStatus.FAIL) {
                         currentUpdateStatus = UpdateStatus.SUCCESS;
                         FileUtils.deleteFiles(LOCAL_VER_FILE_NAME);
                         FileUtils.rename(REMOTE_VER_FILE_NAME, LOCAL_VER_FILE_NAME);
                     }
+                    controller.setCurrentStateText(UPDATE_STATE_PROGRAMM_RUNING);
                 }
             }
+        }
+
+        synchronized (MainApplication.LOCK) {
+            MainApplication.wait = false;
+            MainApplication.LOCK.notifyAll();
         }
 
         return currentUpdateStatus;
@@ -122,6 +141,13 @@ public class ApplicationUpdater {
         int sub = Integer.parseInt(tokenizer.nextToken());
         int rev = Integer.parseInt(tokenizer.nextToken());
         return new Version(main, sub, rev);
+    }
+
+    public void terminate() {
+        controller.closeWindow();
+        controller = null;
+        client = null;
+        currentUpdateStatus = null;
     }
 
     public enum UpdateStatus {
