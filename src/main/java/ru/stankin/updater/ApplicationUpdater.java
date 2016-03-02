@@ -65,6 +65,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
             updateProgress(0, resourcesDirSize);
             UpdateStatus status = update();
             controller.setCurrentStateText(UPDATE_STATE_PROGRAMM_RUNING);
+            Thread.sleep(1000);
             return status;
         }
 
@@ -96,7 +97,6 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
                             FileUtils.deleteFiles(LOCAL_VER_FILE_NAME);
                             FileUtils.rename(REMOTE_VER_FILE_NAME, LOCAL_VER_FILE_NAME);
                         }
-                        controller.setCurrentStateText(UPDATE_STATE_PROGRAMM_RUNING);
                     }
                 }
             }
