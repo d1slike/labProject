@@ -51,6 +51,8 @@ public class TestController extends AbstractController {
 
     private Test test;
 
+    private State currentState;
+
 
     @FXML
     private Label attemptsLabel;
@@ -137,6 +139,7 @@ public class TestController extends AbstractController {
     }
 
     private void showNextQuestion() {
+        currentState = State.SELECT_ANSWER;
         Question question = test.prepareAndGetNextQuestion();
         imageView.setVisible(false);
         if (question.getImgSource() != null) {
@@ -231,31 +234,30 @@ public class TestController extends AbstractController {
     private synchronized void onNextButtonClick() {
         if (test == null)
             return;
-        currentTimeLine.pause();
-        boolean isCorrect = test.checkCurrentStudentAnswer();
-        currentResultLabel.setText(isCorrect ? "Верный ответ" : "Неверный ответ");
-        currentResultLabel.setTextFill(isCorrect ? GREEN : RED);
-        currentResultLabel.setVisible(true);
-        changeStateOfKeyElementsOnPanel(false);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(DELAY_BEFORE_SHOW_NEXT_QUESTION_IN_SECONDS), (event) -> {
+        if (currentState == State.SELECT_ANSWER) {
+            currentTimeLine.pause();
+            boolean isCorrect = test.checkCurrentStudentAnswer();
+            currentResultLabel.setText(isCorrect ? "Верный ответ" : "Неверный ответ");
+            currentResultLabel.setTextFill(isCorrect ? GREEN : RED);
+            currentResultLabel.setVisible(true);
+            changeStateOfKeyElementsOnPanel(false);
+            currentState = State.WAIT;
+        } else if (currentState == State.WAIT) {
             changeStateOfKeyElementsOnPanel(true);
             if (test.haveMoreQuestion()) {
                 showNextQuestion();
                 currentTimeLine.play();
-            }
-            else if (test.isCompleteCorrect())
+            } else if (test.isCompleteCorrect())
                 showResults(true);
             else if (test.haveAnyAttempts())
                 tryAgain();
-        }));
-        timeline.setCycleCount(1);
-        timeline.play();
+        }
     }
 
     private void changeStateOfKeyElementsOnPanel(boolean enable) {
         allButtons.forEach(radioButton -> radioButton.setDisable(!enable));
         currentResultLabel.setVisible(!enable);
-        nextButton.setDisable(!enable);
+        nextButton.setDefaultButton(!enable);
     }
 
     private void showResults(boolean success) {
@@ -308,5 +310,9 @@ public class TestController extends AbstractController {
         tmpStage.setTitle("Результаты теста");
         tmpStage.setOnCloseRequest(Event::consume);
         tmpStage.showAndWait();
+    }
+
+    public enum State {
+        SELECT_ANSWER, WAIT;
     }
 }
