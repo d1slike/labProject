@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import ru.stankin.AbstractController;
+import ru.stankin.utils.Util;
 
 /**
  * Created by DisDev on 02.03.2016.
@@ -27,11 +28,16 @@ public class UpdateWindowController extends AbstractController {
     @FXML
     private void initialize() {
         updater = new ApplicationUpdater(this);
-        updater.setOnSucceeded(event -> getMainApplication().initMainApp());
+        updater.setOnSucceeded(event -> {
+            UpdateStatus status = updater.getValue();
+            if (status.isOk())
+                getMainApplication().initMainApp();
+            else
+                Util.showMessageAndCloseProgram("Ошибка обновления программы!", Util.Msg.PLEASE_REINSTALL_AND_RESTART_PROGRAM);
+        });
         currentStateLabel.setText(ApplicationUpdater.UPDATE_STATE_CHECK_NEED_UPDATE);
         progressBar.progressProperty().bind(updater.progressProperty());
         updater.start();
-
     }
 
     @Override

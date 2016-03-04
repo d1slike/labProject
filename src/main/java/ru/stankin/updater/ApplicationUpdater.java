@@ -9,7 +9,6 @@ import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import ru.stankin.utils.Util;
 import ru.stankin.utils.files.FileUtils;
 
 import java.io.*;
@@ -57,16 +56,25 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
             currentUpdateStatus = UpdateStatus.NOT_NEED_UPDATE;
             alreadyDownloaded = 0;
             controller.setCurrentStateText(UPDATE_STATE_CHECK_NEED_UPDATE);
-            getResourcesDirSize("/" + RESOURCES_DIRECTORY_NAME);
         }
 
         @Override
         protected UpdateStatus call() throws Exception {
-            updateProgress(0, resourcesDirSize);
+            if (!testNetConnection())
+                return UpdateStatus.HAVE_NO_NET_CONNECTION;
             UpdateStatus status = update();
             controller.setCurrentStateText(UPDATE_STATE_PROGRAMM_RUNING);
             Thread.sleep(1000);
             return status;
+        }
+
+        private boolean testNetConnection() {
+            boolean ok = false;
+            try {
+                ok = client.users.getCurrentAccount() != null;
+            } catch (DbxException ignored) {
+            }
+            return ok;
         }
 
         private void getResourcesDirSize(String path) {
@@ -89,6 +97,8 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
             if (checkForNeedUpdate()) {
                 if (FileUtils.deleteFiles(RESOURCES_DIRECTORY_NAME)) {
                     if (new File(RESOURCES_DIRECTORY_NAME).mkdir()) {
+                        getResourcesDirSize("/" + RESOURCES_DIRECTORY_NAME);
+                        updateProgress(0, resourcesDirSize);
                         currentUpdateStatus = UpdateStatus.PREPARED;
                         controller.setCurrentStateText(UPDATE_STATE_UPDATING);
                         downloadResource("/" + RESOURCES_DIRECTORY_NAME);
@@ -130,7 +140,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
         private boolean checkForNeedUpdate() {
             Version localVersion = getVersionFromFile(LOCAL_VER_FILE_NAME);
             if (localVersion == null) {
-                Util.showProgramsFilesSpoiled();
+                currentUpdateStatus = UpdateStatus.LOCAL_FILE_VERSION_IS_BAD;
                 return false;
             }
             Version remoteVersion = downloadAndGetRemoteVersion();

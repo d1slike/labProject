@@ -80,6 +80,11 @@ public class Util {
     }
 
     public static void showProgramsFilesSpoiled() {
-        showMessageAndCloseProgram("Повреждение файлов программы!", "Пожалуйста переустановите программу и попробуйте запустить повторно.");
+        showMessageAndCloseProgram(Msg.SPOILED_PROGRAM_FILES, Msg.PLEASE_REINSTALL_AND_RESTART_PROGRAM);
+    }
+
+    public static class Msg {
+        public static final String SPOILED_PROGRAM_FILES = "Повреждение файлов программы!";
+        public static final String PLEASE_REINSTALL_AND_RESTART_PROGRAM = "Пожалуйста переустановите программу и попробуйте запустить повторно.";
     }
 }
