@@ -5,7 +5,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{B27F9354-E542-4D9E-B288-3BDFACF90781}
+AppId={{1E073440-CDEE-47EE-8B49-075360650D39}
 AppName=RCalc
 AppVersion=1.0.0
 ;AppVerName=RCalc 1.0.0
@@ -16,7 +16,7 @@ AppUpdatesURL=eldustru@yandex.ru
 DefaultDirName={pf}\RCalc
 DefaultGroupName=RCalc
 AllowNoIcons=yes
-OutputDir=C:\Workspace\labProject\deploy\package\windows
+OutputDir=C:\Workspace\labProject\deploy
 OutputBaseFilename=RCalc_Installer
 SetupIconFile=C:\Workspace\labProject\deploy\package\windows\RCalc.ico
 Compression=lzma
@@ -34,10 +34,10 @@ Source: "C:\Workspace\labProject\target\jfx\native\RCalc\*"; DestDir: "{app}"; F
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\RCalc"; Filename: "{app}\RCalc-1.0.exe"
+Name: "{group}\RCalc"; Filename: "{app}\RCalc.exe"
 Name: "{group}\{cm:UninstallProgram,RCalc}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\RCalc"; Filename: "{app}\RCalc-1.0.exe"; Tasks: desktopicon
+Name: "{commondesktop}\RCalc"; Filename: "{app}\RCalc.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\RCalc-1.0.exe"; Description: "{cm:LaunchProgram,RCalc}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\RCalc.exe"; Description: "{cm:LaunchProgram,RCalc}"; Flags: nowait postinstall skipifsilent
 
