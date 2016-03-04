@@ -4,3 +4,4 @@
 /target
 /.idea/vcs.xml
 /version.ini
+/deploy/package/windows/RCalc_Installer.exe
