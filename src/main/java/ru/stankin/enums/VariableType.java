@@ -24,7 +24,7 @@ public enum  VariableType {
     TAU(VarName.TAU, Double.MIN_VALUE, Double.MAX_VALUE, "с");
 
     private final ReadOnlyStringProperty name;
-    private final ReadOnlyStringProperty nameWithMeansurement;
+    private final ReadOnlyStringProperty nameWithMeasurement;
     private final String measurement;
     private final double leftValue;
     private final double rightValue;
@@ -35,7 +35,7 @@ public enum  VariableType {
         this.rightValue = rightValue;
         this.name = new SimpleStringProperty(name);
         String measurement = "(" + meansure + ")";
-        this.nameWithMeansurement = new SimpleStringProperty(name + measurement);
+        this.nameWithMeasurement = new SimpleStringProperty(name + measurement);
         this.measurement = measurement;
     }
 
@@ -52,12 +52,17 @@ public enum  VariableType {
         return name.getValue();
     }
 
-    public ReadOnlyStringProperty getNameProperty() {
-        return name;
+
+    public static VariableType defaultResearchVariable() {
+        return Xa;
     }
 
-    public ReadOnlyStringProperty getNameWithMeansurement() {
-        return nameWithMeansurement;
+    public static VariableType defaultAltVariable() {
+        return RO;
+    }
+
+    public ReadOnlyStringProperty getNameWithMeasurement() {
+        return nameWithMeasurement;
     }
 
     public static class VarName {
@@ -79,7 +84,4 @@ public enum  VariableType {
         public static final String PHI = "\u03C6";
     }
 
-    public String getMeasurement() {
-        return measurement;
-    }
 }

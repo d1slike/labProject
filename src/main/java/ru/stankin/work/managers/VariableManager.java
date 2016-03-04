@@ -37,7 +37,7 @@ public class VariableManager {
         activeVariables = new EnumMap<>(VariableType.class);
         resultRecords = FXCollections.observableArrayList();
         Stream.of(EDITABLE_VAR_TYPES_ARRAY).forEach(type -> activeVariables.put(type, new Variable(type, 0)));
-        clear();
+        calculator = new Calculator(this);
     }
 
     public double getVarValue(VariableType type) {
@@ -45,12 +45,13 @@ public class VariableManager {
     }
 
     public void clear() {
-        activeVariables.values().forEach(variable -> variable.setValue(0));
-        altVariable = activeVariables.get(VariableType.RO);
-        altVarStep = 0;
-        researchVariable = VariableType.Xa;
-        currentDeltaTime = 0;
+        //activeVariables.values().forEach(variable -> variable.setValue(0));
+        //altVariable = activeVariables.get(VariableType.RO);
+        //altVarStep = 0;
+        //researchVariable = VariableType.Xa;
+        //currentDeltaTime = 0;
         lastTime = 0;
+        altVariable.setValue(altVariable.getValue() - ALT_VAR_MAX_STEP_COUNT * altVarStep);
         resultRecords.clear();
         calculator = new Calculator(this);
     }
@@ -78,6 +79,7 @@ public class VariableManager {
         }
 
     }
+
     public Collection<Variable> getAllVars() {
         return activeVariables.values();
     }
@@ -86,7 +88,7 @@ public class VariableManager {
         return altVariable;
     }
 
-    public void setAltVariable(VariableType type) {
+    public void setAltVariableType(VariableType type) {
         altVariable = activeVariables.get(type);
     }
 

@@ -6,6 +6,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.stankin.MainApplication;
 import ru.stankin.utils.Util;
@@ -37,7 +38,7 @@ public class ChartController {
     private boolean alreadyBuilt;
     private boolean inShowing;
 
-    public ChartController() {
+    public ChartController(Stage primaryStage) {
         yAxisForDynamicReactionsChart = new NumberAxis();
         yAxisForFullReactionsChart = new NumberAxis();
 
@@ -77,20 +78,21 @@ public class ChartController {
         Scene scene = new Scene(pane);
         stage = new Stage();
         stage.setTitle("Графики");
+        stage.initModality(Modality.NONE);
         stage.setHeight(CHART_HEIGHT);
         stage.setWidth(CHART_WIDTH * 2);
         stage.setIconified(false);
+        stage.initOwner(primaryStage);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> inShowing = false);
     }
 
-    public void buildAndShow(VariableManager variableManager, Stage primaryStage) {
+    public void buildAndShow(VariableManager variableManager) {
 
         if (inShowing)
             return;
 
         if (!alreadyBuilt) {
-            stage.initOwner(primaryStage);
             stage.getIcons().clear();
             stage.getIcons().add(MainApplication.getIcon());
             final String researchVarName = variableManager.getResearchVariable().getName();

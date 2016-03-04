@@ -1,6 +1,7 @@
 package ru.stankin.work;
 
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -121,15 +122,21 @@ public class WorkController extends AbstractController {
     private void initialize() {
 
         variableManager = new VariableManager();
-        chartController = new ChartController();
+        Platform.runLater(() -> chartController = new ChartController(getMainApplication().getPrimaryStage()));
         currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
 
         altVarSwitcher.getItems().addAll(VariableManager.EDITABLE_VAR_TYPES_ARRAY);
         altVarSwitcher.getItems().remove(VariableType.TAU);
-        altVarSwitcher.setValue(VariableType.RO);
+        VariableType defaultAltVar = VariableType.defaultAltVariable();
+        altVarSwitcher.setValue(defaultAltVar);
+        variableManager.setAltVariableType(defaultAltVar);
+        altVarSwitcher.setVisibleRowCount(VariableManager.EDITABLE_VAR_TYPES_ARRAY.length);
 
         researchVarSwitcher.getItems().addAll(VariableType.Xa, VariableType.Xb, VariableType.Ya, VariableType.Yb);
-        researchVarSwitcher.setValue(VariableType.Xa);
+        researchVarSwitcher.setVisibleRowCount(4);
+        VariableType defaultResVar = VariableType.defaultResearchVariable();
+        researchVarSwitcher.setValue(defaultResVar);
+        variableManager.setResearchVariableType(defaultResVar);
 
         timeLabel.setText(VariableType.VarName.DELTA + VariableType.T.getName());
 
@@ -155,7 +162,7 @@ public class WorkController extends AbstractController {
         variableManager.setCurrentDeltaTime(0.01911);
 
         //variableManager.setResearchVariableType(VariableType.Xb);
-        //variableManager.setAltVariable(VariableType.R);
+        //variableManager.setAltVariableType(VariableType.R);
 
 
         //calculateAndShowInformation();
@@ -237,7 +244,7 @@ public class WorkController extends AbstractController {
     }
 
     private void prepareVarTable() {
-        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeansurement());
+        varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeasurement());
         varTableColumnParam.setStyle("-fx-font-weight: bold;");
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditingCell());
@@ -248,17 +255,17 @@ public class WorkController extends AbstractController {
     private void onCancelButtonClick() {
         if (chartController.isInShowing())
             return;
-        currentWorkStage = WorkStage.STAGE_1_SELECT_ALT_VAR;
+        currentWorkStage = WorkStage.STAGE_5_WRITE_TIME_STEP;
         onChangedWorkStage();
-        resultTable.setVisible(false);
-        currentInfoVBox.setVisible(false);
+        //resultTable.setVisible(false);
+        //currentInfoVBox.setVisible(false);
         variableManager.clear();
         chartController.clear();
     }
 
     @FXML
     private void onChangedAltVariable() {
-        variableManager.setAltVariable(altVarSwitcher.getValue());
+        variableManager.setAltVariableType(altVarSwitcher.getValue());
     }
 
     @FXML
@@ -304,7 +311,7 @@ public class WorkController extends AbstractController {
     private void onShowChartButtonClick() {
         if (chartController == null)
             return;
-        chartController.buildAndShow(variableManager, getMainApplication().getPrimaryStage());
+        chartController.buildAndShow(variableManager);
     }
 
     private void onChangedWorkStage() {
@@ -316,7 +323,7 @@ public class WorkController extends AbstractController {
         switch (currentWorkStage) {
             case STAGE_1_SELECT_ALT_VAR:
                 resultTableAltVarColumn.setText(variableManager.getAltVariable().getName());
-                altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeansurement().getValue());
+                altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeasurement().getValue());
                 break;
             case STAGE_2_WRITE_STEP_TO_ALT_VAR: {
                 ParseResult result = getDoubleValue(altVarStepField, ElementNames.FIELD_ALT_VAR_STEP);
@@ -357,7 +364,7 @@ public class WorkController extends AbstractController {
     }
 
     private void calculateAndShowInformation() {
-        altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeansurement().getValue());
+        altVarNameLabel.setText(variableManager.getAltVariable().getType().getNameWithMeasurement().getValue());
         altVarValueLabel.setText(Util.doubleCommaFormat(variableManager.getAltVariable().getValue()) + "");
         phiNameLabel.setText(VariableType.VarName.PHI + "(" + VariableType.VarName.TAU + ")");
         phiValueLabel.setText(Util.doubleCommaFormat(variableManager.calculatePhiForTau()));

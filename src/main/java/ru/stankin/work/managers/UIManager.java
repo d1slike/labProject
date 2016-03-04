@@ -21,7 +21,7 @@ public class UIManager {
 
     public static final String RED_BORDER_STYLE = "-fx-border-color: red; -fx-border-width: 1;";
     public static final String DEFAULT_BORDER_STYLE = "";
-    private static final String SELECTION_BORDER_STYLE = "-fx-border-color: blue; -fx-border-width: 2;";
+    //private static final String SELECTION_BORDER_STYLE = "-fx-border-color: blue; -fx-border-width: 2;";
 
     private final Map<String, Control> itemReferenceMap;
     private final List<String> notDefaultStyleItems;
