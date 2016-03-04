@@ -38,7 +38,6 @@ public class CipherFileStreamFactory {
             }
 
         } catch (NoSuchPaddingException | FileNotFoundException | InvalidKeyException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
         }
         return inputStream;
     }

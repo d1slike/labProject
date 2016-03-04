@@ -2,6 +2,7 @@ package ru.stankin.test.model;
 
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
+import jfork.nproperty.Cfg;
 import ru.stankin.test.holders.QuestionsHolder;
 
 import java.util.List;
@@ -11,10 +12,14 @@ import java.util.List;
  */
 public class Test {
 
-    public static final int MAX_QUESTIONS = 2;
-    public static final int MAX_MINUTES_TO_COMPLETE = 9;
-    private static final int MAX_ATTEMPTS = 2;
-    private static final int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
+    @Cfg("MaxQuestions")
+    public static int MAX_QUESTIONS = 10;
+    @Cfg("MinutesToCompleteTest")
+    public static int MAX_MINUTES_TO_COMPLETE = 19;
+    @Cfg("AttemptsToCompleteTestWithoutBadMark")
+    private static int MAX_ATTEMPTS = 2;
+    @Cfg("MinCorrectAnswersCountToCompleteTest")
+    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 6;
 
     private List<Question> questions;
     private TIntIntMap answersMap;

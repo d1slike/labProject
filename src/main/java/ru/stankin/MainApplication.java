@@ -41,7 +41,6 @@ public class MainApplication extends Application {
     }
 
     public void initMainApp() {
-        primaryStage.close();
         try {
             File file = new File("resources/image/icon.png");
             if (file.exists())
@@ -52,15 +51,19 @@ public class MainApplication extends Application {
             Util.showProgramsFilesSpoiled();
         }
 
+        Configs.load();
         QuestionsHolder.getInstance();
         ImageCache.getInstance();
+
+
+        primaryStage.close();
         primaryStage.getIcons().add(MAIN_APP_ICON);
         nextStage();
         primaryStage.show();
     }
 
     public void nextStage() {
-        currentGlobalStage = currentGlobalStage == null ? GlobalStage.MAIN_LAB_WORK : currentGlobalStage.next();
+        currentGlobalStage = currentGlobalStage == null ? GlobalStage.UPDATE : currentGlobalStage.next();
         prepareUI();
     }
 
