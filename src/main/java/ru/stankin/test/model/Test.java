@@ -3,6 +3,7 @@ package ru.stankin.test.model;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 import jfork.nproperty.Cfg;
+import ru.stankin.Configs;
 import ru.stankin.test.holders.QuestionsHolder;
 
 import java.util.List;
@@ -11,15 +12,6 @@ import java.util.List;
  * Created by Dislike on 06.02.2016.
  */
 public class Test {
-
-    @Cfg("MaxQuestions")
-    public static int MAX_QUESTIONS = 10;
-    @Cfg("MinutesToCompleteTest")
-    public static int MAX_MINUTES_TO_COMPLETE = 19;
-    @Cfg("AttemptsToCompleteTestWithoutBadMark")
-    private static int MAX_ATTEMPTS = 2;
-    @Cfg("MinCorrectAnswersCountToCompleteTest")
-    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 6;
 
     private List<Question> questions;
     private TIntIntMap answersMap;
@@ -34,7 +26,7 @@ public class Test {
 
 
     public Test() {
-        availableAttempts = MAX_ATTEMPTS;
+        availableAttempts = Configs.Test.attempts();
         answersMap = new TIntIntHashMap();
         clearAndUpdateQuestions();
     }
@@ -73,7 +65,7 @@ public class Test {
     }
 
     public boolean haveMoreQuestion() {
-        return currentQuestionPosition < MAX_QUESTIONS - 1;
+        return currentQuestionPosition < Configs.Test.maxQuestions() - 1;
     }
 
     public boolean haveAnyAttempts() {
@@ -85,7 +77,7 @@ public class Test {
     }
 
     public boolean isCompleteCorrect() {
-        return correctAnswersCount >= MIN_CORRECT_ANSWERS_TO_COMPLETE;
+        return correctAnswersCount >= Configs.Test.correctAnswersToComplete();
     }
 
     public int getAvailableAttempts() {

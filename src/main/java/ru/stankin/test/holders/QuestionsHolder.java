@@ -5,6 +5,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import ru.stankin.Configs;
 import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
@@ -37,8 +38,9 @@ public class QuestionsHolder {
 
     public List<Question> getRndListOfQuestion() {
         List<Question> copy = new LinkedList<>(questions.valueCollection());
-        List<Question> toShows = new ArrayList<>(Test.MAX_QUESTIONS);
-        while (!copy.isEmpty() && toShows.size() < Test.MAX_QUESTIONS) {
+        final int maXQuestions = Configs.Test.maxQuestions();
+        List<Question> toShows = new ArrayList<>(maXQuestions);
+        while (!copy.isEmpty() && toShows.size() < maXQuestions) {
             int size = copy.size();
             Question question = size == 1 ? copy.remove(0) : copy.remove(Rnd.get(size));
             toShows.add(question);

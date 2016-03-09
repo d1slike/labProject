@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.stankin.AbstractController;
+import ru.stankin.Configs;
 import ru.stankin.MainApplication;
 import ru.stankin.enums.AnswerNumber;
 import ru.stankin.test.model.Answer;
@@ -101,7 +102,7 @@ public class TestController extends AbstractController {
     private void initialize() {
         test = new Test();
         prepareUIToStartTest();
-        maxQuestion.setText(Integer.toString(Test.MAX_QUESTIONS));
+        maxQuestion.setText(Integer.toString(Configs.Test.maxQuestions()));
         currentTimeLine = new Timeline(new KeyFrame(Duration.seconds(1),
                 event -> timeTick()));
         allButtons = new ArrayList<>(4);
@@ -201,7 +202,7 @@ public class TestController extends AbstractController {
         if (test == null)
             return;
 
-        currentMinutesToCompleteTest = Test.MAX_MINUTES_TO_COMPLETE;
+        currentMinutesToCompleteTest = Configs.Test.minutesToComplete() - 1;
         secondsToShow = SECONDS_INIT_VALUE;
 
         minutesLabel.setText(Integer.toString(currentMinutesToCompleteTest));
@@ -257,7 +258,7 @@ public class TestController extends AbstractController {
     private void changeStateOfKeyElementsOnPanel(boolean enable) {
         allButtons.forEach(radioButton -> radioButton.setDisable(!enable));
         currentResultLabel.setVisible(!enable);
-        nextButton.setDefaultButton(!enable);
+        //nextButton.setDefaultButton(!enable);
     }
 
     private void showResults(boolean success) {
@@ -275,7 +276,7 @@ public class TestController extends AbstractController {
         result.setAlignment(Pos.CENTER);
         vBox.getChildren().add(result);
 
-        Label correctAnswerCount = new Label("Верных ответов: " + test.getCorrectAnswersCount() + " / " + Test.MAX_QUESTIONS);
+        Label correctAnswerCount = new Label("Верных ответов: " + test.getCorrectAnswersCount() + " / " + Configs.Test.maxQuestions());
         correctAnswerCount.setFont(Font.font(14));
         correctAnswerCount.setAlignment(Pos.CENTER);
         vBox.getChildren().add(correctAnswerCount);

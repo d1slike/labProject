@@ -51,7 +51,7 @@ public class MainApplication extends Application {
             Util.showProgramsFilesSpoiled();
         }
 
-        Configs.load();
+        Configs.Test.attempts();//load configs
         QuestionsHolder.getInstance();
         ImageCache.getInstance();
 

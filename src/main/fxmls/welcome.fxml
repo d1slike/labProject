@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.web.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.WelcomeController">
-   <children>
-      <VBox alignment="CENTER" layoutX="48.0" layoutY="94.0">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.WelcomeController">
+   <center>
+      <VBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutX="48.0" layoutY="94.0" prefHeight="200.0" prefWidth="500.0" text="Для допуска к лабораторной работе Вам необходимо пройти тест.Всего дается 2 попытки для выполнения теста из 10 вопросов. Предложенноевремя 10 минут. Если не удасться выполнить тестовые задания с 2ух  попыток то ваш итоговый бал будет снижен. Будьте внимательны,следуйте все инструкциям, предложенным в программе. Желаем удачи!" textAlignment="CENTER" wrapText="true" />
-            <Button fx:id="nextButton" defaultButton="true" layoutX="238.0" layoutY="264.0" mnemonicParsing="false" onAction="#onNextButtonClick" prefHeight="30.0" prefWidth="120.0" text="Далее">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
+            <Label fx:id="infoLabel" alignment="CENTER" contentDisplay="CENTER" text="Label" textAlignment="CENTER" wrapText="true" />
+            <Button fx:id="nextButton" alignment="CENTER" contentDisplay="CENTER" defaultButton="true" mnemonicParsing="false" onAction="#onNextButtonClick" text="Далее" />
          </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
       </VBox>
-   </children>
-</AnchorPane>
+   </center>
+</BorderPane>
