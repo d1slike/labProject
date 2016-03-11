@@ -16,18 +16,20 @@ public class Configs {
 
     private static final String PROPERTY_FILE = "properties.ini";
 
-    @Cfg("MaxQuestions")
-    private static int MAX_QUESTIONS = 10;
+    //@Cfg("MaxQuestions")
+    private static int MAX_QUESTIONS = 2;
     @Cfg("MinutesToCompleteTest")
-    private static int MAX_MINUTES_TO_COMPLETE = 19;
+    private static int MAX_MINUTES_TO_COMPLETE = 20;
     @Cfg("AttemptsToCompleteTestWithoutBadMark")
     private static int MAX_ATTEMPTS = 2;
     @Cfg("MinCorrectAnswersCountToCompleteTest")
     private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 6;
-    @Cfg("MinMark")
-    private static int MIN_MARK = 20;
+    //@Cfg("MinMark")
+    private static int MIN_MARK = 5;
     @Cfg("MaxMark")
     private static int MAX_MARK = 40;
+    @Cfg("PointForOneCorrectanswer")
+    private static double POINT_FOR_CORRECT_ANSWER = 2.6;
 
     static {
         load();
@@ -67,6 +69,10 @@ public class Configs {
 
         public static int maxMark() {
             return MAX_MARK;
+        }
+
+        public static double pointForOneCorrectanswer() {
+            return POINT_FOR_CORRECT_ANSWER;
         }
     }
 

@@ -1,11 +1,13 @@
 package ru.stankin.test.model;
 
+import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
 import jfork.nproperty.Cfg;
 import ru.stankin.Configs;
 import ru.stankin.test.holders.QuestionsHolder;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,15 +26,20 @@ public class Test {
     private List<Answer> currentAnswers;
     private int correctAnswersCount;
 
+    private TDoubleArrayList studentsPoints;
+    public int currentAttemptIndex;
+
 
     public Test() {
         availableAttempts = Configs.Test.attempts();
+        studentsPoints = new TDoubleArrayList();
         answersMap = new TIntIntHashMap();
         clearAndUpdateQuestions();
     }
 
     public void decrementAttempts() {
         availableAttempts--;
+        currentAttemptIndex++;
     }
 
     public void clearAndUpdateQuestions() {
@@ -59,8 +66,11 @@ public class Test {
 
     public boolean checkCurrentStudentAnswer() {
         boolean correct = answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer;
-        if (correct)
+        if (correct) {
             correctAnswersCount++;
+            if (haveAnyAttempts())
+                incrementStudentsPoint();
+        }
         return correct;
     }
 
@@ -88,7 +98,7 @@ public class Test {
         return correctAnswersCount;
     }
 
-    public int getCurrentQustionNumber() {
+    public int getCurrentQuestionNumber() {
         return currentQuestionPosition + 1;
     }
 
@@ -102,5 +112,25 @@ public class Test {
         currentQuestionPosition = -1;
         answersMap.clear();
         currentStudentAnswer = -1;
+    }
+
+    private void incrementStudentsPoint() {
+        studentsPoints[currentAttemptIndex] = studentsPoints[currentAttemptIndex] + Configs.Test.pointForOneCorrectanswer();
+    }
+
+    public long getTotalPointForCurrentAttempt() {
+        return haveAnyAttempts() ? Math.round(studentsPoints[currentAttemptIndex]) : Configs.Test.minMark();
+    }
+
+    public long getMaxOfPointsForAllAttempts() {
+        double max = studentsPoints[0];
+        for (double studentsPoint : studentsPoints)
+            if (max < studentsPoint)
+                max = studentsPoint;
+        return Math.round(max);
+    }
+
+    public boolean isDone() {
+        return getMaxOfPointsForAllAttempts() >= Configs.Test.minMark();
     }
 }

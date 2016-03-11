@@ -3,9 +3,7 @@ package ru.stankin.test;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -130,7 +128,7 @@ public class TestController extends AbstractController {
         currentTimeLine.stop();
         test.decrementAttempts();
         test.clearAndUpdateQuestions();
-        showResults(false);
+        //showResults(false);
         prepareUIToStartTest();
     }
 
@@ -149,7 +147,7 @@ public class TestController extends AbstractController {
         }
         if (question.getText() != null)
             questionText.setText(question.getText());
-        currentQuestion.setText(Integer.toString(test.getCurrentQustionNumber()));
+        currentQuestion.setText(Integer.toString(test.getCurrentQuestionNumber()));
         int answerNum = AnswerNumber.FIRST;
         allButtons.forEach(radioButton -> {
             radioButton.setGraphic(null);
@@ -250,8 +248,9 @@ public class TestController extends AbstractController {
                 currentTimeLine.play();
             } else if (test.isCompleteCorrect())
                 showResults(true);
-            else if (test.haveAnyAttempts())
-                tryAgain();
+            else
+                showResults(false);
+
         }
     }
 
@@ -281,25 +280,35 @@ public class TestController extends AbstractController {
         correctAnswerCount.setAlignment(Pos.CENTER);
         vBox.getChildren().add(correctAnswerCount);
 
-        boolean next = success || !test.haveAnyAttempts();
-        Button actionButton = new Button(next ? "Приступить к лабораторной работе" : "Пройти тест заново");
-        EventHandler<ActionEvent> eventHandler;
-        if (next)
-            eventHandler = event -> {
+        Label points = new Label("Ваш балл: " + test.getMaxOfPointsForAllAttempts());
+        points.setAlignment(Pos.CENTER);
+        vBox.getChildren().add(points);
+
+        Button nextButton = null;
+        Button tryAgainButton = null;
+        if (test.isDone()) {
+            nextButton = new Button("Приступить к лабораторной работе");
+            nextButton.setOnAction(event -> {
                 tmpStage.close();
                 getMainApplication().nextStage();
-            };
-        else
-            eventHandler = event -> {
+            });
+        } else if (!success || test.haveAnyAttempts()) {
+            tryAgainButton = new Button("Пройти тест повторно");
+            tryAgainButton.setOnAction(event -> {
                 tmpStage.close();
+                tryAgain();
                 showNextQuestion();
                 currentTimeLine.play();
-            };
-        actionButton.setOnAction(eventHandler);
-        vBox.getChildren().add(actionButton);
+            });
+        }
+
+        if (nextButton != null)
+            vBox.getChildren().add(nextButton);
+        if (tryAgainButton != null)
+            vBox.getChildren().add(tryAgainButton);
 
         borderPane.setCenter(vBox);
-        BorderPane.setAlignment(vBox, Pos.CENTER);
+        //BorderPane.setAlignment(vBox, Pos.CENTER);
         Stage primaryStage = getMainApplication().getPrimaryStage();
         tmpStage.initOwner(primaryStage);
         tmpStage.setIconified(false);
