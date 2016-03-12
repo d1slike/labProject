@@ -2,7 +2,6 @@ package ru.stankin.test.model;
 
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
-import jfork.nproperty.Cfg;
 import ru.stankin.Configs;
 import ru.stankin.test.holders.QuestionsHolder;
 
@@ -25,14 +24,25 @@ public class Test {
     private int correctAnswersCount;
 
 
+    private double currentPoints;
+    private double currentPointsCacheCopy;
+    private double maxPoints;
+
+
     public Test() {
         availableAttempts = Configs.Test.attempts();
         answersMap = new TIntIntHashMap();
+        //studentPoints = new TDoubleArrayList();
         clearAndUpdateQuestions();
     }
 
     public void decrementAttempts() {
         availableAttempts--;
+        if (maxPoints < currentPoints)
+            maxPoints = currentPoints;
+        currentPointsCacheCopy = currentPoints;
+        currentPoints = 0;
+
     }
 
     public void clearAndUpdateQuestions() {
@@ -59,8 +69,10 @@ public class Test {
 
     public boolean checkCurrentStudentAnswer() {
         boolean correct = answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer;
-        if (correct)
+        if (correct) {
             correctAnswersCount++;
+            currentPoints += Configs.Test.pointsForCorrectAnswer();
+        }
         return correct;
     }
 
@@ -76,7 +88,7 @@ public class Test {
         return currentAnswers;
     }
 
-    public boolean isCompleteCorrect() {
+    public boolean isCompleteCorrectNow() {
         return correctAnswersCount >= Configs.Test.correctAnswersToComplete();
     }
 
@@ -90,6 +102,18 @@ public class Test {
 
     public int getCurrentQustionNumber() {
         return currentQuestionPosition + 1;
+    }
+
+    public long getCurrentPoints() {
+        return Math.round(currentPointsCacheCopy);
+    }
+
+    public long getMaxPoints() {
+        return Math.round(maxPoints);
+    }
+
+    public boolean isDone() {
+        return isCompleteCorrectNow() || getMaxPoints() >= Configs.Test.minPoints();
     }
 
     public void setCurrentStudentAnswer(int number) {

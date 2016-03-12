@@ -8,7 +8,6 @@ import org.dom4j.io.SAXReader;
 import ru.stankin.Configs;
 import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
-import ru.stankin.test.model.Test;
 import ru.stankin.utils.Rnd;
 import ru.stankin.utils.Util;
 import ru.stankin.utils.files.CipherFileStreamFactory;
@@ -54,6 +53,7 @@ public class QuestionsHolder {
             if(!file.exists())
                 throw new FileNotFoundException("Data file is not found!");
             SAXReader reader = new SAXReader();
+            reader.setEncoding("UTF-8");
             reader.setIgnoreComments(true);
 
             Document document = reader.read(CipherFileStreamFactory.getInstance().getSafeFileInputStream(file));

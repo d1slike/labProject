@@ -3,7 +3,6 @@ package ru.stankin;
 
 import jfork.nproperty.Cfg;
 import jfork.nproperty.ConfigParser;
-import ru.stankin.test.model.Test;
 import ru.stankin.utils.Util;
 import ru.stankin.utils.files.CipherFileStreamFactory;
 
@@ -17,17 +16,19 @@ public class Configs {
     private static final String PROPERTY_FILE = "properties.ini";
 
     @Cfg("MaxQuestions")
-    private static int MAX_QUESTIONS = 10;
+    private static int MAX_QUESTIONS = 2;
     @Cfg("MinutesToCompleteTest")
-    private static int MAX_MINUTES_TO_COMPLETE = 19;
+    private static int MAX_MINUTES_TO_COMPLETE = 20;
     @Cfg("AttemptsToCompleteTestWithoutBadMark")
     private static int MAX_ATTEMPTS = 2;
     @Cfg("MinCorrectAnswersCountToCompleteTest")
-    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 6;
-    @Cfg("MinMark")
-    private static int MIN_MARK = 20;
+    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
+    /*@Cfg("MinMark")
+    private static int MIN_MARK = 3;
     @Cfg("MaxMark")
-    private static int MAX_MARK = 40;
+    private static int MAX_MARK = 5;*/
+    @Cfg("PointSForCorrectAnswer")
+    private static double POINTS_FOR_CORRECT_ANSWER = 2.6;
 
     static {
         load();
@@ -45,6 +46,9 @@ public class Configs {
     }
 
     public static class Test {
+        private static int minPoints = (int) Math.round(MIN_CORRECT_ANSWERS_TO_COMPLETE * POINTS_FOR_CORRECT_ANSWER);
+        private static int maxPoints = (int) Math.round(MAX_QUESTIONS * POINTS_FOR_CORRECT_ANSWER);
+
         public static int maxQuestions() {
             return MAX_QUESTIONS;
         }
@@ -61,13 +65,19 @@ public class Configs {
             return MIN_CORRECT_ANSWERS_TO_COMPLETE;
         }
 
-        public static int minMark() {
-            return MIN_MARK;
+        public static int minPoints() {
+            return minPoints;
         }
 
-        public static int maxMark() {
-            return MAX_MARK;
+        public static int maxPoints() {
+            return maxPoints;
         }
+
+        public static double pointsForCorrectAnswer() {
+            return POINTS_FOR_CORRECT_ANSWER;
+        }
+
+
     }
 
 }

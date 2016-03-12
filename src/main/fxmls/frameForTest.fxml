@@ -1,49 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.test.TestController">
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="ru.stankin.test.TestController">
    <center>
       <VBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: black; -fx-border-radius: 25; -fx-border-width: 2; -fx-border-style: dashed;" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" spacing="10.0">
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="290.0" prefWidth="970.0" spacing="10.0">
                <children>
-                  <Label fx:id="questionText" alignment="CENTER" text="Text" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="questionText" alignment="CENTER" prefHeight="79.0" prefWidth="950.0" text="Text"
+                         textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
                      <VBox.margin>
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </Label>
-                  <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" visible="false" />
+                  <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="600.0" pickOnBounds="true"
+                             preserveRatio="true" visible="false"/>
                </children>
             </VBox>
-            <RadioButton fx:id="firstAnswer" mnemonicParsing="false" onAction="#onSelectFirst" selected="true" text="A" textOverrun="CLIP" wrapText="true">
-               <toggleGroup>
-                  <ToggleGroup fx:id="answerGroup" />
-               </toggleGroup>
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin>
-            </RadioButton>
-            <RadioButton fx:id="secondAnswer" mnemonicParsing="false" onAction="#onSelectSecond" text="B" textOverrun="CLIP" toggleGroup="$answerGroup" wrapText="true">
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin></RadioButton>
-            <RadioButton fx:id="thirdAnswer" mnemonicParsing="false" onAction="#onSelectThird" text="C" textOverrun="CLIP" toggleGroup="$answerGroup" wrapText="true">
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin></RadioButton>
-            <RadioButton fx:id="fourthAnswer" mnemonicParsing="false" onAction="#onSelectFourth" text="D" textOverrun="CLIP" toggleGroup="$answerGroup" wrapText="true">
-               <VBox.margin>
-                  <Insets left="20.0" />
-               </VBox.margin></RadioButton>
+            <VBox>
+               <children>
+                  <RadioButton fx:id="firstAnswer" mnemonicParsing="false" onAction="#onSelectFirst" selected="true"
+                               text="A" textOverrun="CLIP" wrapText="true">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="answerGroup"/>
+                     </toggleGroup>
+                     <VBox.margin>
+                        <Insets left="20.0"/>
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="secondAnswer" mnemonicParsing="false" onAction="#onSelectSecond" text="B"
+                               textOverrun="CLIP" toggleGroup="$answerGroup" wrapText="true">
+                     <VBox.margin>
+                        <Insets left="20.0"/>
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="thirdAnswer" mnemonicParsing="false" onAction="#onSelectThird" text="C"
+                               textOverrun="CLIP" toggleGroup="$answerGroup" wrapText="true">
+                     <VBox.margin>
+                        <Insets left="20.0"/>
+                     </VBox.margin>
+                  </RadioButton>
+                  <RadioButton fx:id="fourthAnswer" mnemonicParsing="false" onAction="#onSelectFourth" text="D"
+                               textOverrun="CLIP" toggleGroup="$answerGroup" wrapText="true">
+                     <VBox.margin>
+                        <Insets left="20.0"/>
+                     </VBox.margin>
+                  </RadioButton>
+               </children>
+            </VBox>
             <HBox alignment="CENTER">
                <children>
-                  <Label fx:id="currentResultLabel" text="Ответ" textAlignment="CENTER">
+                  <Label fx:id="currentAnswerResultLabel" text="Ответ" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets top="30.0" />
                      </HBox.margin>
@@ -106,13 +120,27 @@
       </BorderPane>
    </top>
    <bottom>
-      <Button fx:id="nextButton" mnemonicParsing="false" onAction="#onNextButtonClick" prefHeight="30.0" prefWidth="120.0" text="Далее" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="3.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="nextButton" alignment="CENTER" mnemonicParsing="false" onAction="#onNextButtonClick"
+                    prefHeight="30.0" prefWidth="120.0" text="Далее" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="25.0" top="25.0"/>
+               </BorderPane.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND"/>
+               </cursor>
+            </Button>
+            <Label fx:id="infoAboutNextLabel" alignment="CENTER" text="*Для продолжения нажмите &quot;Далее&quot;"
+                   textFill="GREY">
+               <font>
+                  <Font size="14.0"/>
+               </font>
+            </Label>
+         </children>
          <BorderPane.margin>
-            <Insets bottom="25.0" top="25.0" />
+            <Insets bottom="10.0" top="10.0"/>
          </BorderPane.margin>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
+      </VBox>
    </bottom>
 </BorderPane>
