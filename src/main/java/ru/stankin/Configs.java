@@ -13,7 +13,7 @@ import java.io.InputStream;
  */
 public class Configs {
 
-    private static final String PROPERTY_FILE = "properties.ini";
+    private static final String PROPERTY_FILE = "resources/properties.ini";
 
     @Cfg("MaxQuestions")
     private static int MAX_QUESTIONS = 2;

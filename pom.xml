@@ -67,9 +67,6 @@
                             <resources>
                                 <resource>
                                     <directory>resources</directory>
-                                    <excludes>
-                                        <exclude>*.ini</exclude>
-                                    </excludes>>
                                 </resource>
                             </resources>
                         </configuration>
@@ -85,9 +82,9 @@
                             <encoding>UTF-8</encoding>
                             <resources>
                                 <resource>
-                                    <directory>resources</directory>
+                                    <directory>/</directory>
                                     <includes>
-                                        <include>*.ini</include>
+                                        <include>version.ini</include>
                                     </includes>
                                 </resource>
                             </resources>

@@ -19,12 +19,13 @@ import java.util.StringTokenizer;
 /**
  * Created by Dislike on 27.02.2016.
  */
-public class ApplicationUpdater extends Service<UpdateStatus> {
+class ApplicationUpdater extends Service<UpdateStatus> {
 
     private static final String APPLICATION_TOKEN = "smHMgyG3CFAAAAAAAAAABzbibSgnKcSxEFORi_l0zNkSaK7hWlOrTQICvuHdGxcC";
     private static final String REMOTE_VER_FILE_NAME = "remote_ver.ini";
     private static final String LOCAL_VER_FILE_NAME = "version.ini";
-    private static final String RESOURCES_DIRECTORY_NAME = "res";
+    private static final String LOCAL_RESOURCES_DIRECTORY_NAME = "res";
+    private static final String REMOTE_RESOURCES_DIRECTORY_NAME = "remote_res";
 
     public static final String UPDATE_STATE_CHECK_NEED_UPDATE = "Проверка наличия обновлений...";
     public static final String UPDATE_STATE_UPDATING = "Обновление...";
@@ -32,12 +33,18 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
 
     private DbxClientV2 client;
     private UpdateWindowController controller;
+    private Version currentVersion;
+    private Version newVersion;
 
 
     public ApplicationUpdater(UpdateWindowController controller) {
         DbxRequestConfig config = new DbxRequestConfig("LabProjectClient", Locale.getDefault().toString());
         client = new DbxClientV2(config, APPLICATION_TOKEN);
         this.controller = controller;
+    }
+
+    public Version getCurrentVersion() {
+        return currentVersion;
     }
 
 
@@ -95,20 +102,22 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
 
         private UpdateStatus update() {
             if (checkForNeedUpdate()) {
-                if (FileUtils.deleteFiles(RESOURCES_DIRECTORY_NAME)) {
-                    if (new File(RESOURCES_DIRECTORY_NAME).mkdir()) {
-                        getResourcesDirSize("/" + RESOURCES_DIRECTORY_NAME);
-                        updateProgress(0, resourcesDirSize);
-                        currentUpdateStatus = UpdateStatus.PREPARED;
-                        controller.setCurrentStateText(UPDATE_STATE_UPDATING);
-                        downloadResource("/" + RESOURCES_DIRECTORY_NAME);
-                        if (currentUpdateStatus != UpdateStatus.FAIL) {
-                            currentUpdateStatus = UpdateStatus.SUCCESS;
-                            FileUtils.deleteFiles(LOCAL_VER_FILE_NAME);
-                            FileUtils.rename(REMOTE_VER_FILE_NAME, LOCAL_VER_FILE_NAME);
-                        }
+                if (new File(REMOTE_RESOURCES_DIRECTORY_NAME).mkdir()) {
+                    getResourcesDirSize("/" + REMOTE_RESOURCES_DIRECTORY_NAME);
+                    updateProgress(0, resourcesDirSize);
+                    currentUpdateStatus = UpdateStatus.PREPARED;
+                    controller.setCurrentStateText(UPDATE_STATE_UPDATING);
+                    downloadResource("/" + REMOTE_RESOURCES_DIRECTORY_NAME);
+                    if (currentUpdateStatus != UpdateStatus.FAIL) {
+                        FileUtils.deleteFiles(LOCAL_RESOURCES_DIRECTORY_NAME);
+                        FileUtils.rename(REMOTE_RESOURCES_DIRECTORY_NAME, LOCAL_RESOURCES_DIRECTORY_NAME);
+                        FileUtils.deleteFiles(LOCAL_VER_FILE_NAME);
+                        FileUtils.rename(REMOTE_VER_FILE_NAME, LOCAL_VER_FILE_NAME);
+                        currentVersion = newVersion;
+                        currentUpdateStatus = UpdateStatus.SUCCESS;
                     }
                 }
+
             }
             return currentUpdateStatus;
         }
@@ -143,10 +152,12 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
                 currentUpdateStatus = UpdateStatus.LOCAL_FILE_VERSION_IS_BAD;
                 return false;
             }
+            currentVersion = localVersion;
             Version remoteVersion = downloadAndGetRemoteVersion();
             boolean needUpdate = remoteVersion != null && remoteVersion.isOlderThen(localVersion);
             if (!needUpdate)
                 FileUtils.deleteFiles(REMOTE_VER_FILE_NAME);
+            newVersion = remoteVersion;
             return needUpdate;
 
         }

@@ -33,4 +33,9 @@ class Version {
             return true;
         return false;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append(mainVersion).append(".").append(subVersion).append(".").append(revision).toString();
+    }
 }
