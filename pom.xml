@@ -106,12 +106,17 @@
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.2.0</version>
+
                 <configuration>
                     <vendor>Yan</vendor>
                     <bundler>ALL</bundler>
                     <appName>RCalc</appName>
                     <deployDir>deploy</deployDir>
                     <mainClass>ru.stankin.MainApplication</mainClass>
+                    <bundleArguments>
+                    <runtime>C:\Program Files (x86)\Java\jdk1.8.0_73\jre</runtime>
+                    <win.64Bit>x86</win.64Bit><!-- overwrite System.getProperty("os.arch") for bundler-detection -->
+                </bundleArguments>
                 </configuration>
             </plugin>
         </plugins>

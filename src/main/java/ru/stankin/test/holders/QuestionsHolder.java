@@ -37,9 +37,9 @@ public class QuestionsHolder {
 
     public List<Question> getRndListOfQuestion() {
         List<Question> copy = new LinkedList<>(questions.valueCollection());
-        final int maXQuestions = Configs.Test.maxQuestions();
-        List<Question> toShows = new ArrayList<>(maXQuestions);
-        while (!copy.isEmpty() && toShows.size() < maXQuestions) {
+        final int maxQuestions = Configs.Test.maxQuestions();
+        List<Question> toShows = new ArrayList<>(maxQuestions);
+        while (!copy.isEmpty() && toShows.size() < maxQuestions) {
             int size = copy.size();
             Question question = size == 1 ? copy.remove(0) : copy.remove(Rnd.get(size));
             toShows.add(question);
