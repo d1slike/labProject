@@ -2,6 +2,7 @@ package ru.stankin.work.managers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import ru.stankin.Configs;
 import ru.stankin.enums.VariableType;
 import ru.stankin.work.math.Calculator;
 import ru.stankin.work.model.ResultRecord;
@@ -18,8 +19,8 @@ import java.util.stream.Stream;
 public class VariableManager {
     public static final VariableType[] EDITABLE_VAR_TYPES_ARRAY = {VariableType.RO, VariableType.R, VariableType.L, VariableType.E, /*VariableType.Zc,*/
             VariableType.GAMMA, VariableType.M, VariableType.H, VariableType.TAU};
-    public static final int ALT_VAR_MAX_STEP_COUNT = 4;
-    public static final int TIME_STEPS_COUNT = 11;
+    public static final int ALT_VAR_MAX_STEP_COUNT = Configs.Lab.altVarSteps();
+    public static final int TIME_STEPS_COUNT = Configs.Lab.timeSteps();
 
     private final Map<VariableType, Variable> activeVariables;
     private final ObservableList<ResultRecord> resultRecords;

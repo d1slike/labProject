@@ -23,20 +23,20 @@ public class Configs {
     private static int MAX_ATTEMPTS = 2;
     @Cfg("MinCorrectAnswersCountToCompleteTest")
     private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
-    /*@Cfg("MinMark")
-    private static int MIN_MARK = 3;
-    @Cfg("MaxMark")
-    private static int MAX_MARK = 5;*/
     @Cfg("PointSForCorrectAnswer")
     private static double POINTS_FOR_CORRECT_ANSWER = 2.6;
+
+    @Cfg("TimeStepsInWork")
+    private static int TIME_STEPS_IN_WORK = 11;
+    @Cfg("AltVarStepsInWork")
+    private static int ALT_VAR_STEPS_IN_WORK = 4;
 
     static {
         load();
     }
 
     private static void load() {
-        try {
-            InputStream stream = CipherFileStreamFactory.getInstance().getSafeFileInputStream(PROPERTY_FILE);
+        try(InputStream stream = CipherFileStreamFactory.getInstance().getSafeFileInputStream(PROPERTY_FILE)) {
             ConfigParser.parse(Configs.class,
                     stream,
                     PROPERTY_FILE);
@@ -77,7 +77,16 @@ public class Configs {
             return POINTS_FOR_CORRECT_ANSWER;
         }
 
+    }
 
+    public static class Lab {
+        public static int timeSteps() {
+            return TIME_STEPS_IN_WORK;
+        }
+
+        public static int altVarSteps() {
+            return ALT_VAR_STEPS_IN_WORK;
+        }
     }
 
 }
