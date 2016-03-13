@@ -37,7 +37,15 @@ public class Test {
     }
 
     public void decrementAttempts() {
-        availableAttempts--;
+        if (haveAnyAttempts()) {
+            availableAttempts--;
+
+            if (isCompleteCorrectNow() && !haveAnyAttempts() && !isDone()) {
+                currentPoints = maxPoints = Configs.Test.minPoints();
+                return;
+            }
+        }
+
         if (maxPoints < currentPoints)
             maxPoints = currentPoints;
         currentPointsCacheCopy = currentPoints;
