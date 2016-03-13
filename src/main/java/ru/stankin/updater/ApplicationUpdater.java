@@ -19,17 +19,19 @@ import java.util.StringTokenizer;
 /**
  * Created by Dislike on 27.02.2016.
  */
-class ApplicationUpdater extends Service<UpdateStatus> {
+public class ApplicationUpdater extends Service<UpdateStatus> {
 
     private static final String APPLICATION_TOKEN = "smHMgyG3CFAAAAAAAAAABzbibSgnKcSxEFORi_l0zNkSaK7hWlOrTQICvuHdGxcC";
     private static final String REMOTE_VER_FILE_NAME = "remote_ver.ini";
     private static final String LOCAL_VER_FILE_NAME = "version.ini";
-    private static final String LOCAL_RESOURCES_DIRECTORY_NAME = "res";
-    private static final String REMOTE_RESOURCES_DIRECTORY_NAME = "remote_res";
+    private static final String LOCAL_RESOURCES_DIRECTORY_NAME = "resources";
+    private static final String REMOTE_RESOURCES_DIRECTORY_NAME = "remote_resources";
 
     public static final String UPDATE_STATE_CHECK_NEED_UPDATE = "Проверка наличия обновлений...";
     public static final String UPDATE_STATE_UPDATING = "Обновление...";
     public static final String UPDATE_STATE_PROGRAMM_RUNING = "Запуск программы...";
+
+    private static final Version DEFAULT_VERSION = new Version(1,0,0);
 
     private DbxClientV2 client;
     private UpdateWindowController controller;
@@ -44,7 +46,7 @@ class ApplicationUpdater extends Service<UpdateStatus> {
     }
 
     public Version getCurrentVersion() {
-        return currentVersion;
+        return currentVersion == null ? DEFAULT_VERSION : currentVersion;
     }
 
 
