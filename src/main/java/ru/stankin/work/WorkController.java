@@ -37,9 +37,10 @@ public class WorkController extends AbstractController {
             return change;
         else if (length > 9)
             return null;
-        char[] chars = content.toCharArray();
-        char lastChar = chars[chars.length - 1];
-        return ((lastChar >= '0' && lastChar <= '9') || lastChar == '.') ? change : null;
+        char lastChar = content.charAt(length - 1);
+        boolean validLastChar = (lastChar >= '0' && lastChar <= '9') || lastChar == '.';
+        boolean dotCheck = content.indexOf('.') == content.lastIndexOf('.');
+        return validLastChar && dotCheck ? change : null;
     };
 
     private VariableManager variableManager;
@@ -229,13 +230,14 @@ public class WorkController extends AbstractController {
                     return;
                 int index = newValue.getIndex();
                 String color = "";
-                if (index >= 0 && index < 11)
+                final int timeSteps = VariableManager.TIME_STEPS_COUNT;
+                if (index >= 0 && index < timeSteps)
                     color = ChartController.FIRST_LINE_COLOR;
-                else if (index >= 11 && index < 22)
+                else if (index >= timeSteps && index < timeSteps * 2)
                     color = ChartController.SECOND_LINE_COLOR;
-                else if (index >= 22 && index < 33)
+                else if (index >= timeSteps * 2 && index < timeSteps * 3)
                     color = ChartController.THIRD_LINE_COLOR;
-                else if (index >= 33 && index < 44)
+                else if (index >= timeSteps * 3 && index < timeSteps * 4)
                     color = ChartController.FORTH_LINE_COLOR;
                 tableRow.setStyle("-fx-background-color: #" + color);
             }));

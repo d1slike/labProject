@@ -1,12 +1,10 @@
 package ru.stankin.work.subcontrollers;
 
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.stankin.MainApplication;
 import ru.stankin.utils.Util;
@@ -16,7 +14,6 @@ import ru.stankin.work.model.ResultRecord;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Created by DisDev on 27.01.2016.
@@ -78,7 +75,7 @@ public class ChartController {
         Scene scene = new Scene(pane);
         stage = new Stage();
         stage.setTitle("Графики");
-        stage.initModality(Modality.NONE);
+        //stage.initModality(Modality.NONE);
         stage.setHeight(CHART_HEIGHT);
         stage.setWidth(CHART_WIDTH * 2);
         stage.setIconified(false);
@@ -99,14 +96,14 @@ public class ChartController {
             yAxisForDynamicReactionsChart.setLabel(researchVarName + " динамическая");
             yAxisForFullReactionsChart.setLabel(researchVarName + " полная");
 
-            ObservableList<ResultRecord> list = variableManager.getResultRecords();
+            List<ResultRecord> list = variableManager.getResultRecords();
             String altVarName = variableManager.getAltVariable().getName();
             dynamicReactionsChart.getData().addAll(buildLines(list, altVarName, false));
             fullReactionsChart.getData().addAll(buildLines(list, altVarName, true));
             alreadyBuilt = true;
         }
         inShowing = true;
-        stage.showAndWait();
+        stage.show();
     }
 
     public void clear() {
@@ -124,48 +121,21 @@ public class ChartController {
     private List<XYChart.Series<Number, Number>> buildLines(List<ResultRecord> resultRecords, String altVarName, boolean fullReaction) {
         final int maxTimeSteps = VariableManager.TIME_STEPS_COUNT;
 
+        List<XYChart.Series<Number, Number>> list = new ArrayList<>();
         int currentPos = 0;
         int lastTime = maxTimeSteps;
-
-        XYChart.Series<Number, Number> firstLine = new XYChart.Series<>();
-        firstLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
-        for (int i = currentPos; i < lastTime; i++) {
-            ResultRecord record = resultRecords.get(i);
-            firstLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
-        }
-
-        currentPos += maxTimeSteps;
-        lastTime += maxTimeSteps;
-
-        XYChart.Series<Number, Number> secondLine = new XYChart.Series<>();
-        secondLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
-        for (int i = currentPos; i < lastTime; i++) {
-            ResultRecord record = resultRecords.get(i);
-            secondLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
-        }
-
-        currentPos += maxTimeSteps;
-        lastTime += maxTimeSteps;
-
-        XYChart.Series<Number, Number> thirdLine = new XYChart.Series<>();
-        thirdLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
-        for (int i = currentPos; i < lastTime; i++) {
-            ResultRecord record = resultRecords.get(i);
-            thirdLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
-        }
-
-        currentPos += maxTimeSteps;
-        lastTime += maxTimeSteps;
-
-        XYChart.Series<Number, Number> fourthLine = new XYChart.Series<>();
-        fourthLine.setName(altVarName + " = " + Util.doubleCommaFormat(resultRecords.get(currentPos).getAltVar()) + " ");
-        for (int i = currentPos; i < lastTime; i++) {
-            ResultRecord record = resultRecords.get(i);
-            fourthLine.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
-        }
-
-        List<XYChart.Series<Number, Number>> list = new ArrayList<>();
-        Stream.of(firstLine, secondLine, thirdLine, fourthLine).forEach(list::add);
+        for (int i = 0; i < VariableManager.ALT_VAR_MAX_STEP_COUNT; i++, currentPos = lastTime, lastTime += maxTimeSteps)
+            list.add(buildLine(resultRecords, currentPos, lastTime, altVarName, fullReaction));
         return list;
+    }
+
+    private XYChart.Series<Number, Number> buildLine(List<ResultRecord> data, int firstIndex, int lastIndex, String altVarName, boolean fullReaction) {
+        XYChart.Series<Number, Number> line = new XYChart.Series<>();
+        line.setName(altVarName + " = " + Util.doubleCommaFormat(data.get(firstIndex).getAltVar()) + " ");
+        for (int i = firstIndex; i < lastIndex; i++) {
+            ResultRecord record = data.get(i);
+            line.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
+        }
+        return line;
     }
 }
