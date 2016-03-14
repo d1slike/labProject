@@ -3,7 +3,6 @@ package ru.stankin;
 
 import jfork.nproperty.Cfg;
 import jfork.nproperty.ConfigParser;
-import ru.stankin.test.model.Test;
 import ru.stankin.utils.Util;
 import ru.stankin.utils.files.CipherFileStreamFactory;
 
@@ -14,30 +13,30 @@ import java.io.InputStream;
  */
 public class Configs {
 
-    private static final String PROPERTY_FILE = "properties.ini";
+    private static final String PROPERTY_FILE = "resources/properties.ini";
 
-    //@Cfg("MaxQuestions")
+    @Cfg("MaxQuestions")
     private static int MAX_QUESTIONS = 2;
     @Cfg("MinutesToCompleteTest")
     private static int MAX_MINUTES_TO_COMPLETE = 20;
     @Cfg("AttemptsToCompleteTestWithoutBadMark")
     private static int MAX_ATTEMPTS = 2;
     @Cfg("MinCorrectAnswersCountToCompleteTest")
-    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 6;
-    //@Cfg("MinMark")
-    private static int MIN_MARK = 5;
-    @Cfg("MaxMark")
-    private static int MAX_MARK = 40;
-    @Cfg("PointForOneCorrectanswer")
-    private static double POINT_FOR_CORRECT_ANSWER = 2.6;
+    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
+    @Cfg("PointSForCorrectAnswer")
+    private static double POINTS_FOR_CORRECT_ANSWER = 2.6;
+
+    @Cfg("TimeStepsInWork")
+    private static int TIME_STEPS_IN_WORK = 11;
+    @Cfg("AltVarStepsInWork")
+    private static int ALT_VAR_STEPS_IN_WORK = 4;
 
     static {
         load();
     }
 
     private static void load() {
-        try {
-            InputStream stream = CipherFileStreamFactory.getInstance().getSafeFileInputStream(PROPERTY_FILE);
+        try(InputStream stream = CipherFileStreamFactory.getInstance().getSafeFileInputStream(PROPERTY_FILE)) {
             ConfigParser.parse(Configs.class,
                     stream,
                     PROPERTY_FILE);
@@ -47,6 +46,9 @@ public class Configs {
     }
 
     public static class Test {
+        private static int minPoints = (int) Math.round(MIN_CORRECT_ANSWERS_TO_COMPLETE * POINTS_FOR_CORRECT_ANSWER);
+        private static int maxPoints = (int) Math.round(MAX_QUESTIONS * POINTS_FOR_CORRECT_ANSWER);
+
         public static int maxQuestions() {
             return MAX_QUESTIONS;
         }
@@ -63,16 +65,27 @@ public class Configs {
             return MIN_CORRECT_ANSWERS_TO_COMPLETE;
         }
 
-        public static int minMark() {
-            return MIN_MARK;
+        public static int minPoints() {
+            return minPoints;
         }
 
-        public static int maxMark() {
-            return MAX_MARK;
+        public static int maxPoints() {
+            return maxPoints;
         }
 
-        public static double pointForOneCorrectanswer() {
-            return POINT_FOR_CORRECT_ANSWER;
+        public static double pointsForCorrectAnswer() {
+            return POINTS_FOR_CORRECT_ANSWER;
+        }
+
+    }
+
+    public static class Lab {
+        public static int timeSteps() {
+            return TIME_STEPS_IN_WORK;
+        }
+
+        public static int altVarSteps() {
+            return ALT_VAR_STEPS_IN_WORK;
         }
     }
 

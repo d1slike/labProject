@@ -61,6 +61,8 @@ public class TestController extends AbstractController {
     private Label secondsLabel;
     @FXML
     private Button nextButton;
+    @FXML
+    private Label infoAboutNextLabel;
 
     @FXML
     private Label questionText;
@@ -73,7 +75,7 @@ public class TestController extends AbstractController {
     private Label maxQuestion;
 
     @FXML
-    private Label currentResultLabel;
+    private Label currentAnswerResultLabel;
 
     @FXML
     private RadioButton firstAnswer;
@@ -92,8 +94,10 @@ public class TestController extends AbstractController {
             currentTimeLine.stop();
             currentTimeLine = null;
         }
-        test = null;
         allButtons.clear();
+        Stage stage = getMainApplication().getPrimaryStage();
+        stage.setTitle(stage.getTitle() + " - Оценка за тест: " + test.getMaxPoints());
+        test = null;
     }
 
     @FXML
@@ -105,8 +109,9 @@ public class TestController extends AbstractController {
                 event -> timeTick()));
         allButtons = new ArrayList<>(4);
         Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer).forEach(allButtons::add);
-        currentResultLabel.setVisible(false);
+        currentAnswerResultLabel.setVisible(false);
         showNextQuestion();
+        infoAboutNextLabel.setVisible(false);
         currentTimeLine.setCycleCount(Animation.INDEFINITE);
         currentTimeLine.play();
     }
@@ -114,7 +119,8 @@ public class TestController extends AbstractController {
     private synchronized void timeTick() {
         if (--secondsToShow == 0) {
             if (currentMinutesToCompleteTest == 0) {
-                tryAgain();
+                //tryAgain();
+                prepareAndShowResults();
                 return;
             }
             secondsToShow = SECONDS_INIT_VALUE;
@@ -125,11 +131,18 @@ public class TestController extends AbstractController {
     }
 
     private void tryAgain() {
+        //currentTimeLine.stop();
+        //test.decrementAttempts();
+        test.clearAndUpdateQuestions();
+        prepareUIToStartTest();
+        showNextQuestion();
+        currentTimeLine.play();
+    }
+
+    private void prepareAndShowResults() {
         currentTimeLine.stop();
         test.decrementAttempts();
-        test.clearAndUpdateQuestions();
-        //showResults(false);
-        prepareUIToStartTest();
+        showResults(test.isCompleteCorrectNow());
     }
 
     private void updateSecondsLabel() {
@@ -147,7 +160,7 @@ public class TestController extends AbstractController {
         }
         if (question.getText() != null)
             questionText.setText(question.getText());
-        currentQuestion.setText(Integer.toString(test.getCurrentQuestionNumber()));
+        currentQuestion.setText(Integer.toString(test.getCurrentQustionNumber()));
         int answerNum = AnswerNumber.FIRST;
         allButtons.forEach(radioButton -> {
             radioButton.setGraphic(null);
@@ -236,9 +249,9 @@ public class TestController extends AbstractController {
         if (currentState == State.SELECT_ANSWER) {
             currentTimeLine.pause();
             boolean isCorrect = test.checkCurrentStudentAnswer();
-            currentResultLabel.setText(isCorrect ? "Верный ответ" : "Неверный ответ");
-            currentResultLabel.setTextFill(isCorrect ? GREEN : RED);
-            currentResultLabel.setVisible(true);
+            currentAnswerResultLabel.setText(isCorrect ? "Верный ответ" : "Неверный ответ");
+            currentAnswerResultLabel.setTextFill(isCorrect ? GREEN : RED);
+            currentAnswerResultLabel.setVisible(true);
             changeStateOfKeyElementsOnPanel(false);
             currentState = State.WAIT;
         } else if (currentState == State.WAIT) {
@@ -246,17 +259,17 @@ public class TestController extends AbstractController {
             if (test.haveMoreQuestion()) {
                 showNextQuestion();
                 currentTimeLine.play();
-            } else if (test.isCompleteCorrect())
-                showResults(true);
-            else
-                showResults(false);
+            } else {
+                prepareAndShowResults();
+            }
 
         }
     }
 
     private void changeStateOfKeyElementsOnPanel(boolean enable) {
         allButtons.forEach(radioButton -> radioButton.setDisable(!enable));
-        currentResultLabel.setVisible(!enable);
+        currentAnswerResultLabel.setVisible(!enable);
+        infoAboutNextLabel.setVisible(!enable);
         //nextButton.setDefaultButton(!enable);
     }
 
@@ -276,39 +289,37 @@ public class TestController extends AbstractController {
         vBox.getChildren().add(result);
 
         Label correctAnswerCount = new Label("Верных ответов: " + test.getCorrectAnswersCount() + " / " + Configs.Test.maxQuestions());
-        correctAnswerCount.setFont(Font.font(14));
-        correctAnswerCount.setAlignment(Pos.CENTER);
-        vBox.getChildren().add(correctAnswerCount);
+        Label currentPoints = new Label("Текущий балл: " + test.getCurrentPoints());
+        Label maxPoints = new Label("Максимальный балл: " + test.getMaxPoints());
 
-        Label points = new Label("Ваш балл: " + test.getMaxOfPointsForAllAttempts());
-        points.setAlignment(Pos.CENTER);
-        vBox.getChildren().add(points);
+        Stream.of(correctAnswerCount, currentPoints, maxPoints).forEach(label -> {
+            label.setFont(Font.font(14));
+            label.setAlignment(Pos.CENTER);
+            vBox.getChildren().add(label);
+        });
 
-        Button nextButton = null;
-        Button tryAgainButton = null;
         if (test.isDone()) {
-            nextButton = new Button("Приступить к лабораторной работе");
+            Button nextButton = new Button("Приступить к лабораторной работе");
+            Label info = new Label("*Приступая к лабораторной работе, Вы получаете максимальный балл.");
+            info.setFont(Font.font(14));
+            info.setTextFill(Paint.valueOf(Color.GRAY.toString()));
             nextButton.setOnAction(event -> {
                 tmpStage.close();
                 getMainApplication().nextStage();
             });
-        } else if (!success || test.haveAnyAttempts()) {
-            tryAgainButton = new Button("Пройти тест повторно");
+            vBox.getChildren().addAll(info, nextButton);
+        }
+
+        if ((test.isDone() && test.haveAnyAttempts()) || (!test.isDone() && !success)) {
+            Button tryAgainButton = new Button("Пройти тест повторно");
             tryAgainButton.setOnAction(event -> {
                 tmpStage.close();
                 tryAgain();
-                showNextQuestion();
-                currentTimeLine.play();
             });
+            vBox.getChildren().add(tryAgainButton);
         }
 
-        if (nextButton != null)
-            vBox.getChildren().add(nextButton);
-        if (tryAgainButton != null)
-            vBox.getChildren().add(tryAgainButton);
-
         borderPane.setCenter(vBox);
-        //BorderPane.setAlignment(vBox, Pos.CENTER);
         Stage primaryStage = getMainApplication().getPrimaryStage();
         tmpStage.initOwner(primaryStage);
         tmpStage.setIconified(false);

@@ -8,7 +8,6 @@ import org.dom4j.io.SAXReader;
 import ru.stankin.Configs;
 import ru.stankin.test.model.Answer;
 import ru.stankin.test.model.Question;
-import ru.stankin.test.model.Test;
 import ru.stankin.utils.Rnd;
 import ru.stankin.utils.Util;
 import ru.stankin.utils.files.CipherFileStreamFactory;
@@ -38,9 +37,9 @@ public class QuestionsHolder {
 
     public List<Question> getRndListOfQuestion() {
         List<Question> copy = new LinkedList<>(questions.valueCollection());
-        final int maXQuestions = Configs.Test.maxQuestions();
-        List<Question> toShows = new ArrayList<>(maXQuestions);
-        while (!copy.isEmpty() && toShows.size() < maXQuestions) {
+        final int maxQuestions = Configs.Test.maxQuestions();
+        List<Question> toShows = new ArrayList<>(maxQuestions);
+        while (!copy.isEmpty() && toShows.size() < maxQuestions) {
             int size = copy.size();
             Question question = size == 1 ? copy.remove(0) : copy.remove(Rnd.get(size));
             toShows.add(question);
@@ -54,6 +53,7 @@ public class QuestionsHolder {
             if(!file.exists())
                 throw new FileNotFoundException("Data file is not found!");
             SAXReader reader = new SAXReader();
+            reader.setEncoding("UTF-8");
             reader.setIgnoreComments(true);
 
             Document document = reader.read(CipherFileStreamFactory.getInstance().getSafeFileInputStream(file));

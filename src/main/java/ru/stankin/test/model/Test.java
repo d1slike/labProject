@@ -1,13 +1,10 @@
 package ru.stankin.test.model;
 
-import gnu.trove.list.array.TDoubleArrayList;
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
-import jfork.nproperty.Cfg;
 import ru.stankin.Configs;
 import ru.stankin.test.holders.QuestionsHolder;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,20 +23,34 @@ public class Test {
     private List<Answer> currentAnswers;
     private int correctAnswersCount;
 
-    private TDoubleArrayList studentsPoints;
-    public int currentAttemptIndex;
+
+    private double currentPoints;
+    private double currentPointsCacheCopy;
+    private double maxPoints;
 
 
     public Test() {
         availableAttempts = Configs.Test.attempts();
-        studentsPoints = new TDoubleArrayList();
         answersMap = new TIntIntHashMap();
+        //studentPoints = new TDoubleArrayList();
         clearAndUpdateQuestions();
     }
 
     public void decrementAttempts() {
-        availableAttempts--;
-        currentAttemptIndex++;
+        if (haveAnyAttempts()) {
+            availableAttempts--;
+
+            if (isCompleteCorrectNow() && !haveAnyAttempts() && !isDone()) {
+                currentPoints = maxPoints = Configs.Test.minPoints();
+                return;
+            }
+        }
+
+        if (maxPoints < currentPoints)
+            maxPoints = currentPoints;
+        currentPointsCacheCopy = currentPoints;
+        currentPoints = 0;
+
     }
 
     public void clearAndUpdateQuestions() {
@@ -68,8 +79,7 @@ public class Test {
         boolean correct = answersMap.get(currentStudentAnswer) == currentQuestionCorrectAnswer;
         if (correct) {
             correctAnswersCount++;
-            if (haveAnyAttempts())
-                incrementStudentsPoint();
+            currentPoints += Configs.Test.pointsForCorrectAnswer();
         }
         return correct;
     }
@@ -86,7 +96,7 @@ public class Test {
         return currentAnswers;
     }
 
-    public boolean isCompleteCorrect() {
+    public boolean isCompleteCorrectNow() {
         return correctAnswersCount >= Configs.Test.correctAnswersToComplete();
     }
 
@@ -98,8 +108,20 @@ public class Test {
         return correctAnswersCount;
     }
 
-    public int getCurrentQuestionNumber() {
+    public int getCurrentQustionNumber() {
         return currentQuestionPosition + 1;
+    }
+
+    public long getCurrentPoints() {
+        return Math.round(currentPointsCacheCopy);
+    }
+
+    public long getMaxPoints() {
+        return Math.round(maxPoints);
+    }
+
+    public boolean isDone() {
+        return isCompleteCorrectNow() || getMaxPoints() >= Configs.Test.minPoints();
     }
 
     public void setCurrentStudentAnswer(int number) {
@@ -112,25 +134,5 @@ public class Test {
         currentQuestionPosition = -1;
         answersMap.clear();
         currentStudentAnswer = -1;
-    }
-
-    private void incrementStudentsPoint() {
-        studentsPoints[currentAttemptIndex] = studentsPoints[currentAttemptIndex] + Configs.Test.pointForOneCorrectanswer();
-    }
-
-    public long getTotalPointForCurrentAttempt() {
-        return haveAnyAttempts() ? Math.round(studentsPoints[currentAttemptIndex]) : Configs.Test.minMark();
-    }
-
-    public long getMaxOfPointsForAllAttempts() {
-        double max = studentsPoints[0];
-        for (double studentsPoint : studentsPoints)
-            if (max < studentsPoint)
-                max = studentsPoint;
-        return Math.round(max);
-    }
-
-    public boolean isDone() {
-        return getMaxOfPointsForAllAttempts() >= Configs.Test.minMark();
     }
 }

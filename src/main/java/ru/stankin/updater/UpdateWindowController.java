@@ -1,7 +1,6 @@
 package ru.stankin.updater;
 
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -42,11 +41,12 @@ public class UpdateWindowController extends AbstractController {
 
     @Override
     public void prepareForNext() {
-        updater.terminate();
-        updater = null;
         Stage primaryStage = getMainApplication().getPrimaryStage();
         primaryStage.setResizable(true);
         primaryStage.setOnCloseRequest(null);
+        primaryStage.setTitle(primaryStage.getTitle() + " (" + updater.getCurrentVersion().toString() + ")");
+        updater.terminate();
+        updater = null;
     }
 
     public void setCurrentStateText(String text) {

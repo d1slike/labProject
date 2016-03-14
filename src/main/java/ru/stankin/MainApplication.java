@@ -63,7 +63,7 @@ public class MainApplication extends Application {
     }
 
     public void nextStage() {
-        currentGlobalStage = currentGlobalStage == null ? GlobalStage.UPDATE : currentGlobalStage.next();
+        currentGlobalStage = currentGlobalStage == null ? GlobalStage.MAIN_LAB_WORK : currentGlobalStage.next();
         prepareUI();
     }
 
@@ -95,12 +95,14 @@ public class MainApplication extends Application {
             Pane pane = loader.load();
             activeController = loader.getController();
             activeController.setMainApplication(this);
+            primaryStage.hide();
             root.setCenter(pane);
             primaryStage.sizeToScene();
             if (currentGlobalStage == GlobalStage.UPDATE) {
                 primaryStage.setResizable(false);
                 primaryStage.setOnCloseRequest(Event::consume);
             }
+            primaryStage.show();
         } catch (Exception ex) {
             Util.showMessageAndCloseProgram(ex);
         }

@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
-import ru.stankin.test.model.Test;
 
 /**
  * Created by DisDev on 05.02.2016.
@@ -16,8 +15,8 @@ public class WelcomeController extends AbstractController {
     private static final String INFO_TEMPLATE = "Перед тем как присутпить к эксперементальной части работы" +
             " Вам необходимо пройти тест." +
             " Тест состоит из %qCount% вопросов, с 3-4 вариантами ответов." +
-            " Максимальный бал за тест – %maxMark%." +
-            " Минимальный бал для прохождения теста %minMark%(%minQCount% верных ответов)." +
+            " Максимальный бал за тест – %maxPoints%." +
+            " Минимальный бал для прохождения теста %minPoints%(%minQCount% верных ответов)." +
             " На выполнение теста дается %attemptsCount% попытки, на каждую попытку дается %minutesToComplete% минут." +
             " Если с первой попытки Вам не удается набрать минимальное количество баллов, то Вам необходимо пройти его повторно." +
             " Если со второй попытке тест пройти не удается, то Вы получаете проходной бал и приступаете к выполнению второй части работы." +
@@ -27,6 +26,10 @@ public class WelcomeController extends AbstractController {
     private Button nextButton;
     @FXML
     private Label infoLabel;
+
+    @Override
+    public void prepareForNext() {
+    }
 
     @FXML
     private void initialize() {
@@ -40,8 +43,8 @@ public class WelcomeController extends AbstractController {
     private String buildInfo() {
         String info = INFO_TEMPLATE;
         info = info.replace("%qCount%", Configs.Test.maxQuestions() + "")
-                .replace("%maxMark%", Configs.Test.maxMark() + "")
-                .replace("%minMark%", Configs.Test.minMark() + "")
+                .replace("%maxPoints%", Configs.Test.maxPoints() + "")
+                .replace("%minPoints%", Configs.Test.minPoints() + "")
                 .replace("%minQCount%", Configs.Test.correctAnswersToComplete() + "")
                 .replace("%attemptsCount%", Configs.Test.attempts() + "")
                 .replace("%minutesToComplete%", Configs.Test.minutesToComplete() + "");
@@ -51,9 +54,5 @@ public class WelcomeController extends AbstractController {
     @FXML
     private void onNextButtonClick() {
         getMainApplication().nextStage();
-    }
-
-    @Override
-    public void prepareForNext() {
     }
 }

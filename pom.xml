@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -8,6 +8,11 @@
     <artifactId>ReactionCalculator</artifactId>
     <version>1.0.0</version>
 
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -58,12 +63,10 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/target/jfx/app/resources</outputDirectory>
+                            <encoding>UTF-8</encoding>
                             <resources>
                                 <resource>
                                     <directory>resources</directory>
-                                    <excludes>
-                                        <exclude>version.ini</exclude>
-                                    </excludes>>
                                 </resource>
                             </resources>
                         </configuration>
@@ -76,9 +79,10 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/target/jfx/app</outputDirectory>
+                            <encoding>UTF-8</encoding>
                             <resources>
                                 <resource>
-                                    <directory>resources</directory>
+                                    <directory>/</directory>
                                     <includes>
                                         <include>version.ini</include>
                                     </includes>
@@ -102,12 +106,17 @@
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.2.0</version>
+
                 <configuration>
                     <vendor>Yan</vendor>
                     <bundler>ALL</bundler>
                     <appName>RCalc</appName>
                     <deployDir>deploy</deployDir>
                     <mainClass>ru.stankin.MainApplication</mainClass>
+                    <bundleArguments>
+                    <runtime>C:\Program Files (x86)\Java\jdk1.8.0_73\jre</runtime>
+                    <win.64Bit>x86</win.64Bit><!-- overwrite System.getProperty("os.arch") for bundler-detection -->
+                </bundleArguments>
                 </configuration>
             </plugin>
         </plugins>
