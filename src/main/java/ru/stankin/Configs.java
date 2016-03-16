@@ -31,11 +31,7 @@ public class Configs {
     @Cfg("AltVarStepsInWork")
     private static int ALT_VAR_STEPS_IN_WORK = 4;
 
-    static {
-        load();
-    }
-
-    private static void load() {
+    static void load() {
         try(InputStream stream = CipherFileStreamFactory.getInstance().getSafeFileInputStream(PROPERTY_FILE)) {
             ConfigParser.parse(Configs.class,
                     stream,

@@ -282,7 +282,7 @@ public class TestController extends AbstractController {
         VBox vBox = new VBox(25);
         vBox.setAlignment(Pos.CENTER);
 
-        Label result = new Label(success ? "Тест завершен успешно" : "Тест не пройден");
+        Label result = new Label(success ? "Тест выполнен успешно" : "Тест не пройден");
         result.setTextFill(success ? GREEN : RED);
         result.setFont(Font.font(18));
         result.setAlignment(Pos.CENTER);
@@ -290,7 +290,7 @@ public class TestController extends AbstractController {
 
         Label correctAnswerCount = new Label("Верных ответов: " + test.getCorrectAnswersCount() + " / " + Configs.Test.maxQuestions());
         Label currentPoints = new Label("Текущий балл: " + test.getCurrentPoints());
-        Label maxPoints = new Label("Максимальный балл: " + test.getMaxPoints());
+        Label maxPoints = new Label("Максимальный набранный балл: " + test.getMaxPoints());
 
         Stream.of(correctAnswerCount, currentPoints, maxPoints).forEach(label -> {
             label.setFont(Font.font(14));

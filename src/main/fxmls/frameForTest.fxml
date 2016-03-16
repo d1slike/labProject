@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.test.TestController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+            minWidth="-Infinity" prefHeight="620.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="ru.stankin.test.TestController">
    <center>
       <VBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-border-color: black; -fx-border-radius: 25; -fx-border-width: 2; -fx-border-style: dashed;" BorderPane.alignment="CENTER">
          <children>
-            <VBox alignment="CENTER" fillWidth="false" prefHeight="290.0" prefWidth="970.0" spacing="10.0">
+            <VBox alignment="CENTER" fillWidth="false" prefWidth="970.0" spacing="10.0">
                <children>
                   <Label fx:id="questionText" alignment="CENTER" prefHeight="79.0" prefWidth="950.0" text="Text" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
                      <VBox.margin>
@@ -56,10 +53,13 @@
                <children>
                   <Label fx:id="currentAnswerResultLabel" text="Ответ" textAlignment="CENTER">
                      <HBox.margin>
-                        <Insets top="30.0" />
+                        <Insets/>
                      </HBox.margin>
                   </Label>
                </children>
+               <VBox.margin>
+                  <Insets bottom="3.0"/>
+               </VBox.margin>
             </HBox>
          </children>
          <BorderPane.margin>

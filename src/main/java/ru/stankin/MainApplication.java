@@ -1,7 +1,6 @@
 package ru.stankin;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -10,7 +9,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
-import ru.stankin.updater.ApplicationUpdater;
 import ru.stankin.utils.ImageCache;
 import ru.stankin.utils.Util;
 
@@ -32,12 +30,19 @@ public class MainApplication extends Application {
     private BorderPane root;
     private AbstractController activeController;
 
+    public static Image getIcon() {
+        return MAIN_APP_ICON;
+    }
+
+    private static void main(String args[]) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setTitle(PROGRAM_NAME);
         nextStage();
-        primaryStage.show();
     }
 
     public void initMainApp() {
@@ -51,7 +56,7 @@ public class MainApplication extends Application {
             Util.showProgramsFilesSpoiled();
         }
 
-        Configs.Test.attempts();//load configs
+        Configs.load();//load configs
         QuestionsHolder.getInstance();
         ImageCache.getInstance();
 
@@ -67,14 +72,6 @@ public class MainApplication extends Application {
 
     public Stage getPrimaryStage() {
         return primaryStage;
-    }
-
-    public static Image getIcon() {
-        return MAIN_APP_ICON;
-    }
-
-    private static void main(String args[]) {
-        launch(args);
     }
 
     private void prepareUI() {
@@ -96,6 +93,7 @@ public class MainApplication extends Application {
             primaryStage.hide();
             root.setCenter(pane);
             primaryStage.sizeToScene();
+            primaryStage.centerOnScreen();
             if (currentGlobalStage == GlobalStage.UPDATE) {
                 primaryStage.setResizable(false);
                 primaryStage.setOnCloseRequest(Event::consume);
