@@ -170,11 +170,12 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="cancelButton" layoutX="857.0" layoutY="679.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="30.0" text="Перессчитать">
+                  <Button fx:id="cancelButton" layoutX="857.0" layoutY="679.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="30.0" text="Пересчитать">
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="30.0" text="Закончить работу" />
                </children>
             </HBox>
          </children>

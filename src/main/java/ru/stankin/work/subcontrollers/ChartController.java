@@ -42,7 +42,7 @@ public class ChartController {
         NumberAxis xAxisForDynamic = new NumberAxis();
         NumberAxis xAsisForFull = new NumberAxis();
 
-        final String xAxisName = "Время(t)";
+        final String xAxisName = "Время t";
         xAxisForDynamic.setLabel(xAxisName);
         xAsisForFull.setLabel(xAxisName);
 
@@ -52,9 +52,9 @@ public class ChartController {
         fullReactionsChart.setPrefSize(CHART_WIDTH, CHART_HEIGHT);
 
         dynamicReactionsChart.setCreateSymbols(true);
-        dynamicReactionsChart.setTitle("Зависимость динамических реакций от времени");
+        dynamicReactionsChart.setTitle("Зависимость динамических реакций от времени за один оборот вала");
         fullReactionsChart.setCreateSymbols(true);
-        fullReactionsChart.setTitle("Зависимость полных реакций от времени");
+        fullReactionsChart.setTitle("Зависимость полных реакций от времени за один оборот вала");
 
         String url = "";
         try {
@@ -67,7 +67,7 @@ public class ChartController {
         //fullReactionsChart.setStyle(cssStyleForChart);
         //dynamicReactionsChart.setStyle(cssStyleForChart);
         BorderPane pane = new BorderPane();
-        pane.setPrefSize(CHART_WIDTH * 2, CHART_HEIGHT);
+        //pane.setPrefSize(CHART_WIDTH * 2, CHART_HEIGHT);
         pane.setLeft(dynamicReactionsChart);
         pane.setRight(fullReactionsChart);
 
@@ -76,8 +76,8 @@ public class ChartController {
         stage = new Stage();
         stage.setTitle("Графики");
         //stage.initModality(Modality.NONE);
-        stage.setHeight(CHART_HEIGHT);
-        stage.setWidth(CHART_WIDTH * 2);
+        //stage.setHeight(CHART_HEIGHT);
+        //stage.setWidth(CHART_WIDTH * 2);
         stage.setIconified(false);
         stage.initOwner(primaryStage);
         stage.setScene(scene);

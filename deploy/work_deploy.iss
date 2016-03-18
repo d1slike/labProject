@@ -5,24 +5,25 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{1E073440-CDEE-47EE-8B49-075360650D39}
+AppId={{0A458551-D515-4A5E-BB67-3FB8258B5DAE}
 AppName=RCalc
 AppVersion=1.0.0
 ;AppVerName=RCalc 1.0.0
 AppPublisher=Yan Comissarov
-AppPublisherURL=eldustru@yandex.ru
-AppSupportURL=eldustru@yandex.ru
-AppUpdatesURL=eldustru@yandex.ru
+AppPublisherURL=www.stankin.ru
+AppSupportURL=eldustru@yandedx.ru
+AppUpdatesURL=www.stankin.ru
 DefaultDirName={pf}\RCalc
 DefaultGroupName=RCalc
 AllowNoIcons=yes
 OutputDir=C:\Workspace\labProject\deploy
-OutputBaseFilename=RCalc_Installer
+OutputBaseFilename=RCalc_RC1_x86
 SetupIconFile=C:\Workspace\labProject\deploy\package\windows\RCalc.ico
 Compression=lzma
 SolidCompression=yes
 
 [Languages]
+Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [Tasks]

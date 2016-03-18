@@ -21,7 +21,8 @@ public enum  VariableType {
     Ya(VarName.Ya, Double.MIN_VALUE, Double.MAX_VALUE, "-"),
     Yb(VarName.Yb, Double.MIN_VALUE, Double.MAX_VALUE, "-"),
     T(VarName.T, Double.MIN_VALUE, Double.MAX_VALUE, "с"),
-    TAU(VarName.TAU, Double.MIN_VALUE, Double.MAX_VALUE, "с");
+    TAU(VarName.TAU, Double.MIN_VALUE, Double.MAX_VALUE, "с"),
+    DELTA_T(VarName.DELTA + VarName.T, Double.MIN_VALUE, Double.MAX_VALUE, "c");
 
     private final ReadOnlyStringProperty name;
     private final ReadOnlyStringProperty nameWithMeasurement;

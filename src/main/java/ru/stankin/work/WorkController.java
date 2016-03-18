@@ -111,6 +111,9 @@ public class WorkController extends AbstractController {
     @FXML
     private Label phiValueLabel;
 
+    @FXML
+    private Button exitButton;
+
     public WorkController() {
     }
 
@@ -139,7 +142,7 @@ public class WorkController extends AbstractController {
         researchVarSwitcher.setValue(defaultResVar);
         variableManager.setResearchVariableType(defaultResVar);
 
-        timeLabel.setText(VariableType.VarName.DELTA + VariableType.T.getName());
+        timeLabel.setText(VariableType.DELTA_T.getNameWithMeasurement().getValue());
 
         resultTable.setVisible(false);
 
@@ -203,6 +206,7 @@ public class WorkController extends AbstractController {
         uiManager.putItem(ElementNames.FIELD_TIME, timeField);
         uiManager.putItem(ElementNames.BUTTON_CANCEL, cancelButton);
         uiManager.putItem(ElementNames.BUTTON_PREV_STAGE, prevStageButton);
+        uiManager.putItem(ElementNames.BUTTON_EXIT, exitButton);
         onChangedWorkStage();
     }
 
@@ -251,6 +255,11 @@ public class WorkController extends AbstractController {
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditingCell());
         varTable.getItems().addAll(variableManager.getAllVars());
+    }
+
+    @FXML
+    private void onExitButtonClick() {
+        System.exit(0);
     }
 
     @FXML

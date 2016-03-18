@@ -15,5 +15,6 @@ public abstract class ElementNames {
     public static final String BUTTON_NEXT_STAGE = "nextStageButton";
     public static final String BUTTON_PREV_STAGE = "prevStageButton";
     public static final String BUTTON_SHOW_CHART = "showChartButton";
+    public static final String BUTTON_EXIT = "exitButton";
 
 }
