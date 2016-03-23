@@ -1,6 +1,7 @@
 package ru.stankin.work.subcontrollers;
 
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -28,8 +29,8 @@ public class ChartController {
     private static final int CHART_WIDTH = 650;
     private final NumberAxis yAxisForDynamicReactionsChart;
     private final NumberAxis yAxisForFullReactionsChart;
-    private final LineChart<Number, Number> dynamicReactionsChart;
-    private final LineChart<Number, Number> fullReactionsChart;
+    private final LineChart<String, Number> dynamicReactionsChart;
+    private final LineChart<String, Number> fullReactionsChart;
     private final Stage stage;
 
     private boolean alreadyBuilt;
@@ -39,10 +40,12 @@ public class ChartController {
         yAxisForDynamicReactionsChart = new NumberAxis();
         yAxisForFullReactionsChart = new NumberAxis();
 
-        NumberAxis xAxisForDynamic = new NumberAxis();
-        NumberAxis xAsisForFull = new NumberAxis();
+        //NumberAxis xAxisForDynamic = new NumberAxis();
+        //NumberAxis xAsisForFull = new NumberAxis();
+        CategoryAxis xAxisForDynamic = new CategoryAxis();
+        CategoryAxis xAsisForFull = new CategoryAxis();
 
-        final String xAxisName = "Время t";
+        final String xAxisName = "Время";
         xAxisForDynamic.setLabel(xAxisName);
         xAsisForFull.setLabel(xAxisName);
 
@@ -118,10 +121,10 @@ public class ChartController {
         return inShowing;
     }
 
-    private List<XYChart.Series<Number, Number>> buildLines(List<ResultRecord> resultRecords, String altVarName, boolean fullReaction) {
+    private List<XYChart.Series<String, Number>> buildLines(List<ResultRecord> resultRecords, String altVarName, boolean fullReaction) {
         final int maxTimeSteps = VariableManager.TIME_STEPS_COUNT;
 
-        List<XYChart.Series<Number, Number>> list = new ArrayList<>();
+        List<XYChart.Series<String, Number>> list = new ArrayList<>();
         int currentPos = 0;
         int lastTime = maxTimeSteps;
         for (int i = 0; i < VariableManager.ALT_VAR_MAX_STEP_COUNT; i++, currentPos = lastTime, lastTime += maxTimeSteps)
@@ -129,12 +132,12 @@ public class ChartController {
         return list;
     }
 
-    private XYChart.Series<Number, Number> buildLine(List<ResultRecord> data, int firstIndex, int lastIndex, String altVarName, boolean fullReaction) {
-        XYChart.Series<Number, Number> line = new XYChart.Series<>();
+    private XYChart.Series<String, Number> buildLine(List<ResultRecord> data, int firstIndex, int lastIndex, String altVarName, boolean fullReaction) {
+        XYChart.Series<String, Number> line = new XYChart.Series<>();
         line.setName(altVarName + " = " + Util.doubleCommaFormat(data.get(firstIndex).getAltVar()) + " ");
         for (int i = firstIndex; i < lastIndex; i++) {
             ResultRecord record = data.get(i);
-            line.getData().add(new XYChart.Data<>(record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
+            line.getData().add(new XYChart.Data<>("t" + record.getPointNumber(), fullReaction ? record.getFullReaction() : record.getDynamicReaction()));
         }
         return line;
     }

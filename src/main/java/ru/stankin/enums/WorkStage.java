@@ -10,7 +10,7 @@ public enum WorkStage {
     STAGE_2_WRITE_STEP_TO_ALT_VAR("Введите шаг изменяемого параметра", AllowedItemsSpace.STAGE_2_ALLOWED_UI_ITEMS, ElementNames.FIELD_ALT_VAR_STEP),
     STAGE_3_FILL_VAR_TABLE("Заполните таблицу переменных в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_3_ALLOWED_UI_ITEMS, ElementNames.TABLE_VARIABLES),
     STAGE_4_SELECT_RESEARCH_VAR("Выберите исследуемую реакцию в соответствии с вашим вариантом", AllowedItemsSpace.STAGE_4_ALLOWED_UI_ITEMS, ElementNames.COMBO_BOX_RESEARCH_VAR_SWITCHER),
-    STAGE_5_WRITE_TIME_STEP("Для вычисленного значения оборотов в минуту(N) определите значение " + VariableType.DELTA_T.getName(), AllowedItemsSpace.STAGE_5_ALLOWED_UI_ITEMS, ElementNames.FIELD_TIME),
+    STAGE_5_WRITE_TIME_STEP("Введите вычисленное по полученной Вами формуле значение " + VariableType.DELTA_T.getName() + " для определённого программой числа N оборотов вала в минуту", AllowedItemsSpace.STAGE_5_ALLOWED_UI_ITEMS, ElementNames.FIELD_TIME),
     STAGE_6_CHECK_CHART("По полученным данным постройте график зависимости максимального по модулю значения исслеудемой реакции от изменяемого параметра", AllowedItemsSpace.STAGE_6_ALLOWED_UI_ITEMS, ElementNames.BUTTON_SHOW_CHART);
 
 
