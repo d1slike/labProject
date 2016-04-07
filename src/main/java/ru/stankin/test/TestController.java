@@ -3,7 +3,9 @@ package ru.stankin.test;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,6 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -29,6 +33,7 @@ import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
 import ru.stankin.utils.ImageCache;
 
+import javax.crypto.KeyGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -86,6 +91,8 @@ public class TestController extends AbstractController {
     @FXML
     private RadioButton fourthAnswer;
 
+    private Scene currentScene;
+
     private List<RadioButton> allButtons;
 
     @Override
@@ -98,6 +105,7 @@ public class TestController extends AbstractController {
         Stage stage = getMainApplication().getPrimaryStage();
         stage.setTitle(stage.getTitle() + " - Оценка за тест: " + test.getMaxPoints());
         test = null;
+        currentScene.setOnKeyReleased(null);
     }
 
     @FXML
@@ -114,6 +122,15 @@ public class TestController extends AbstractController {
         infoAboutNextLabel.setVisible(false);
         currentTimeLine.setCycleCount(Animation.INDEFINITE);
         currentTimeLine.play();
+        Platform.runLater(() -> {
+            currentScene = getMainApplication().getPrimaryStage().getScene();
+            currentScene.setOnKeyReleased(event -> {
+                if (event.getCode() == KeyCode.F4 && event.isShiftDown()) {
+                    getMainApplication().nextStage();
+                    event.consume();
+                }
+            });
+        });
     }
 
     private synchronized void timeTick() {

@@ -75,8 +75,8 @@
             <Label text="Таблица параметров" />
             <TableView fx:id="varTable" editable="true" layoutX="14.0" layoutY="253.0" prefHeight="311.0" prefWidth="311.0">
               <columns>
-                <TableColumn fx:id="varTableColumnParam" prefWidth="109.0" resizable="false" text="Параметр" />
-                <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" text="Значение" />
+                <TableColumn fx:id="varTableColumnParam" editable="false" prefWidth="109.0" resizable="false" sortable="false" text="Параметр" />
+                <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" sortable="false" text="Значение" />
               </columns>
             </TableView>
          </children>

@@ -146,6 +146,12 @@ public class WorkController extends AbstractController {
 
         resultTable.setVisible(false);
 
+        Stream.of(varTable, altVarStepField, timeField)
+                .forEach(control1 -> control1.disabledProperty().addListener(observable -> {
+                    control1.setStyle(control1.isDisable() ? "-fx-font-weight: bold;" +
+                    "-fx-font-size: 14px;" : "");
+        }));
+
         prepareVarTable();
         prepareResultTable();
         prepareUI();
@@ -189,6 +195,7 @@ public class WorkController extends AbstractController {
             event.consume();
         });
 
+        
         timeField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
         altVarStepField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
     }
@@ -252,6 +259,12 @@ public class WorkController extends AbstractController {
     private void prepareVarTable() {
         varTableColumnParam.setCellValueFactory(param -> param.getValue().getType().getNameWithMeasurement());
         varTableColumnParam.setStyle("-fx-font-weight: bold;");
+        varTable.disableProperty().addListener(observable -> {
+            varTable.setStyle(varTable.isDisable() ? "-fx-font-weight: bold;" +
+                    "-fx-font-size: 13px;" : "");
+            if (varTable.isDisable())
+                varTable.getSelectionModel().clearSelection();
+        });
         varTableColumnValue.setCellValueFactory(param -> param.getValue().getValueProperties());
         varTableColumnValue.setCellFactory((TableColumn<Variable, Number> col) -> new EditingCell());
         varTable.getItems().addAll(variableManager.getAllVars());

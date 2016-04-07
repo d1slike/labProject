@@ -66,7 +66,7 @@ public class MainApplication extends Application {
     }
 
     public void nextStage() {
-        currentGlobalStage = currentGlobalStage == null ? GlobalStage.MAIN_LAB_WORK : currentGlobalStage.next();
+        currentGlobalStage = currentGlobalStage == null ? GlobalStage.UPDATE : currentGlobalStage.next();
         prepareUI();
     }
 

@@ -15,14 +15,14 @@ public class Configs {
 
     private static final String PROPERTY_FILE = "resources/properties.ini";
 
-    @Cfg("MaxQuestions")
-    private static int MAX_QUESTIONS = 2;
+    //@Cfg("MaxQuestions")
+    private static int MAX_QUESTIONS = 15;
     @Cfg("MinutesToCompleteTest")
     private static int MAX_MINUTES_TO_COMPLETE = 20;
     @Cfg("AttemptsToCompleteTestWithoutBadMark")
     private static int MAX_ATTEMPTS = 2;
-    @Cfg("MinCorrectAnswersCountToCompleteTest")
-    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 1;
+    //@Cfg("MinCorrectAnswersCountToCompleteTest")
+    private static int MIN_CORRECT_ANSWERS_TO_COMPLETE = 8;
     @Cfg("PointSForCorrectAnswer")
     private static double POINTS_FOR_CORRECT_ANSWER = 2.6;
 
