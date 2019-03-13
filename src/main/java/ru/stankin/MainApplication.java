@@ -12,8 +12,6 @@ import ru.stankin.test.holders.QuestionsHolder;
 import ru.stankin.utils.ImageCache;
 import ru.stankin.utils.Util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.URL;
 
 
@@ -47,11 +45,7 @@ public class MainApplication extends Application {
 
     public void initMainApp() {
         try {
-            File file = new File("resources/image/icon.png");
-            if (file.exists())
-                MAIN_APP_ICON = new Image(file.toURI().toURL().toString());
-            else
-                throw new FileNotFoundException();
+            MAIN_APP_ICON = new Image(getClass().getResource("/icon.png").toString());
         } catch (Exception ex) {
             Util.showProgramsFilesSpoiled();
         }
@@ -85,7 +79,7 @@ public class MainApplication extends Application {
                 activeController = null;
             }
 
-            URL url = getClass().getResource("/fxmls/" + currentGlobalStage.getPathToForm());
+            URL url = getClass().getResource("/" + currentGlobalStage.getPathToForm());
             FXMLLoader loader = new FXMLLoader(url);
             Pane pane = loader.load();
             activeController = loader.getController();

@@ -1,19 +1,25 @@
 package ru.stankin;
 
 
-import jfork.nproperty.Cfg;
-import jfork.nproperty.ConfigParser;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import ru.stankin.utils.Util;
 import ru.stankin.utils.files.CipherFileStreamFactory;
 
 import java.io.InputStream;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Map;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Created by Dislike on 04.03.2016.
  */
 public class Configs {
 
-    private static final String PROPERTY_FILE = "resources/properties.ini";
+    private static final String PROPERTY_FILE = Util.externalResource("resources/properties.ini");
 
     //@Cfg("MaxQuestions")
     private static int MAX_QUESTIONS = 15;
@@ -33,9 +39,40 @@ public class Configs {
 
     static void load() {
         try(InputStream stream = CipherFileStreamFactory.getInstance().getSafeFileInputStream(PROPERTY_FILE)) {
-            ConfigParser.parse(Configs.class,
-                    stream,
-                    PROPERTY_FILE);
+            Properties properties = new Properties();
+            properties.load(stream);
+
+            Map<String, Field> fieldMap = FieldUtils.getFieldsListWithAnnotation(Configs.class, Cfg.class).stream()
+                    .filter(field -> {
+                        int modifiers = field.getModifiers();
+                        return Modifier.isStatic(modifiers) && !Modifier.isFinal(modifiers);
+                    }).peek(field -> field.setAccessible(true)).collect(Collectors.toMap(field -> field.getAnnotation(Cfg.class).value(), field -> field));
+            properties.forEach((k, v) -> {
+                fieldMap.computeIfPresent(String.valueOf(k), (name, field) -> {
+                    Object value;
+                    String stringValue = String.valueOf(v);
+                    Class<?> type = field.getType();
+                    try {
+                        if (type.isAssignableFrom(int.class) || type.isAssignableFrom(Integer.class)) {
+                            value = Integer.parseInt(stringValue);
+                        } else if (type.isAssignableFrom(boolean.class) || type.isAssignableFrom(Boolean.class)) {
+                            value = Boolean.parseBoolean(stringValue);
+                        } else if (type.isAssignableFrom(float.class) || type.isAssignableFrom(Float.class)) {
+                            value = Float.parseFloat(stringValue);
+                        } else if (type.isAssignableFrom(double.class) || type.isAssignableFrom(Double.class)) {
+                            value = Double.parseDouble(stringValue);
+                        } else {
+                            value = stringValue;
+                        }
+                        FieldUtils.writeStaticField(field, value);
+
+                    } catch (IllegalAccessException ignored) {
+
+                    }
+                    return field;
+                });
+            });
+
         } catch (Exception ex) {
             Util.showProgramsFilesSpoiled();
         }
@@ -83,6 +120,11 @@ public class Configs {
         public static int altVarSteps() {
             return ALT_VAR_STEPS_IN_WORK;
         }
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    private @interface Cfg {
+        String value();
     }
 
 }

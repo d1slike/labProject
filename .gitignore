@@ -1,11 +1,9 @@
 /out
-/.idea/workspace.xml
 /build
 /target
-/.idea/vcs.xml
-/version.ini
 /deploy/package/windows/RCalc_Installer.exe
 /deploy/RCalc_Installer.exe
 /deploy/*.exe
 /res
-/.idea/misc.xml
+.idea
+.gradle

@@ -1,7 +1,5 @@
 package ru.stankin.test.holders;
 
-import gnu.trove.map.TIntObjectMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -15,19 +13,17 @@ import ru.stankin.utils.files.CipherFileStreamFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InvalidObjectException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by DisDev on 05.02.2016.
  */
 public class QuestionsHolder {
     private static QuestionsHolder ourInstance = new QuestionsHolder();
-    private final TIntObjectMap<Question> questions;
+    private final Map<Integer, Question> questions;
 
     private QuestionsHolder() {
-        questions = new TIntObjectHashMap<>();
+        questions = new HashMap<>();
         load();
     }
 
@@ -36,7 +32,7 @@ public class QuestionsHolder {
     }
 
     public List<Question> getRndListOfQuestion() {
-        List<Question> copy = new LinkedList<>(questions.valueCollection());
+        List<Question> copy = new LinkedList<>(questions.values());
         final int maxQuestions = Configs.Test.maxQuestions();
         List<Question> toShows = new ArrayList<>(maxQuestions);
         while (!copy.isEmpty() && toShows.size() < maxQuestions) {
@@ -49,7 +45,7 @@ public class QuestionsHolder {
 
     private void load() {
         try {
-            File file = new File("resources/ex_data.bin");
+            File file = new File(Util.externalResource("resources/ex_data.bin"));
             if(!file.exists())
                 throw new FileNotFoundException("Data file is not found!");
             SAXReader reader = new SAXReader();
@@ -63,7 +59,7 @@ public class QuestionsHolder {
             for (Element question : element.elements("question")) {
                 int qId = parseIntValue(question, "id");
                 int correctAnswer = parseIntValue(question, "correctAnswerId");
-                TIntObjectMap<Answer> answers = new TIntObjectHashMap<>();
+                Map<Integer, Answer> answers = new HashMap<>();
                 for (Element answer : question.elements("answer")) {
                     int aId = parseIntValue(answer, "id");
                     answers.put(aId, new Answer(aId, answer.attributeValue("imgSource"), answer.attributeValue("text")));

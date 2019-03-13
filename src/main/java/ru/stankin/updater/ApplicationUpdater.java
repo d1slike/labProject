@@ -9,6 +9,7 @@ import com.dropbox.core.v2.files.FolderMetadata;
 import com.dropbox.core.v2.files.Metadata;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import ru.stankin.utils.Util;
 import ru.stankin.utils.files.FileUtils;
 
 import java.io.*;
@@ -23,13 +24,15 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
 
     private static final String APPLICATION_TOKEN = "smHMgyG3CFAAAAAAAAAABzbibSgnKcSxEFORi_l0zNkSaK7hWlOrTQICvuHdGxcC";
     private static final String REMOTE_VER_FILE_NAME = "remote_ver.ini";
-    private static final String LOCAL_VER_FILE_NAME = "version.ini";
-    private static final String LOCAL_RESOURCES_DIRECTORY_NAME = "resources";
+    private static final String VERSION_FILE_NAME = "version.ini";
+    private static final String RESOURCES_FILE_NAME = "resources";
+    private static final String LOCAL_VER_FILE_NAME = Util.externalResource(VERSION_FILE_NAME);
+    private static final String LOCAL_RESOURCES_DIRECTORY_NAME = Util.externalResource(RESOURCES_FILE_NAME);
     private static final String REMOTE_RESOURCES_DIRECTORY_NAME = "remote_resources";
 
     public static final String UPDATE_STATE_CHECK_NEED_UPDATE = "Проверка наличия обновлений...";
     public static final String UPDATE_STATE_UPDATING = "Обновление...";
-    public static final String UPDATE_STATE_PROGRAMM_RUNING = "Запуск программы...";
+    public static final String UPDATE_STATE_PROGRAM_RUNNING = "Запуск программы...";
 
     private static final Version DEFAULT_VERSION = new Version(1,0,0);
 
@@ -72,7 +75,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
             if (!testNetConnection())
                 return UpdateStatus.HAVE_NO_NET_CONNECTION;
             UpdateStatus status = update();
-            controller.setCurrentStateText(UPDATE_STATE_PROGRAMM_RUNING);
+            controller.setCurrentStateText(UPDATE_STATE_PROGRAM_RUNNING);
             Thread.sleep(1000);
             return status;
         }
@@ -80,7 +83,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
         private boolean testNetConnection() {
             boolean ok = false;
             try {
-                ok = client.users.getCurrentAccount() != null;
+                ok = client.users().getCurrentAccount() != null;
             } catch (DbxException ignored) {
             }
             return ok;
@@ -88,7 +91,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
 
         private void getResourcesDirSize(String path) {
             try {
-                List<Metadata> metadataList = client.files.listFolder(path).getEntries();
+                List<Metadata> metadataList = client.files().listFolder(path).getEntries();
                 for (Metadata metadata : metadataList) {
                     if (metadata instanceof FolderMetadata) {
                         String dirName = new StringBuilder(path).append("/").append(metadata.getName()).toString();
@@ -126,7 +129,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
 
         private void downloadResource(String path) {
             try {
-                List<Metadata> metadataList = client.files.listFolder(path).getEntries();
+                List<Metadata> metadataList = client.files().listFolder(path).getEntries();
                 for (Metadata metadata : metadataList) {
                     if (metadata instanceof FolderMetadata) {
                         String dirName = new StringBuilder(path).append("/").append(metadata.getName()).toString();
@@ -135,7 +138,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
                     } else if (metadata instanceof FileMetadata) {
                         String fileLocation = metadata.getPathDisplay();
                         try (OutputStream stream = new FileOutputStream(fileLocation.substring(1))) {
-                            client.files.download(fileLocation).download(stream);
+                            client.files().download(fileLocation).download(stream);
                             alreadyDownloaded += ((FileMetadata) metadata).getSize();
                             updateProgress(alreadyDownloaded, resourcesDirSize);
                         } catch (IOException e) {
@@ -167,7 +170,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
         private Version downloadAndGetRemoteVersion() {
             Version remote = null;
             try (OutputStream outputStream = new FileOutputStream(REMOTE_VER_FILE_NAME)) {
-                DbxDownloader<FileMetadata> dbxDownloader = client.files.download("/" + LOCAL_VER_FILE_NAME);
+                DbxDownloader<FileMetadata> dbxDownloader = client.files().download("/" + VERSION_FILE_NAME);
                 dbxDownloader.download(outputStream);
                 outputStream.close();
                 File local = new File(REMOTE_VER_FILE_NAME);

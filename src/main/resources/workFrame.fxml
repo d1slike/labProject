@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.stankin.work.WorkController">
+   <top>
+      <BorderPane style="-fx-border-color: gray; -fx-border-width: 1;" BorderPane.alignment="CENTER">
+         <center>
+            <Label fx:id="informationTextLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="60.0" prefWidth="980.0" textAlignment="CENTER" wrapText="true" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold Italic" size="14.0" />
+               </font>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </Label>
+         </center>
+         <right>
+            <Button fx:id="nextStageButton" mnemonicParsing="false" onAction="#onNextStageButtonClick" prefHeight="30.0" prefWidth="90.0" text="Далее" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </BorderPane.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </right>
+         <left>
+            <Button fx:id="prevStageButton" mnemonicParsing="false" onAction="#onPrevStageButtonClick" prefHeight="30.0" prefWidth="90.0" text="Назад" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="10.0" right="10.0" />
+               </BorderPane.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+         </left>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </BorderPane>
+   </top>
+   <padding>
+      <Insets left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <left>
+      <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
+               <children>
+                  <Label layoutX="40.0" layoutY="117.0" text="Изменяемый параметр" />
+                  <ComboBox fx:id="altVarSwitcher" layoutX="40.0" layoutY="144.0" onAction="#onChangedAltVariable" prefHeight="30.0" prefWidth="90.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ComboBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="162.0" prefHeight="91.0" prefWidth="311.0" spacing="10.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="162.0" prefHeight="91.0" prefWidth="193.0" text="Шаг изменяемого параметра" wrapText="true" />
+                  <TextField fx:id="altVarStepField" layoutX="122.0" layoutY="170.0" prefHeight="30.0" prefWidth="90.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+               </children>
+            </HBox>
+            <Label text="Таблица параметров" />
+            <TableView fx:id="varTable" editable="true" layoutX="14.0" layoutY="253.0" prefHeight="311.0" prefWidth="311.0">
+              <columns>
+                <TableColumn fx:id="varTableColumnParam" editable="false" prefWidth="109.0" resizable="false" sortable="false" text="Параметр" />
+                <TableColumn fx:id="varTableColumnValue" prefWidth="201.0" resizable="false" sortable="false" text="Значение" />
+              </columns>
+            </TableView>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <center>
+      <VBox alignment="TOP_CENTER" fillWidth="false" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER" fillWidth="false">
+               <children>
+                  <Label alignment="CENTER" layoutX="325.0" layoutY="253.0" prefHeight="62.0" prefWidth="123.0" text="Исследуемая реакция" textAlignment="CENTER" wrapText="true" />
+                  <ComboBox fx:id="researchVarSwitcher" layoutX="323.0" layoutY="315.0" onAction="#onChangedResearchVariable" prefHeight="30.0" prefWidth="90.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ComboBox>
+                  <VBox fx:id="currentInfoVBox" alignment="CENTER" fillWidth="false" spacing="5.0">
+                     <children>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label fx:id="altVarNameLabel" text="altVar" />
+                              <Label text="=" />
+                              <Label fx:id="altVarValueLabel" text="?" />
+                           </children>
+                        </HBox>
+                        <HBox spacing="5.0">
+                           <children>
+                              <Label text="Обороты в минуту(N)  =" />
+                              <Label fx:id="RPMValueLabel" text="?" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <Label fx:id="phiNameLabel" alignment="CENTER" text="phi" />
+                              <Label text="=" />
+                              <Label fx:id="phiValueLabel" text="?" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                  </VBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Label fx:id="timeLabel" layoutX="364.0" layoutY="362.0" text="Время" />
+                  <TextField fx:id="timeField" layoutX="323.0" layoutY="389.0" prefHeight="30.0" prefWidth="90.0">
+                     <cursor>
+                        <Cursor fx:constant="TEXT" />
+                     </cursor>
+                  </TextField>
+                  <Button fx:id="calcButton" layoutX="323.0" layoutY="441.0" mnemonicParsing="false" onAction="#onCalcButtonClick" prefHeight="30.0" text="Рассчитать">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="30.0" />
+               </VBox.margin>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+   <right>
+      <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Таблица результатов" />
+            <TableView fx:id="resultTable" layoutX="542.0" layoutY="98.0">
+              <columns>
+                <TableColumn fx:id="resultTableTimeColumn" editable="false" prefWidth="96.6" resizable="false" sortable="false" text="t" />
+                <TableColumn fx:id="resultTableAltVarColumn" editable="false" prefWidth="96.6" resizable="false" sortable="false" />
+                  <TableColumn fx:id="resultTableStaticReaction" editable="false" prefWidth="96.6" resizable="false" />
+                  <TableColumn fx:id="resultTableDynamicReaction" editable="false" prefWidth="96.6" resizable="false" />
+                  <TableColumn fx:id="resultTableFullReaction" editable="false" prefWidth="96.6" resizable="false" />
+                  <TableColumn fx:id="resultTablePhiColumn" editable="false" prefWidth="96.6" resizable="false" sortable="false" text="N" />
+              </columns>
+            </TableView>
+            <HBox alignment="CENTER" fillHeight="false" layoutX="542.0" layoutY="679.0" spacing="50.0">
+               <children>
+                  <Button fx:id="showChartButton" layoutX="542.0" layoutY="588.0" mnemonicParsing="false" onAction="#onShowChartButtonClick" prefHeight="30.0" text="Просмотр графиков">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="cancelButton" layoutX="857.0" layoutY="679.0" mnemonicParsing="false" onAction="#onCancelButtonClick" prefHeight="30.0" text="Пересчитать">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onExitButtonClick" prefHeight="30.0" text="Закончить работу" />
+               </children>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </right>
+</BorderPane>

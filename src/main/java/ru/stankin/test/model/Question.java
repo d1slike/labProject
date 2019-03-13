@@ -1,11 +1,11 @@
 package ru.stankin.test.model;
 
-import gnu.trove.map.TIntObjectMap;
 import ru.stankin.utils.Rnd;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by DisDev on 05.02.2016.
@@ -15,9 +15,9 @@ public class Question {
     private final String imgSource;
     private final String text;
     private final int correctAnswerId;
-    private final TIntObjectMap<Answer> answers;
+    private final Map<Integer, Answer> answers;
 
-    public Question(int id, String imgSource, String text, int correctAnswerId, TIntObjectMap<Answer> answers) {
+    public Question(int id, String imgSource, String text, int correctAnswerId, Map<Integer, Answer> answers) {
         this.id = id;
         this.imgSource = imgSource;
         this.text = text;
@@ -26,7 +26,7 @@ public class Question {
     }
 
     public List<Answer> shakeAnswers() {
-        List<Answer> copy = new LinkedList<>(answers.valueCollection());
+        List<Answer> copy = new LinkedList<>(answers.values());
         List<Answer> toReturn = new ArrayList<>(answers.size());
         while (!copy.isEmpty()) {
             int copySize = copy.size();

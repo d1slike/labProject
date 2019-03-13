@@ -1,11 +1,11 @@
 package ru.stankin.test.model;
 
-import gnu.trove.map.TIntIntMap;
-import gnu.trove.map.hash.TIntIntHashMap;
 import ru.stankin.Configs;
 import ru.stankin.test.holders.QuestionsHolder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Dislike on 06.02.2016.
@@ -13,7 +13,7 @@ import java.util.List;
 public class Test {
 
     private List<Question> questions;
-    private TIntIntMap answersMap;
+    private Map<Integer, Integer> answersMap;
 
     private int availableAttempts;
 
@@ -31,7 +31,7 @@ public class Test {
 
     public Test() {
         availableAttempts = Configs.Test.attempts();
-        answersMap = new TIntIntHashMap();
+        answersMap = new HashMap<>();
         //studentPoints = new TDoubleArrayList();
         clearAndUpdateQuestions();
     }

@@ -18,7 +18,7 @@ public class CipherFileStreamFactory {
     private CipherFileStreamFactory() {
         key = null;
         try {
-            key = new SecretKeySpec("key".getBytes("UTF-8"), "Blowfish");
+            key = new SecretKeySpec("jcnhjdcrjuj18".getBytes("UTF-8"), "Blowfish");
         } catch (UnsupportedEncodingException ignored) {
         }
 

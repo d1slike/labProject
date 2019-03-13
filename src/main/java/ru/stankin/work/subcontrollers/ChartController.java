@@ -61,7 +61,7 @@ public class ChartController {
 
         String url = "";
         try {
-            url = new File("resources/css/Chart.css").toURI().toURL().toString();
+            url = new File(Util.externalResource("resources/css/Chart.css")).toURI().toURL().toString();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

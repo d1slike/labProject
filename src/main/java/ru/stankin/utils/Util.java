@@ -18,6 +18,12 @@ import java.util.Locale;
  * Created by DisDev on 12.02.2016.
  */
 public class Util {
+    private static final String RESOURCE_DIR = System.getenv("APP_DIR") == null ? "" : System.getenv("APP_DIR");
+
+    public static String externalResource(String filePath) {
+        return RESOURCE_DIR + filePath;
+    }
+
     public static String doubleCommaFormat(double value) {
         return String.format("%.3f", value);
     }
