@@ -20,6 +20,7 @@ public class CipherFileStreamFactory {
         try {
             key = new SecretKeySpec("key".getBytes("UTF-8"), "Blowfish");
         } catch (UnsupportedEncodingException ignored) {
+            ignored.printStackTrace();
         }
 
     }
@@ -38,6 +39,7 @@ public class CipherFileStreamFactory {
             }
 
         } catch (NoSuchPaddingException | FileNotFoundException | InvalidKeyException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
         return inputStream;
     }

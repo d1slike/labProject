@@ -195,7 +195,7 @@ public class WorkController extends AbstractController {
             event.consume();
         });
 
-        
+
         timeField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
         altVarStepField.setTextFormatter(new TextFormatter<Number>(TEXT_FORMAT_CONDITION));
     }
@@ -405,6 +405,7 @@ public class WorkController extends AbstractController {
             val = Double.parseDouble(field.getText());
             uiManager.setDefaultBorder(elementName);
         } catch (Exception ex) {
+            ex.printStackTrace();
             uiManager.setRedBorder(elementName);
             success = false;
         }
@@ -505,6 +506,7 @@ public class WorkController extends AbstractController {
                     val = Double.parseDouble(textField.getText());
                     ok = true;
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                     setStyle(UIManager.RED_BORDER_STYLE);
                 }
                 if (ok) {

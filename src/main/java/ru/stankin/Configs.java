@@ -67,13 +67,14 @@ public class Configs {
                         FieldUtils.writeStaticField(field, value);
 
                     } catch (IllegalAccessException ignored) {
-
+                        ignored.printStackTrace();
                     }
                     return field;
                 });
             });
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             Util.showProgramsFilesSpoiled();
         }
     }

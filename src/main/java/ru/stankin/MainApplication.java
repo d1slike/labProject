@@ -47,6 +47,7 @@ public class MainApplication extends Application {
         try {
             MAIN_APP_ICON = new Image(getClass().getResource("/icon.png").toString());
         } catch (Exception ex) {
+            ex.printStackTrace();
             Util.showProgramsFilesSpoiled();
         }
 
@@ -94,6 +95,7 @@ public class MainApplication extends Application {
             }
             primaryStage.show();
         } catch (Exception ex) {
+            ex.printStackTrace();
             Util.showMessageAndCloseProgram(ex);
         }
     }

@@ -33,6 +33,7 @@ public class ImageCache {
             for (File image : imagesDirectory.listFiles(filter))
                 images.put(image.getName(), new ImageView(image.toURI().toURL().toString()));
         } catch (Exception ex) {
+            ex.printStackTrace();
             Util.showProgramsFilesSpoiled();
         }
     }

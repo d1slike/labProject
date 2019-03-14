@@ -85,6 +85,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
             try {
                 ok = client.users().getCurrentAccount() != null;
             } catch (DbxException ignored) {
+                ignored.printStackTrace();
             }
             return ok;
         }
@@ -100,6 +101,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
                         resourcesDirSize += ((FileMetadata) metadata).getSize();
                 }
             } catch (DbxException e) {
+                e.printStackTrace();
                 currentUpdateStatus = UpdateStatus.FAIL;
             }
         }
@@ -142,11 +144,13 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
                             alreadyDownloaded += ((FileMetadata) metadata).getSize();
                             updateProgress(alreadyDownloaded, resourcesDirSize);
                         } catch (IOException e) {
+                            e.printStackTrace();
                             currentUpdateStatus = UpdateStatus.FAIL;
                         }
                     }
                 }
             } catch (DbxException e) {
+                e.printStackTrace();
                 currentUpdateStatus = UpdateStatus.FAIL;
             }
         }
@@ -178,7 +182,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
                     remote = getVersionFromFile(REMOTE_VER_FILE_NAME);
                 //local.delete();
             } catch (Exception ex) {
-                //ex.printStackTrace();
+                ex.printStackTrace();
             }
 
             return remote;
@@ -189,7 +193,7 @@ public class ApplicationUpdater extends Service<UpdateStatus> {
             try (BufferedReader inputStream = new BufferedReader(new FileReader(fileName))) {
                 version = parseVersion(inputStream.readLine());
             } catch (Exception ex) {
-                //ex.printStackTrace();
+                ex.printStackTrace();
             }
 
             return version;

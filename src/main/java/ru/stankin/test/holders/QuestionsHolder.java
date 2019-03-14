@@ -68,6 +68,7 @@ public class QuestionsHolder {
             }
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             Util.showProgramsFilesSpoiled();
         }
     }
