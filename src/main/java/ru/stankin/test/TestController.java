@@ -4,8 +4,8 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -33,7 +32,6 @@ import ru.stankin.test.model.Question;
 import ru.stankin.test.model.Test;
 import ru.stankin.utils.ImageCache;
 
-import javax.crypto.KeyGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -350,7 +348,11 @@ public class TestController extends AbstractController {
         tmpStage.showAndWait();
     }
 
+    public void onAboutClick(ActionEvent event) {
+        showAboutDialog();
+    }
+
     public enum State {
-        SELECT_ANSWER, WAIT;
+        SELECT_ANSWER, WAIT
     }
 }

@@ -2,6 +2,7 @@ package ru.stankin;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -52,5 +53,10 @@ public class WelcomeController extends AbstractController {
     @FXML
     private void onNextButtonClick() {
         getMainApplication().nextStage();
+    }
+
+    @FXML
+    private void onAboutClick(ActionEvent event) {
+        showAboutDialog();
     }
 }

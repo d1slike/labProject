@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.stankin.AboutController">
+    <top>
+        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true"
+                   BorderPane.alignment="CENTER">
+            <image>
+                <Image url="@Stankin.png"/>
+            </image>
+        </ImageView>
+    </top>
+    <center>
+        <TextArea editable="false" prefWidth="600.0"
+                  text="Программа предназначена для обучения студентов ФГБОУ ВО &quot;МГТУ &quot;СТАНКИН&quot; по курсу &quot;Теоретическая механика&quot;."
+                  wrapText="true" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="50.0" left="50.0" right="50.0" top="50.0"/>
+            </padding>
+        </TextArea>
+    </center>
+    <bottom>
+        <BorderPane prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <left>
+                <Hyperlink onAction="#onClickGithubLink" text="Github" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets left="25.0"/>
+                    </BorderPane.margin>
+                </Hyperlink>
+            </left>
+            <right>
+                <VBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0"
+                      BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets right="25.0"/>
+                    </BorderPane.margin>
+                    <children>
+                        <Label text="Лычкин Е.Н."/>
+                        <Label text="Комиссаров Я.В."/>
+                        <Label text="Семеняка А.Г."/>
+                    </children>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" top="10.0"/>
+                    </padding>
+                </VBox>
+            </right>
+        </BorderPane>
+    </bottom>
+</BorderPane>

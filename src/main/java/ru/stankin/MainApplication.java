@@ -1,6 +1,7 @@
 package ru.stankin;
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,12 +22,14 @@ import java.net.URL;
 public class MainApplication extends Application {
 
     public static final String PROGRAM_NAME = "RCalc";
+    private static HostServices hostServices;
     private static Image MAIN_APP_ICON;
 
     private Stage primaryStage;
     private GlobalStage currentGlobalStage;
     private BorderPane root;
     private AbstractController activeController;
+
 
     public static Image getIcon() {
         return MAIN_APP_ICON;
@@ -36,9 +39,18 @@ public class MainApplication extends Application {
         launch(args);
     }
 
+    public static HostServices getHServices() {
+        return hostServices;
+    }
+
+    public static URL getFXMLUrl(String fileName) {
+        return MainApplication.class.getResource("/" + fileName);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+        this.hostServices = getHostServices();
         primaryStage.setTitle(PROGRAM_NAME);
         nextStage();
     }
@@ -67,6 +79,18 @@ public class MainApplication extends Application {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public Stage newChildStage(String name) {
+        Stage childStage = new Stage();
+        childStage.initOwner(primaryStage);
+        String title = PROGRAM_NAME;
+        if (name != null) {
+            title = title + " - " + name;
+        }
+        childStage.setTitle(title);
+        childStage.getIcons().add(MAIN_APP_ICON);
+        return childStage;
     }
 
     private void prepareUI() {

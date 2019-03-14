@@ -12,6 +12,7 @@ import java.util.HashMap;
  */
 public class ImageCache {
     private static final ImageCache ourInstance = new ImageCache();
+    private static final String NOT_FOUND = "not_found.jpg";
 
     public static ImageCache getInstance() {
         return ourInstance;
@@ -27,11 +28,13 @@ public class ImageCache {
     private void load() {
         try {
             File imagesDirectory = new File(Util.externalResource("resources/image"));
-            if (!imagesDirectory.exists())
-                throw new FileNotFoundException("dirrectory " + Util.externalResource("resources/image") + " is not found");
+            if (!imagesDirectory.exists()) {
+                throw new FileNotFoundException("directory " + Util.externalResource("resources/image") + " is not found");
+            }
             final FilenameFilter filter = (dir, name) ->  !name.startsWith("icon") && (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg"));
-            for (File image : imagesDirectory.listFiles(filter))
+            for (File image : imagesDirectory.listFiles(filter)) {
                 images.put(image.getName(), new ImageView(image.toURI().toURL().toString()));
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             Util.showProgramsFilesSpoiled();
@@ -39,7 +42,12 @@ public class ImageCache {
     }
 
     public ImageView getByName(String name) {
-        return images.getOrDefault(name, null);
+        ImageView img = images.getOrDefault(name, null);
+        if (img == null) {
+            System.out.println("WARN: image " + name + " not found");
+            return images.get(NOT_FOUND);
+        }
+        return img;
     }
 
 }

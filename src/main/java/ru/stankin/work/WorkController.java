@@ -2,6 +2,7 @@ package ru.stankin.work;
 
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -405,12 +406,15 @@ public class WorkController extends AbstractController {
             val = Double.parseDouble(field.getText());
             uiManager.setDefaultBorder(elementName);
         } catch (Exception ex) {
-            ex.printStackTrace();
             uiManager.setRedBorder(elementName);
             success = false;
         }
 
         return new ParseResult(success, val);
+    }
+
+    public void onAboutClick(ActionEvent actionEvent) {
+        showAboutDialog();
     }
 
 
