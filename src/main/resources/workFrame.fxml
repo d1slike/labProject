@@ -62,7 +62,7 @@
    <left>
       <VBox alignment="TOP_CENTER" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
+             <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="12.0" layoutY="123.0" spacing="10.0">
                <children>
                   <Label layoutX="40.0" layoutY="117.0" text="Изменяемый параметр" />
                   <ComboBox fx:id="altVarSwitcher" layoutX="40.0" layoutY="144.0" onAction="#onChangedAltVariable" prefHeight="30.0" prefWidth="90.0">
@@ -72,7 +72,8 @@
                   </ComboBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER" fillHeight="false" layoutX="12.0" layoutY="162.0" prefHeight="91.0" prefWidth="311.0" spacing="10.0">
+             <HBox alignment="CENTER_LEFT" fillHeight="false" layoutX="12.0" layoutY="162.0" prefHeight="91.0"
+                   prefWidth="311.0" spacing="10.0">
                <children>
                   <Label layoutX="14.0" layoutY="162.0" prefHeight="91.0" prefWidth="193.0" text="Шаг изменяемого параметра" wrapText="true" />
                   <TextField fx:id="altVarStepField" layoutX="122.0" layoutY="170.0" prefHeight="30.0" prefWidth="90.0">
@@ -153,6 +154,11 @@
                   <Insets top="30.0" />
                </VBox.margin>
             </VBox>
+             <Button mnemonicParsing="false" onAction="#onClickShowModel" text="Визуальная модель">
+                 <VBox.margin>
+                     <Insets top="45.0"/>
+                 </VBox.margin>
+             </Button>
          </children>
          <BorderPane.margin>
             <Insets top="20.0" />

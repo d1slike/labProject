@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import ru.stankin.test.holders.QuestionsHolder;
 import ru.stankin.utils.ImageCache;
 import ru.stankin.utils.Util;
+import ru.stankin.work.subcontrollers.SchemaController;
 
 import java.net.URL;
 
@@ -43,7 +44,7 @@ public class MainApplication extends Application {
         return hostServices;
     }
 
-    public static URL getFXMLUrl(String fileName) {
+    public static URL getResource(String fileName) {
         return MainApplication.class.getResource("/" + fileName);
     }
 
@@ -63,6 +64,7 @@ public class MainApplication extends Application {
             Util.showProgramsFilesSpoiled();
         }
 
+        SchemaController.prepare();
         Configs.load();//load configs
         QuestionsHolder.getInstance();
         ImageCache.getInstance();

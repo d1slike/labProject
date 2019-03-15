@@ -5,13 +5,18 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.stankin.AbstractController;
+import ru.stankin.MainApplication;
 import ru.stankin.enums.ElementNames;
 import ru.stankin.enums.VariableType;
 import ru.stankin.enums.WorkStage;
@@ -21,6 +26,7 @@ import ru.stankin.work.managers.VariableManager;
 import ru.stankin.work.model.ResultRecord;
 import ru.stankin.work.model.Variable;
 import ru.stankin.work.subcontrollers.ChartController;
+import ru.stankin.work.subcontrollers.SchemaController;
 
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
@@ -413,10 +419,30 @@ public class WorkController extends AbstractController {
         return new ParseResult(success, val);
     }
 
-    public void onAboutClick(ActionEvent actionEvent) {
+    @FXML
+    private void onAboutClick(ActionEvent event) {
         showAboutDialog();
     }
 
+    @FXML
+    private void onClickShowModel(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(MainApplication.getResource("schema.fxml"));
+            Pane pane = loader.load();
+            SchemaController controller = loader.getController();
+            controller.setParam(altVarSwitcher.getValue());
+
+            Scene scene = new Scene(pane);
+
+            Stage childStage = getMainApplication().newChildStage("Модель");
+            childStage.setScene(scene);
+            childStage.sizeToScene();
+            childStage.centerOnScreen();
+            childStage.showAndWait();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     private static class ParseResult {
 

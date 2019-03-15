@@ -12,7 +12,6 @@ import ru.stankin.utils.Util;
 import ru.stankin.work.managers.VariableManager;
 import ru.stankin.work.model.ResultRecord;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class ChartController {
 
         String url = "";
         try {
-            url = new File(Util.externalResource("resources/css/Chart.css")).toURI().toURL().toString();
+            url = MainApplication.getResource("css/Chart.css").toURI().toURL().toString();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -73,7 +72,6 @@ public class ChartController {
         //pane.setPrefSize(CHART_WIDTH * 2, CHART_HEIGHT);
         pane.setLeft(dynamicReactionsChart);
         pane.setRight(fullReactionsChart);
-
 
         Scene scene = new Scene(pane);
         stage = new Stage();

@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
  */
 public class ApplicationUpdater extends Service<UpdateStatus> {
 
-    private static final String APPLICATION_TOKEN = "smHMgyG3CFAAAAAAAAAABzbibSgnKcSxEFORi_l0zNkSaK7hWlOrTQICvuHdGxcC";
+    private static final String APPLICATION_TOKEN = "smHMgyG3CFAAAAAAAAAAUKSQey4ELtVv7l7vPbVEvzeKLmf9L3amjLf2ID7cnNgH";
     private static final String REMOTE_VER_FILE_NAME = "remote_ver.ini";
     private static final String VERSION_FILE_NAME = "version.ini";
     private static final String RESOURCES_FILE_NAME = "resources";

@@ -4,21 +4,36 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ru.stankin.MainApplication;
 
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by DisDev on 12.02.2016.
  */
 public class Util {
     private static final String RESOURCE_DIR = System.getenv("APP_DIR") == null ? "" : System.getenv("APP_DIR");
+
+    public static CompletableFuture<Image> asyncLoadImageFromResources(String fileName) {
+        return CompletableFuture.supplyAsync(() -> MainApplication.class.getResourceAsStream("/" + fileName))
+                .thenApply(inputStream -> {
+                    try (InputStream image = inputStream) {
+                        return new Image(image);
+                    } catch (Exception ex) {
+                        System.out.printf("Could not load %s, %s\n", fileName, ex.getMessage());
+                    }
+                    return null;
+                });
+    }
 
     public static String externalResource(String filePath) {
         return RESOURCE_DIR + filePath;

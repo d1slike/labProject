@@ -24,7 +24,7 @@ public abstract class AbstractController {
 
     public final void showAboutDialog() {
         try {
-            FXMLLoader loader = new FXMLLoader(MainApplication.getFXMLUrl("about.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApplication.getResource("about.fxml"));
             Pane pane = loader.load();
 
             Scene scene = new Scene(pane);

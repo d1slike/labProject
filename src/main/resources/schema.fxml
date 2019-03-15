@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<HBox spacing="50.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="ru.stankin.work.subcontrollers.SchemaController">
+    <children>
+        <VBox alignment="CENTER" prefWidth="200.0" spacing="30.0">
+            <children>
+                <ImageView fx:id="schemaImage" fitHeight="420.0" fitWidth="270.0" pickOnBounds="true"
+                           preserveRatio="true"/>
+                <Label text="Схема"/>
+            </children>
+        </VBox>
+        <VBox alignment="CENTER" prefWidth="200.0" spacing="30.0">
+            <children>
+                <ImageView fx:id="rollingImage" fitHeight="420.0" fitWidth="270.0" pickOnBounds="true"
+                           preserveRatio="true"/>
+                <Label text="Вращение"/>
+            </children>
+        </VBox>
+        <VBox alignment="CENTER" prefWidth="200.0" spacing="15.0">
+            <children>
+                <ImageView fx:id="paramImage" fitHeight="420.0" fitWidth="270.0" pickOnBounds="true"
+                           preserveRatio="true"/>
+                <Label text="Изменяемый параметр"/>
+                <Label fx:id="paramLabel" text="R"/>
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+    </padding>
+</HBox>
